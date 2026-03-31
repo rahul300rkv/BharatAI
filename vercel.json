@@ -1,0 +1,20 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "functions": {
+    "app/api/chat/route.ts": { "maxDuration": 300 },
+    "app/api/generate/scene-content/route.ts": { "maxDuration": 300 },
+    "app/api/generate/scene-outlines-stream/route.ts": { "maxDuration": 300 },
+    "app/api/generate/image/route.ts": { "maxDuration": 120 },
+    "app/api/generate/video/route.ts": { "maxDuration": 300 },
+    "app/api/generate/tts/route.ts": { "maxDuration": 120 },
+    "app/api/transcription/route.ts": { "maxDuration": 60 },
+    "app/api/pbl/chat/route.ts": { "maxDuration": 300 },
+    "app/api/generate-classroom/route.ts": { "maxDuration": 300 },
+    "app/api/generate-classroom/[jobId]/route.ts": { "maxDuration": 60 }
+  },
+  "env": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  }
+}
