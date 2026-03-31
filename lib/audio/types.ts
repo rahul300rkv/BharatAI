@@ -114,6 +114,7 @@ export interface TTSProviderConfig {
   defaultModelId?: string;
   icon?: string;
   voices: TTSVoiceInfo[];
+  models?: TTSModelInfo[];
   supportedFormats: string[]; // ['mp3', 'wav', 'opus', etc.]
   speedRange?: {
     min: number;
