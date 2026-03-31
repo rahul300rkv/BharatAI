@@ -102,7 +102,10 @@ export interface TTSVoiceInfo {
   gender?: 'male' | 'female' | 'neutral';
   description?: string;
 }
-
+export interface TTSModelInfo {
+  id: string;
+  name: string;
+}
 /**
  * TTS Provider Configuration
  */
