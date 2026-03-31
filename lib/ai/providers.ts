@@ -24,7 +24,6 @@
  */
 
 import { createOpenAI } from '@ai-sdk/openai';
-import { createGroq } from '@ai-sdk/groq';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import type { LanguageModel } from 'ai';
@@ -1201,13 +1200,13 @@ export function getModel(config: ModelConfig): ModelWithInfo {
 
   let model: LanguageModel;
 
-  // ── Groq: native @ai-sdk/groq provider (callable, not .chat()) ──────
+  // ── Groq: OpenAI-compatible provider ────────────────────────────────
   if (config.providerId === 'groq') {
-    const groqProvider = createGroq({
+    const groqOpenAI = createOpenAI({
       apiKey: effectiveApiKey,
-      baseURL: effectiveBaseUrl,
+      baseURL: effectiveBaseUrl || 'https://api.groq.com/openai/v1',
     });
-    model = groqProvider(config.modelId as Parameters<typeof groqProvider>[0]);
+    model = groqOpenAI.chat(config.modelId);
     const modelInfo = provider?.models.find((m) => m.id === config.modelId) || null;
     return { model, modelInfo };
   }
