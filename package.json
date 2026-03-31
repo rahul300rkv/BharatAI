@@ -21,7 +21,6 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.23",
     "@ai-sdk/google": "^3.0.13",
-    "@ai-sdk/groq": "^1.2.9",
     "@ai-sdk/openai": "^3.0.13",
     "@ai-sdk/react": "^3.0.44",
     "@base-ui/react": "^1.1.0",
