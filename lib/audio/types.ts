@@ -82,7 +82,9 @@ export type TTSProviderId =
   | 'azure-tts'
   | 'glm-tts'
   | 'qwen-tts'
+  | 'doubao-tts'
   | 'elevenlabs-tts'
+  | 'minimax-tts'
   | 'browser-native-tts';
 // Add new TTS providers below (uncomment and modify):
 // | 'fish-audio-tts'
