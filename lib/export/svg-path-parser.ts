@@ -22,8 +22,13 @@ export const parseSvgPath = (d: string) => {
   const pathData = new SVGPathData(d);
 
   const ret = pathData.commands.map((item) => {
-    return { ...item, type: typeMap[item.type] };
-  });
+  const typeKey = item.type as keyof typeof typeMap;
+
+  return {
+    ...item,
+    type: typeMap[typeKey] ?? "UNKNOWN",
+  };
+});
   return ret;
 };
 
