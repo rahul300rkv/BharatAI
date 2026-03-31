@@ -146,7 +146,6 @@
  */
 
 import { createOpenAI } from '@ai-sdk/openai';
-import { createGroq } from '@ai-sdk/groq';
 import { experimental_transcribe as transcribe } from 'ai';
 import type { ASRModelConfig } from './types';
 import { ASR_PROVIDERS } from './constants';
