@@ -165,6 +165,7 @@ export interface ASRProviderConfig {
   name: string;
   requiresApiKey: boolean;
   defaultBaseUrl?: string;
+  defaultModelId?: string;
   icon?: string;
   supportedLanguages: string[];
   supportedFormats: string[];
