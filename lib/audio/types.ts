@@ -97,6 +97,7 @@ export type TTSProviderId =
 export interface TTSVoiceInfo {
   id: string;
   name: string;
+  compatibleModels?: string[];
   language: string;
   localeName?: string; // Language name in its native script (e.g., "中文（简体，中国）", "日本語")
   gender?: 'male' | 'female' | 'neutral';
