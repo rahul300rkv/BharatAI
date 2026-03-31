@@ -101,7 +101,7 @@ export function getAvailableProvidersWithVoices(
 
       // Build model groups
       const modelGroups: ModelVoiceGroup[] = [];
-      if (config.models.length > 0) {
+      if (config.models?.length) {
         for (const model of config.models) {
           const compatibleVoices = config.voices
             .filter((v) => !v.compatibleModels || v.compatibleModels.includes(model.id))
