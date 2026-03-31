@@ -111,6 +111,7 @@ export interface TTSProviderConfig {
   name: string;
   requiresApiKey: boolean;
   defaultBaseUrl?: string;
+  defaultModelId?: string;
   icon?: string;
   voices: TTSVoiceInfo[];
   supportedFormats: string[]; // ['mp3', 'wav', 'opus', etc.]
@@ -128,6 +129,7 @@ export interface TTSModelConfig {
   providerId: TTSProviderId;
   apiKey?: string;
   baseUrl?: string;
+  modelId?: string;
   voice: string;
   speed?: number;
   format?: string;
