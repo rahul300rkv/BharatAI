@@ -43,7 +43,7 @@ export const toPoints = (d: string) => {
 
   const points = [];
   for (const item of pathData.commands) {
-    const type = typeMap[item.type];
+    const type = typeMap[item.type as keyof typeof typeMap];
 
     if (item.type === 2 || item.type === 16) {
       points.push({
