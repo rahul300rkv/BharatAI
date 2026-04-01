@@ -34,6 +34,10 @@ export const metadata: Metadata = {
   description:
     'Bharat ka apna AI classroom. Upload a document or describe any topic to instantly generate an immersive, multi-agent learning experience in Hinglish.',
   keywords: ['BharatAI', 'Indian AI', 'CBSE', 'JEE', 'UPSC', 'NEET', 'Hindi', 'classroom', 'AI teacher'],
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({

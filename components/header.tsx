@@ -123,7 +123,7 @@ export function Header({ currentSceneTitle }: HeaderProps) {
                       'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
                   )}
                 >
-                  简体中文
+                  हिन्दी
                 </button>
                 <button
                   onClick={() => {
