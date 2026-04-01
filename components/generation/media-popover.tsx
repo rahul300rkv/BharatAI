@@ -228,7 +228,7 @@ export function MediaPopover({ onSettingsOpen }: MediaPopoverProps) {
       if (p.id === 'browser-native-tts' && browserVoices.length > 0) {
         const byLang = new Map<string, SpeechSynthesisVoice[]>();
         for (const v of browserVoices) {
-          const langKey = v.lang.split('-')[0]; // "zh-CN" → "zh"
+          const langKey = v.lang.split('-')[0]; // "hi-IN" → "zh"
           if (!byLang.has(langKey)) byLang.set(langKey, []);
           byLang.get(langKey)!.push(v);
         }

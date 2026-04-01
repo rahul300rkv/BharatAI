@@ -215,8 +215,8 @@ async function generateAzureTTS(
   // Build SSML
   const rate = config.speed ? `${((config.speed - 1) * 100).toFixed(0)}%` : '0%';
   const ssml = `
-    <speak version='1.0' xml:lang='zh-CN'>
-      <voice xml:lang='zh-CN' name='${config.voice}'>
+    <speak version='1.0' xml:lang='hi-IN'>
+      <voice xml:lang='hi-IN' name='${config.voice}'>
         <prosody rate='${rate}'>${escapeXml(text)}</prosody>
       </voice>
     </speak>

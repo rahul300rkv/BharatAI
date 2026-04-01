@@ -56,14 +56,14 @@ const RECENT_OPEN_STORAGE_KEY = 'recentClassroomsOpen';
 interface FormState {
   pdfFile: File | null;
   requirement: string;
-  language: 'zh-CN' | 'en-US';
+  language: 'hi-IN' | 'en-US';
   webSearch: boolean;
 }
 
 const initialFormState: FormState = {
   pdfFile: null,
   requirement: '',
-  language: 'zh-CN',
+  language: 'hi-IN',
   webSearch: false,
 };
 
@@ -99,10 +99,10 @@ function HomePage() {
       const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
       const updates: Partial<FormState> = {};
       if (savedWebSearch === 'true') updates.webSearch = true;
-      if (savedLanguage === 'zh-CN' || savedLanguage === 'en-US') {
+      if (savedLanguage === 'hi-IN' || savedLanguage === 'en-US') {
         updates.language = savedLanguage;
       } else {
-        const detected = navigator.language?.startsWith('zh') ? 'zh-CN' : 'en-US';
+        const detected = navigator.language?.startsWith('zh') ? 'hi-IN' : 'en-US';
         updates.language = detected;
       }
       if (Object.keys(updates).length > 0) {
@@ -335,18 +335,18 @@ function HomePage() {
             }}
             className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-muted-foreground hover:bg-primary/8 hover:text-primary hover:shadow-sm transition-all"
           >
-            {locale === 'zh-CN' ? 'CN' : 'EN'}
+            {locale === 'hi-IN' ? 'CN' : 'EN'}
           </button>
           {languageOpen && (
             <div className="absolute top-full mt-2 right-0 bg-[#FFF9F2] dark:bg-[#2A1500] border border-primary/15 rounded-xl shadow-lg overflow-hidden z-50 min-w-[120px]">
               <button
                 onClick={() => {
-                  setLocale('zh-CN');
+                  setLocale('hi-IN');
                   setLanguageOpen(false);
                 }}
                 className={cn(
                   'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary transition-colors',
-                  locale === 'zh-CN' &&
+                  locale === 'hi-IN' &&
                     'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
                 )}
               >

@@ -113,7 +113,7 @@ export function useAudioRecorder(options: UseAudioRecorderOptions = {}) {
           const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
           const recognition = new SpeechRecognition();
 
-          recognition.lang = asrLanguage || 'zh-CN';
+          recognition.lang = asrLanguage || 'hi-IN';
           recognition.continuous = false;
           recognition.interimResults = false;
 

@@ -108,18 +108,18 @@ export function Header({ currentSceneTitle }: HeaderProps) {
               }}
               className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-muted-foreground hover:bg-primary/8 hover:text-primary hover:shadow-sm transition-all"
             >
-              {locale === 'zh-CN' ? 'CN' : 'EN'}
+              {locale === 'hi-IN' ? 'हि' : 'EN'}
             </button>
             {languageOpen && (
               <div className="absolute top-full mt-2 right-0 bg-[#FFF9F2] dark:bg-[#2A1500] border border-primary/15 rounded-xl shadow-lg overflow-hidden z-50 min-w-[120px]">
                 <button
                   onClick={() => {
-                    setLocale('zh-CN');
+                    setLocale('hi-IN');
                     setLanguageOpen(false);
                   }}
                   className={cn(
                     'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary dark:hover:bg-primary/12 transition-colors',
-                    locale === 'zh-CN' &&
+                    locale === 'hi-IN' &&
                       'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
                   )}
                 >

@@ -211,7 +211,7 @@ export interface ImageOrShapeFlip {
 /**
  * 图片滤镜
  *
- * https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter
+ * https://developer.mozilla.org/hi-IN/docs/Web/CSS/filter
  *
  * 'blur'?: 模糊，默认0（px）
  *

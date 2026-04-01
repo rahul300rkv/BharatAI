@@ -15,7 +15,7 @@ export interface UseBrowserTTSOptions {
   rate?: number; // 0.1 to 10
   pitch?: number; // 0 to 2
   volume?: number; // 0 to 1
-  lang?: string; // e.g., 'zh-CN', 'en-US'
+  lang?: string; // e.g., 'hi-IN', 'en-US'
 }
 
 export function useBrowserTTS(options: UseBrowserTTSOptions = {}) {
@@ -26,7 +26,7 @@ export function useBrowserTTS(options: UseBrowserTTSOptions = {}) {
     rate = 1.0,
     pitch = 1.0,
     volume = 1.0,
-    lang = 'zh-CN',
+    lang = 'hi-IN',
   } = options;
 
   const [isSpeaking, setIsSpeaking] = useState(false);

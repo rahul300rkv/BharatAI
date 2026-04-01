@@ -32,7 +32,7 @@ export function useBrowserASR(options: UseBrowserASROptions = {}) {
   const {
     onTranscription,
     onError,
-    language = 'zh-CN',
+    language = 'hi-IN',
     continuous = false,
     interimResults = false,
   } = options;
