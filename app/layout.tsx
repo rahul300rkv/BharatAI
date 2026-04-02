@@ -54,6 +54,14 @@ export default function RootLayout({
       className={`${mukta.variable} ${yatraOne.variable}`}
       suppressHydrationWarning
     >
+        <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3532554351654388"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body
         className={`${mukta.className} ${GeistMono.variable} antialiased`}
         suppressHydrationWarning
