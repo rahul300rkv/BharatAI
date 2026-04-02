@@ -4,6 +4,7 @@ import { GeistMono } from 'geist/font/mono';
 import { Mukta, Yatra_One } from 'next/font/google';
 import './globals.css';
 import 'animate.css';
+import Script from 'next/script';
 import 'katex/dist/katex.min.css';
 import { ThemeProvider } from '@/lib/hooks/use-theme';
 import { I18nProvider } from '@/lib/hooks/use-i18n';
