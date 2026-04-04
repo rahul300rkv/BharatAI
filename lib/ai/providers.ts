@@ -1229,7 +1229,20 @@ export function getModel(config: ModelConfig): ModelWithInfo {
     const modelInfo = provider?.models.find((m) => m.id === config.modelId) || null;
     return { model, modelInfo };
   }
-
+// ── OpenRouter: OpenAI-compatible provider ───────────────────────────
+if (config.providerId === 'openrouter') {
+  const openrouterOpenAI = createOpenAI({
+    apiKey: effectiveApiKey,
+    baseURL: effectiveBaseUrl || 'https://openrouter.ai/api/v1',
+    headers: {
+      'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://bharatai.app',
+      'X-Title': 'BharatAI',
+    },
+  });
+  model = openrouterOpenAI.chat(config.modelId);
+  const modelInfo = provider?.models.find((m) => m.id === config.modelId) || null;
+  return { model, modelInfo };
+}
   switch (providerType) {
     case 'openai': {
       const openaiOptions: Parameters<typeof createOpenAI>[0] = {
