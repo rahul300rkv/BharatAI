@@ -1081,7 +1081,26 @@ export const PROVIDERS: Record<ProviderId, ProviderConfig> = {
       },
     ],
   },
-
+openrouter: {
+  id: 'openrouter',
+  name: 'OpenRouter',
+  type: 'openai',
+  defaultBaseUrl: 'https://openrouter.ai/api/v1',
+  requiresApiKey: true,
+  icon: '/logos/openrouter.svg',
+  models: [
+    { id: 'openai/gpt-4o', name: 'GPT-4o', contextWindow: 128000, outputWindow: 16384, capabilities: { streaming: true, tools: true, vision: true } },
+    { id: 'openai/gpt-4o-mini', name: 'GPT-4o Mini', contextWindow: 128000, outputWindow: 16384, capabilities: { streaming: true, tools: true, vision: true } },
+    { id: 'anthropic/claude-sonnet-4-20250514', name: 'Claude Sonnet 4', contextWindow: 200000, outputWindow: 16000, capabilities: { streaming: true, tools: true, vision: true } },
+    { id: 'anthropic/claude-3.5-haiku', name: 'Claude 3.5 Haiku', contextWindow: 200000, outputWindow: 8192, capabilities: { streaming: true, tools: true, vision: true } },
+    { id: 'google/gemini-2.0-flash-001', name: 'Gemini 2.0 Flash', contextWindow: 1000000, outputWindow: 8192, capabilities: { streaming: true, tools: true, vision: true } },
+    { id: 'meta-llama/llama-4-maverick', name: 'Llama 4 Maverick', contextWindow: 1000000, outputWindow: 16384, capabilities: { streaming: true, tools: true, vision: true } },
+    { id: 'meta-llama/llama-3.3-70b-instruct', name: 'Llama 3.3 70B', contextWindow: 131072, outputWindow: 8192, capabilities: { streaming: true, tools: true, vision: false } },
+    { id: 'deepseek/deepseek-chat-v3-0324', name: 'DeepSeek V3', contextWindow: 163840, outputWindow: 8192, capabilities: { streaming: true, tools: true, vision: false } },
+    { id: 'deepseek/deepseek-r1', name: 'DeepSeek R1', contextWindow: 163840, outputWindow: 32768, capabilities: { streaming: true, tools: false, vision: false, thinking: { toggleable: false, budgetAdjustable: false, defaultEnabled: true } } },
+    { id: 'qwen/qwen3-235b-a22b', name: 'Qwen3 235B', contextWindow: 131072, outputWindow: 8192, capabilities: { streaming: true, tools: true, vision: false } },
+  ],
+},
 };
 
 /**
