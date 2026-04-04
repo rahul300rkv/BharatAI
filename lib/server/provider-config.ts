@@ -50,6 +50,7 @@ const LLM_ENV_MAP: Record<string, string> = {
   DOUBAO: 'doubao',
   GROK: 'grok',
   GROQ: 'groq',
+  OPENROUTER: 'openrouter',
 };
 
 const TTS_ENV_MAP: Record<string, string> = {
