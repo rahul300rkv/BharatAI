@@ -1099,6 +1099,7 @@ openrouter: {
     { id: 'deepseek/deepseek-chat-v3-0324', name: 'DeepSeek V3', contextWindow: 163840, outputWindow: 8192, capabilities: { streaming: true, tools: true, vision: false } },
     { id: 'deepseek/deepseek-r1', name: 'DeepSeek R1', contextWindow: 163840, outputWindow: 32768, capabilities: { streaming: true, tools: false, vision: false, thinking: { toggleable: false, budgetAdjustable: false, defaultEnabled: true } } },
     { id: 'qwen/qwen3-235b-a22b', name: 'Qwen3 235B', contextWindow: 131072, outputWindow: 8192, capabilities: { streaming: true, tools: true, vision: false } },
+  { id: 'qwen/qwen3-6b-plus:free', name: 'Qwen3 6B Plus (free)', contextWindow: 131072, outputWindow: 8192, capabilities: { streaming: true, tools: true, vision: false } },
   ],
 },
 };
