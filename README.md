@@ -7,7 +7,6 @@
 <p align="center">
   Multi-agent interactive learning — CBSE, JEE, NEET, UPSC & more — in Hinglish
 </p>
-
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg?style=flat-square" alt="License"/></a>
   <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js"/>
