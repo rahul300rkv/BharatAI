@@ -21,7 +21,7 @@
 
 ## 🇮🇳 What is BharatAI?
 
-BharatAI is a fork of [OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) — completely reimagined for Indian students. It turns any topic into a rich interactive classroom experience with AI teachers, quizzes, simulations and project-based learning — all delivered in **Hinglish** with an Indian cultural aesthetic.
+BharatAI turns any topic into a rich interactive classroom experience with AI teachers, quizzes, simulations and project-based learning — all delivered in **Hinglish** with an Indian cultural aesthetic.
 
 ### ✨ BharatAI-specific features
 
