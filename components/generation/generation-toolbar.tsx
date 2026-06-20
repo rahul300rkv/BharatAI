@@ -365,7 +365,7 @@ export function GenerationToolbar({
             className={pillMuted}
           >
             <Globe className="size-3.5" />
-            <span>{language === 'hi-IN' ? '中文' : 'EN'}</span>
+            <span>{language === 'hi-IN' ? 'HI' : 'EN'}</span>
           </button>
         </TooltipTrigger>
         <TooltipContent>{t('toolbar.languageHint')}</TooltipContent>
