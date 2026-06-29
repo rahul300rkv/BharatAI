@@ -102,7 +102,7 @@ function HomePage() {
       if (savedLanguage === 'hi-IN' || savedLanguage === 'en-US') {
         updates.language = savedLanguage;
       } else {
-        const detected = navigator.language?.startsWith('zh') ? 'hi-IN' : 'en-US';
+        const detected = navigator.language?.startsWith('hi') ? 'hi-IN' : 'en-US';
         updates.language = detected;
       }
       if (Object.keys(updates).length > 0) {
@@ -1114,6 +1114,147 @@ function ClassroomCard({
   );
 }
 
+// ─── Static SEO content — visible to crawlers, subtle for users ──────────────
+function SEOContent() {
+  return (
+    <section aria-label="About BharatAI" className="w-full max-w-4xl mx-auto px-4 pb-16 mt-4">
+      {/* Features */}
+      <div className="mb-12">
+        <h2 className="text-xl font-bold text-center mb-2 text-foreground/80">
+          Why Students Love BharatAI
+        </h2>
+        <p className="text-center text-sm text-muted-foreground/70 mb-8">
+          India&apos;s most advanced AI classroom — built for CBSE, JEE, NEET &amp; UPSC
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            {
+              emoji: '🎓',
+              title: 'Multi-Agent AI Classroom',
+              desc: 'A full class with AI Teacher, AI Assistant, and student agents who discuss, debate and explain — not just one bot answering questions.',
+            },
+            {
+              emoji: '📄',
+              title: 'PDF to Lesson in Seconds',
+              desc: 'Upload your NCERT chapter, notes or any PDF and get an interactive lesson with slides, quiz and whiteboard instantly.',
+            },
+            {
+              emoji: '🇮🇳',
+              title: 'Hindi + English Support',
+              desc: 'Generate lessons in Hindi (हिन्दी) or English. Perfect for Hindi-medium students and Hinglish learners.',
+            },
+            {
+              emoji: '📝',
+              title: 'Auto-Generated Quizzes',
+              desc: 'Every lesson includes MCQs, short answers and AI-graded quizzes to test understanding — like a real exam practice.',
+            },
+            {
+              emoji: '🖊️',
+              title: 'Interactive Whiteboard',
+              desc: 'AI teacher draws diagrams, writes formulas and explains concepts on a live whiteboard — just like a real class.',
+            },
+            {
+              emoji: '🔒',
+              title: 'Your API Key, Your Data',
+              desc: 'BharatAI runs on your own AI API key. Your data stays private — we never store your conversations.',
+            },
+          ].map(({ emoji, title, desc }) => (
+            <div
+              key={title}
+              className="rounded-xl border border-border/40 bg-muted/20 p-4 flex flex-col gap-2"
+            >
+              <span className="text-2xl">{emoji}</span>
+              <h3 className="font-semibold text-sm text-foreground/85">{title}</h3>
+              <p className="text-xs text-muted-foreground/70 leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Use cases */}
+      <div className="mb-12 rounded-xl border border-border/40 bg-muted/20 p-6">
+        <h2 className="text-lg font-bold mb-4 text-foreground/80">Who Uses BharatAI?</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { label: 'Class 10–12 CBSE Students', detail: 'Learn Science, Maths, Social Science with AI explanations and auto-generated notes.' },
+            { label: 'JEE Aspirants', detail: 'Master Physics, Chemistry and Maths concepts with whiteboard diagrams and formula walkthroughs.' },
+            { label: 'NEET Aspirants', detail: 'Study Biology and Chemistry with detailed AI explanations and practice quizzes.' },
+            { label: 'UPSC Aspirants', detail: 'Cover History, Polity, Geography and Current Affairs with structured AI-generated lessons.' },
+            { label: 'College Students', detail: 'Understand complex university topics by uploading lecture notes or textbook PDFs.' },
+            { label: 'Curious Learners', detail: 'Learn anything — from Quantum Physics to Indian Classical Music — in minutes.' },
+          ].map(({ label, detail }) => (
+            <div key={label} className="flex gap-3 items-start">
+              <span className="mt-0.5 text-primary text-sm">✓</span>
+              <div>
+                <p className="text-sm font-medium text-foreground/80">{label}</p>
+                <p className="text-xs text-muted-foreground/60 leading-relaxed">{detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* FAQ */}
+      <div className="mb-8">
+        <h2 className="text-lg font-bold mb-6 text-foreground/80">
+          Frequently Asked Questions
+        </h2>
+        <div className="flex flex-col gap-4">
+          {[
+            {
+              q: 'What is BharatAI?',
+              a: "BharatAI is India's first multi-agent AI classroom. Type any topic or upload a PDF and instantly get a full interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in Hindi or English.",
+            },
+            {
+              q: 'Is BharatAI free?',
+              a: 'BharatAI is free to use. You need to bring your own AI API key (OpenAI, Gemini, Claude, DeepSeek, Groq and more are all supported). There are no subscription fees.',
+            },
+            {
+              q: 'Can BharatAI help with JEE, NEET and UPSC preparation?',
+              a: 'Yes. BharatAI is purpose-built for Indian competitive exam preparation. Generate lessons on any Physics, Chemistry, Biology, Mathematics, History, Polity or Geography topic. The AI quizzes are modelled after exam patterns.',
+            },
+            {
+              q: 'Does BharatAI support Hindi?',
+              a: 'Yes. BharatAI fully supports Hindi (हिन्दी) and English. Choose your language before generating a lesson and the AI teacher, quizzes and discussions will all be in your chosen language.',
+            },
+            {
+              q: 'Can I upload an NCERT PDF and get a lesson?',
+              a: 'Yes. Upload any PDF — NCERT textbook, reference notes, previous year papers — and BharatAI will extract the content and generate a complete AI classroom from it in seconds.',
+            },
+            {
+              q: 'Which AI models work with BharatAI?',
+              a: 'BharatAI supports OpenAI (GPT-4o, GPT-4o mini), Google Gemini (2.0 Flash, 1.5 Pro), Anthropic Claude (3.5 Sonnet), DeepSeek, Qwen, Groq (Llama 3), Kimi, GLM, MiniMax, SiliconFlow and any OpenAI-compatible provider.',
+            },
+            {
+              q: 'Is my data private?',
+              a: 'Yes. BharatAI uses your own API key and runs entirely in your browser. Your lessons, PDFs and conversations are never stored on our servers.',
+            },
+          ].map(({ q, a }) => (
+            <div
+              key={q}
+              className="rounded-xl border border-border/40 bg-muted/20 p-4"
+            >
+              <h3 className="text-sm font-semibold text-foreground/85 mb-1.5">{q}</h3>
+              <p className="text-xs text-muted-foreground/70 leading-relaxed">{a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer trust line */}
+      <p className="text-center text-xs text-muted-foreground/40 leading-relaxed">
+        BharatAI — Bharat Ka Apna AI Classroom 🇮🇳 &nbsp;·&nbsp; Made with ❤️ for Indian students
+        &nbsp;·&nbsp; CBSE · JEE · NEET · UPSC · Hindi · English
+      </p>
+    </section>
+  );
+}
+
 export default function Page() {
-  return <HomePage />;
+  return (
+    <>
+      <HomePage />
+      <SEOContent />
+    </>
+  );
 }
