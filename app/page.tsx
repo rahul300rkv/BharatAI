@@ -67,6 +67,65 @@ const initialFormState: FormState = {
   webSearch: false,
 };
 
+// ─── API Key Onboarding Banner ────────────────────────────────────────────────
+function OnboardingBanner({ onSetupClick }: { onSetupClick: () => void }) {
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem('onboardingDismissed') === 'true') setDismissed(true);
+    } catch { /* ignore */ }
+  }, []);
+
+  if (dismissed) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      className="w-full max-w-[800px] mb-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3"
+    >
+      <span className="text-2xl shrink-0">🔑</span>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-semibold text-orange-900 dark:text-orange-200">
+          BharatAI needs your own AI API Key to work
+        </p>
+        <p className="text-xs text-orange-700/80 dark:text-orange-300/70 mt-0.5 leading-relaxed">
+          It&apos;s <strong>free</strong> — get a Groq API key in 2 minutes at{' '}
+          <a
+            href="https://console.groq.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline font-medium hover:text-orange-900 dark:hover:text-orange-100 transition-colors"
+          >
+            console.groq.com
+          </a>
+          . Then click <strong>Settings → LLM → Add API Key</strong>.
+          Also supports OpenAI, Gemini, Claude, DeepSeek &amp; more.
+        </p>
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        <button
+          onClick={onSetupClick}
+          className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm"
+        >
+          Set up now
+        </button>
+        <button
+          onClick={() => {
+            setDismissed(true);
+            try { localStorage.setItem('onboardingDismissed', 'true'); } catch { /* ignore */ }
+          }}
+          className="px-2 py-1.5 rounded-lg text-xs text-orange-600/60 hover:text-orange-700 dark:text-orange-400/60 dark:hover:text-orange-300 transition-colors"
+        >
+          ✕
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
 function HomePage() {
   const { t, locale, setLocale } = useI18n();
   const { theme, setTheme } = useTheme();
@@ -464,6 +523,20 @@ function HomePage() {
           style={{ animationDuration: '6s' }}
         />
       </div>
+
+      {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
+      {!currentModelId && (
+        <div className="relative z-20 w-full max-w-[800px] mt-2">
+          <AnimatePresence>
+            <OnboardingBanner
+              onSetupClick={() => {
+                setSettingsSection('providers' as import('@/lib/types/settings').SettingsSection);
+                setSettingsOpen(true);
+              }}
+            />
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* ═══ Hero section: title + input (centered, wider) ═══ */}
       <motion.div
