@@ -209,6 +209,16 @@ export default function RootLayout({
             }),
           }}
         />
+        
+  {/* Google Search Console verification */}
+  <meta
+    name="google-site-verification"
+    content="RBbljzCIw3mPRaMp6kDl03gswB9HqiyYYwUSdhC8cEA"
+  />
+
+  {/* existing JSON-LD scripts stay here */}
+  
+
       </head>
       <body
         className={`${mukta.className} ${GeistMono.variable} antialiased`}
