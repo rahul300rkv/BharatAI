@@ -138,24 +138,20 @@ function HomePage() {
   >(undefined);
 
  // Draft cache for requirement text
-const {
-  cachedValue: cachedRequirement,
-  updateCache: updateRequirementCache,
-} = useDraftCache<string>({ key: 'requirementDraft' });
+const [prevCachedRequirement, setPrevCachedRequirement] =
+  useState(cachedRequirement);
 
-// Restore requirement draft from cache
-useEffect(() => {
+if (cachedRequirement !== prevCachedRequirement) {
+  setPrevCachedRequirement(cachedRequirement);
+
   if (cachedRequirement) {
-    setForm((prev) => {
-      if (prev.requirement === cachedRequirement) return prev;
-
-      return {
-        ...prev,
-        requirement: cachedRequirement,
-      };
-    });
+    setForm((prev) =>
+      prev.requirement === cachedRequirement
+        ? prev
+        : { ...prev, requirement: cachedRequirement },
+    );
   }
-}, [cachedRequirement]);
+}
 
   // Model setup state
   const currentModelId = useSettingsStore((s) => s.modelId);
