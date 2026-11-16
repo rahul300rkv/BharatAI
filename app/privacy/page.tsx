@@ -108,14 +108,9 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold">7. Contact</h2>
             <p>
-              Questions about this Privacy Policy? Email us at:{' '}
-              <a href="mailto:rahul.verma300@rediffmail.com" className="text-primary underline">
-                YOUR_EMAIL@example.com
-              </a>
+              Questions about this Privacy Policy? Email us.
             </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Replace the email above with your real contact email before deploying.
-            </p>
+            
           </section>
         </div>
       </div>
