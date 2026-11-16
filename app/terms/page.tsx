@@ -31,7 +31,7 @@ export default function TermsPage() {
             <Link href="/privacy" className="text-primary underline">Privacy Policy</Link>.
           </p>
           <p>
-            Contact: <a href="mailto:rahul.verma300@rediffmail.com" className="text-primary underline">YOUR_EMAIL@example.com</a>
+            Contact: <a href="mailto:rahul.verma300@rediffmail.com" className="text-primary underline">bharatai@rediffmail.com</a>
           </p>
         </div>
       </div>
