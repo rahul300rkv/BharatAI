@@ -138,20 +138,22 @@ function HomePage() {
   >(undefined);
 
  // Draft cache for requirement text
-const [prevCachedRequirement, setPrevCachedRequirement] =
-  useState(cachedRequirement);
+const {
+  cachedValue: cachedRequirement,
+  updateCache: updateRequirementCache,
+} = useDraftCache<string>({ key: 'requirementDraft' });
 
-if (cachedRequirement !== prevCachedRequirement) {
-  setPrevCachedRequirement(cachedRequirement);
+/* eslint-disable react-hooks/set-state-in-effect */
+useEffect(() => {
+  if (!cachedRequirement) return;
 
-  if (cachedRequirement) {
-    setForm((prev) =>
-      prev.requirement === cachedRequirement
-        ? prev
-        : { ...prev, requirement: cachedRequirement },
-    );
-  }
-}
+  setForm((prev) =>
+    prev.requirement === cachedRequirement
+      ? prev
+      : { ...prev, requirement: cachedRequirement },
+  );
+}, [cachedRequirement]);
+/* eslint-enable react-hooks/set-state-in-effect */
 
   // Model setup state
   const currentModelId = useSettingsStore((s) => s.modelId);
