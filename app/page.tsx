@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowUp,
@@ -136,9 +137,25 @@ function HomePage() {
     import('@/lib/types/settings').SettingsSection | undefined
   >(undefined);
 
-  // Draft cache for requirement text
-  const { cachedValue: cachedRequirement, updateCache: updateRequirementCache } =
-    useDraftCache<string>({ key: 'requirementDraft' });
+ // Draft cache for requirement text
+const {
+  cachedValue: cachedRequirement,
+  updateCache: updateRequirementCache,
+} = useDraftCache<string>({ key: 'requirementDraft' });
+
+// Restore requirement draft from cache
+useEffect(() => {
+  if (cachedRequirement) {
+    setForm((prev) => {
+      if (prev.requirement === cachedRequirement) return prev;
+
+      return {
+        ...prev,
+        requirement: cachedRequirement,
+      };
+    });
+  }
+}, [cachedRequirement]);
 
   // Model setup state
   const currentModelId = useSettingsStore((s) => s.modelId);
@@ -519,7 +536,7 @@ function HomePage() {
           style={{ animationDuration: '4s' }}
         />
         <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/80/10 rounded-full blur-3xl animate-pulse"
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"
           style={{ animationDuration: '6s' }}
         />
       </div>
@@ -887,7 +904,7 @@ function GreetingBar() {
             transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             className="absolute left-4 top-3.5 z-50 w-64"
           >
-            <div className="rounded-2xl bg-[#FFF9F2]/98 dark:bg-[#2A1500]/98 backdrop-blur-sm ring-1 ring-primary/[0.08]/[0.04] dark:ring-white/[0.06] shadow-[0_1px_8px_-2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_8px_-2px_rgba(0,0,0,0.3)] px-2.5 py-2">
+            <div className="rounded-2xl bg-[#FFF9F2]/98 dark:bg-[#2A1500]/98 backdrop-blur-sm ring-1 ring-primary/[0.04] dark:ring-white/[0.06] shadow-[0_1px_8px_-2px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_8px_-2px_rgba(0,0,0,0.3)] px-2.5 py-2">
               {/* ── Row: avatar + name ── */}
               <div
                 className="flex items-center gap-2.5 cursor-pointer transition-all duration-200"
