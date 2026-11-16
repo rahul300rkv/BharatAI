@@ -1,0 +1,40 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Terms of Service — BharatAI',
+};
+
+export default function TermsPage() {
+  return (
+    <main className="min-h-screen bg-background text-foreground">
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+        <Link href="/" className="text-sm text-primary hover:underline mb-8 inline-block">
+          ← Back to BharatAI
+        </Link>
+
+        <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
+        <p className="text-sm text-muted-foreground mb-8">Last updated: November 16, 2026</p>
+
+        <div className="space-y-6 text-sm leading-relaxed">
+          <p>
+            By using BharatAI you agree to these terms. The service is provided "as is". 
+            You are responsible for any API costs from the providers you connect 
+            (Groq, OpenAI, etc.).
+          </p>
+          <p>
+            You may not use the service for illegal purposes or to generate harmful content. 
+            We reserve the right to restrict access if these terms are violated.
+          </p>
+          <p>
+            For the full privacy practices see our{' '}
+            <Link href="/privacy" className="text-primary underline">Privacy Policy</Link>.
+          </p>
+          <p>
+            Contact: <a href="mailto:rahul.verma300@rediffmail.com" className="text-primary underline">YOUR_EMAIL@example.com</a>
+          </p>
+        </div>
+      </div>
+    </main>
+  );
+}
