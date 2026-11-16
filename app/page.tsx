@@ -1315,10 +1315,31 @@ function SEOContent() {
       </div>
 
       {/* Footer trust line */}
-      <p className="text-center text-xs text-muted-foreground/40 leading-relaxed">
-        BharatAI — Bharat Ka Apna AI Classroom 🇮🇳 &nbsp;·&nbsp; Made with ❤️ for Indian students
-        &nbsp;·&nbsp; CBSE · JEE · NEET · UPSC · Hindi · English
-      </p>
+     {/* Footer */}
+<footer className="mt-16 border-t border-border/40 pt-8 pb-6">
+  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+    <p className="text-muted-foreground/60">
+      BharatAI — Bharat Ka Apna AI Classroom 🇮🇳
+    </p>
+    <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+      <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
+        About
+      </Link>
+      <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+        Privacy Policy
+      </Link>
+      <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+        Terms
+      </Link>
+      <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
+        Contact
+      </Link>
+    </nav>
+  </div>
+  <p className="text-center text-xs text-muted-foreground/40 mt-4">
+    Made with ❤️ for Indian students · CBSE · JEE · NEET · UPSC
+  </p>
+</footer>
     </section>
   );
 }
