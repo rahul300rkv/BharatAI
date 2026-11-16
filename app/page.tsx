@@ -1281,7 +1281,92 @@ function SEOContent() {
           ))}
         </div>
       </div>
+{/* How it works */}
+<div className="mb-12">
+  <h2 className="text-xl font-bold text-foreground/80 mb-3">
+    How BharatAI Turns Topics Into Lessons
+  </h2>
 
+  <p className="text-sm text-muted-foreground/70 leading-relaxed mb-6">
+    Start with a question, syllabus topic, chapter name or PDF. BharatAI
+    organizes the material into a structured classroom experience designed
+    to help students understand ideas, practise recall and revise important
+    concepts.
+  </p>
+
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    {[
+      {
+        title: '1. Describe What You Want to Learn',
+        description:
+          'Enter a focused request such as Newton laws for Class 11, organic chemistry reaction mechanisms, Indian polity for UPSC or a summary of an NCERT chapter. You can also upload study material to guide the lesson.',
+      },
+      {
+        title: '2. Generate a Structured AI Classroom',
+        description:
+          'BharatAI converts the request into connected explanations, presentation slides, classroom discussions, diagrams, whiteboard activities and quizzes. Each part supports the same learning objective, helping students move from an introduction to practical understanding.',
+      },
+      {
+        title: '3. Learn, Practise and Revise',
+        description:
+          'Follow the AI teacher, answer questions and use quizzes to identify gaps. Students can revisit generated classrooms whenever they need revision, making BharatAI useful for daily study, homework support and exam preparation.',
+      },
+    ].map(({ title, description }) => (
+      <article
+        key={title}
+        className="rounded-xl border border-border/40 bg-muted/20 p-5"
+      >
+        <h3 className="text-sm font-semibold text-foreground/85 mb-2">
+          {title}
+        </h3>
+        <p className="text-xs text-muted-foreground/70 leading-relaxed">
+          {description}
+        </p>
+      </article>
+    ))}
+  </div>
+</div>
+
+{/* Subjects */}
+<div className="mb-12 rounded-xl border border-border/40 bg-muted/20 p-6">
+  <h2 className="text-lg font-bold text-foreground/80 mb-3">
+    Subjects and Exams You Can Study
+  </h2>
+
+  <p className="text-sm text-muted-foreground/70 leading-relaxed">
+    Create lessons for school Science, Mathematics, Social Science, English
+    and Computer Science, or explore college and professional topics.
+    Competitive-exam learners can build focused classrooms for JEE Physics,
+    Chemistry and Mathematics, NEET Biology, and UPSC History, Geography,
+    Economy, Environment and Indian Polity.
+  </p>
+</div>
+
+{/* Active learning */}
+<div className="mb-12">
+  <h2 className="text-lg font-bold text-foreground/80 mb-3">
+    Designed for Active Learning
+  </h2>
+
+  <div className="space-y-3 text-sm text-muted-foreground/70 leading-relaxed">
+    <p>
+      BharatAI is designed to make students participate instead of passively
+      reading long answers. Explanations are divided into manageable sections
+      and reinforced through questions, examples and visual teaching. Hindi
+      and English options help learners study in the language they understand
+      best, while PDF-based generation keeps lessons connected to their own
+      books and notes.
+    </p>
+
+    <p>
+      Unlike a standard chatbot response, a generated classroom combines
+      several learning formats in one place. This gives learners multiple ways
+      to approach difficult concepts and makes the material easier to review
+      before tests. Teachers and parents can also use the generated structure
+      to support guided study sessions.
+    </p>
+  </div>
+</div>
       {/* FAQ */}
       <div className="mb-8">
         <h2 className="text-lg font-bold mb-6 text-foreground/80">
