@@ -26,7 +26,7 @@ export default function ContactPage() {
               href="mailto:rahul.verma300@rediffmail.com" 
               className="text-primary text-lg underline"
             >
-              YOUR_EMAIL@example.com
+              bharatai@rediffmail.com
             </a>
           </div>
           
