@@ -14,6 +14,7 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
 import { Loader2, Trash2, AlertTriangle } from 'lucide-react';
+import { LanguageSelect } from '@/components/site-language';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { clearDatabase } from '@/lib/utils/database';
 import { toast } from 'sonner';
@@ -62,7 +63,7 @@ export function GeneralSettings() {
       : t('settings.clearCacheConfirmItems').split(', ');
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8"><div className="flex items-center justify-between"><Label>{t('settings.language')}</Label><LanguageSelect/></div>
       {/* Danger Zone - Clear Cache */}
       <div className="relative rounded-xl border border-destructive/30 bg-destructive/[0.03] dark:bg-destructive/[0.06] overflow-hidden">
         {/* Subtle diagonal stripe pattern for danger emphasis */}

@@ -140,6 +140,7 @@ export async function generateSceneOutlinesFromRequirements(
       id: outline.id || nanoid(),
       order: index + 1,
       language: requirements.language,
+      ...(outline.pblConfig ? {pblConfig:{...outline.pblConfig,language:requirements.language}} : {}),
     }));
 
     // Replace sequential gen_img_N/gen_vid_N with globally unique IDs

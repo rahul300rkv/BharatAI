@@ -1,5 +1,6 @@
 'use client';
 
+import { SiteText } from '@/components/site-language';
 import { Stage } from '@/components/stage';
 import { ThemeProvider } from '@/lib/hooks/use-theme';
 import { useStageStore } from '@/lib/store';
@@ -175,13 +176,13 @@ export default function ClassroomDetailPage() {
           {loading ? (
             <div className="flex-1 flex items-center justify-center bharatai-bg">
               <div className="text-center text-muted-foreground">
-                <p>Loading classroom...</p>
+                <p><SiteText k="loadingClassroom"/></p>
               </div>
             </div>
           ) : error ? (
             <div className="flex-1 flex items-center justify-center bharatai-bg">
               <div className="text-center">
-                <p className="text-destructive mb-4">Error: {error}</p>
+                <p className="text-destructive mb-4"><SiteText k="error"/>: {error}</p>
                 <button
                   onClick={() => {
                     setError(null);
@@ -189,9 +190,7 @@ export default function ClassroomDetailPage() {
                     loadClassroom();
                   }}
                   className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-                >
-                  Retry
-                </button>
+                ><SiteText k="retry"/></button>
               </div>
             </div>
           ) : (

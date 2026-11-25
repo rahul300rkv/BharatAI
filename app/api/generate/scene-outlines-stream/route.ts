@@ -261,6 +261,8 @@ export async function POST(req: NextRequest) {
                     ...outline,
                     id: outline.id || nanoid(),
                     order: parsedOutlines.length + 1,
+                    language: requirements.language,
+                    ...(outline.pblConfig ? {pblConfig:{...outline.pblConfig,language:requirements.language}} : {}),
                   };
                   parsedOutlines.push(enriched);
 

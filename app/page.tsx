@@ -21,6 +21,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { languages, isLocale, type Locale, normalizeLocale } from '@/lib/i18n';
+import { SiteText } from '@/components/site-language';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { createLogger } from '@/lib/logger';
 import { Button } from '@/components/ui/button';
@@ -403,7 +404,7 @@ useEffect(() => {
       >
         {/* Language Selector */}
           <div className="relative" >
-            <select aria-label="Interface language" value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);updateForm('language', value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
+            <select aria-label="Interface language" value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
             {languages.map(l=><option key={l.code} value={l.code} lang={l.code}>{l.native}</option>)}
             </select>
           </div>
@@ -1388,21 +1389,13 @@ function SEOContent() {
       BharatAI — Bharat Ka Apna AI Classroom 🇮🇳
     </p>
     <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-      <Link href="/learn" className="text-primary underline">Free learning resources</Link>
-      <Link href="/guides" className="text-primary underline">Study guides</Link>
-      <Link href="/editorial-policy" className="text-muted-foreground hover:text-foreground">Editorial policy</Link>
-      <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-        About
-      </Link>
-      <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
-        Privacy Policy
-      </Link>
-      <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
-        Terms
-      </Link>
-      <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-        Contact
-      </Link>
+      <Link href="/learn" className="text-primary underline"><SiteText k="learn"/></Link>
+      <Link href="/guides" className="text-primary underline"><SiteText k="guides"/></Link>
+      <Link href="/editorial-policy" className="text-muted-foreground hover:text-foreground"><SiteText k="editorial"/></Link>
+      <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="about"/></Link>
+      <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="privacy"/></Link>
+      <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="terms"/></Link>
+      <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="contact"/></Link>
     </nav>
   </div>
   <p className="text-center text-xs text-muted-foreground/40 mt-4">
@@ -1416,7 +1409,7 @@ function SEOContent() {
 export default function Page() {
   return (
     <>
-      <div className="mx-auto max-w-5xl px-4 py-3 text-sm"><Link href="/learn" className="text-primary underline">Explore free lessons — no API key required</Link> · <Link href="/guides" className="text-primary underline">Classroom guides</Link></div>
+      <div className="mx-auto max-w-5xl px-4 py-3 text-sm"><Link href="/learn" className="text-primary underline"><SiteText k="learn"/></Link> · <Link href="/guides" className="text-primary underline"><SiteText k="guides"/></Link></div>
       <HomePage />
       <SEOContent />
     </>

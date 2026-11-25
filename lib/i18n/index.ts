@@ -1,5 +1,6 @@
 import { defaultLocale, isLocale, type Locale } from './types';
 export { type Locale, defaultLocale, languages, isLocale, normalizeLocale, languageName, languageInstruction } from './types';
+import { siteStrings } from './site';
 import { indianStrings } from './indian';
 import { commonHiIN, commonEnUS } from './common';
 import { stageHiIN, stageEnUS } from './stage';
@@ -28,6 +29,8 @@ export type TranslationKey = keyof (typeof translations)['en-US'];
 
 export function translate(locale: Locale, key: string): string {
   const keys = key.split('.');
+  const site = siteStrings[locale]?.[key] ?? siteStrings['en-US']?.[key];
+  if (site !== undefined) return site;
   const localized = indianStrings[locale]?.[key];
   if (localized && locale !== 'hi-IN' && locale !== 'en-US') return localized;
   let value: unknown = translations[locale === 'hi-IN' ? 'hi-IN' : 'en-US'];
