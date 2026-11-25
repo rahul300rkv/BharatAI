@@ -3,12 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { EngagementHome, LearningDiscovery } from '@/components/learning-engagement';
-import { track } from '@/lib/learning/activity';
-import { LearningPreview } from '@/components/learning-preview';
+import { CompactResume, LearningDiscovery } from '@/components/learning-engagement';
+import { track, removeVisit } from '@/lib/learning/activity';
+import { engagementText } from '@/lib/i18n/engagement';
 import { designText, localizedLabTitle } from '@/lib/i18n/learning-design';
 import { LabText } from '@/components/site-language';
-import { LearningHome } from '@/components/learning-home';
 import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import {
   ArrowUp,
@@ -76,66 +75,6 @@ const initialFormState: FormState = {
   webSearch: false,
 };
 
-// ─── API Key Onboarding Banner ────────────────────────────────────────────────
-function OnboardingBanner({ onSetupClick }: { onSetupClick: () => void }) {
-  const { locale } = useI18n();
-  const hi = locale === 'hi-IN';
-  const [dismissed, setDismissed] = useState(false);
-
-  useEffect(() => {
-    try {
-      if (localStorage.getItem('onboardingDismissed') === 'true') setDismissed(true);
-    } catch { /* ignore */ }
-  }, []);
-
-  if (dismissed) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -8 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      className="w-full max-w-[800px] mb-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3"
-    >
-      <span className="text-2xl shrink-0">🔑</span>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-orange-900 dark:text-orange-200">
-          {hi ? 'कक्षा बनाने के लिए AI API कुंजी सेट करें' : 'Set up an AI API key to generate a classroom'}
-        </p>
-        <p className="text-xs text-orange-700/80 dark:text-orange-300/70 mt-0.5 leading-relaxed">
-          {hi ? 'NVIDIA की API कुंजी यहाँ प्राप्त करें: ' : 'Get an NVIDIA API key at ' }
-          <a
-            href="https://build.nvidia.com/models"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline font-medium hover:text-orange-900 dark:hover:text-orange-100 transition-colors"
-          >
-            build.nvidia.com
-          </a>
-          {hi ? '। फिर सेटिंग्स में LLM अनुभाग खोलकर API कुंजी जोड़ें। OpenAI, Gemini, Claude और अन्य प्रदाता भी समर्थित हैं। प्रदाता की शुल्क व उपयोग सीमाएँ लागू हो सकती हैं।' : '. Then open Settings → LLM and add your API key. Other providers are supported. Provider charges and limits may apply.'}
-        </p>
-      </div>
-      <div className="flex items-center gap-2 shrink-0">
-        <button
-          onClick={onSetupClick}
-          className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm"
-        >
-          {hi ? 'अभी सेट करें' : 'Set up now'}
-        </button>
-        <button
-          onClick={() => {
-            setDismissed(true);
-            try { localStorage.setItem('onboardingDismissed', 'true'); } catch { /* ignore */ }
-          }}
-          className="px-2 py-1.5 rounded-lg text-xs text-orange-600/60 hover:text-orange-700 dark:text-orange-400/60 dark:hover:text-orange-300 transition-colors"
-        >
-          ✕
-        </button>
-      </div>
-    </motion.div>
-  );
-}
-
 function HomePage() {
   const { t, locale, setLocale } = useI18n();
   const { theme, setTheme } = useTheme();
@@ -167,7 +106,7 @@ useEffect(() => {
 
   // Model setup state
   const currentModelId = useSettingsStore((s) => s.modelId);
-  const [recentOpen, setRecentOpen] = useState(true);
+  const [recentOpen, setRecentOpen] = useState(false);
 
   // Hydrate client-only state after mount (avoids SSR mismatch)
   /* eslint-disable react-hooks/set-state-in-effect -- Hydration from localStorage must happen in effect */
@@ -263,6 +202,7 @@ useEffect(() => {
     setPendingDeleteId(null);
     try {
       await deleteStageData(id);
+      removeVisit(id);
       await loadClassrooms();
     } catch (err) {
       log.error('Failed to delete classroom:', err);
@@ -405,11 +345,11 @@ useEffect(() => {
   };
 
   return (
-    <div className="learning-hero relative w-full flex flex-col items-center px-4 pt-16 sm:px-8 sm:pt-20 overflow-x-clip">
-      {/* ═══ Top-right pill (unchanged) ═══ */}
+    <div className="learning-hero relative w-full flex flex-col items-center px-4 pt-4 sm:px-8 overflow-x-clip min-h-[min(76dvh,720px)]">
+      <header className="w-full max-w-6xl flex items-center justify-between gap-2"><Link href="/" aria-label="BharatAI"><img src="/logo-horizontal.svg" alt="BharatAI" className="h-9 sm:h-11 w-auto"/></Link><nav className="hidden sm:flex flex-wrap gap-4 text-sm ms-auto me-3"><Link href="/demo"><LabText text="Classrooms"/></Link><Link href="/labs"><LabText text="Labs"/></Link><Link href="/learn"><SiteText k="learn"/></Link></nav>
       <div
         ref={toolbarRef}
-        className="fixed top-4 right-4 z-50 flex items-center gap-1 bg-popover/95 backdrop-blur-md px-2 py-1.5 rounded-full border border-primary/15 shadow-sm"
+        className="relative z-50 flex items-center gap-1"
       >
         {/* Language Selector */}
           <div className="relative" >
@@ -494,6 +434,7 @@ useEffect(() => {
           </button>
         </div>
       </div>
+      </header>
       <SettingsDialog
         open={settingsOpen}
         onOpenChange={(open) => {
@@ -510,27 +451,11 @@ useEffect(() => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={cn(
           'relative z-20 w-full max-w-[800px] flex flex-col items-center',
-          'justify-center py-8',
+          'justify-center pt-12 sm:pt-20 pb-8',
         )}
       >
-        {/* ── Logo ── */}
-        <motion.img
-          src="/logo-horizontal.svg"
-          alt="BharatAI"
-          initial={false}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            delay: 0.1,
-            type: 'spring',
-            stiffness: 200,
-            damping: 20,
-          }}
-          className="h-14 md:h-20 mb-3 -ml-2 md:-ml-3 drop-shadow-sm"
-        />
-
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-semibold text-center mb-3 tracking-tight max-w-3xl">{designText(locale,'hero')}</h1>
-        <p className="text-center text-base text-muted-foreground max-w-xl mb-4">{designText(locale,'intro')}</p>
-        <nav aria-label={designText(locale,'resources')} className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm mb-6"><Link href="/demo"><LabText text="Free demo classrooms"/></Link><Link href="/labs"><LabText text="Labs"/></Link><Link href="/learn"><SiteText k="learn"/></Link><Link href="/guides"><SiteText k="guides"/></Link></nav>
+        <h1 className="text-3xl sm:text-5xl font-semibold text-center mb-2 tracking-tight max-w-3xl">{designText(locale,'prompt')}</h1>
+        <p className="text-center text-base text-muted-foreground max-w-xl mb-6">{designText(locale,'hero')}</p>
         {/* ── Unified input area ── */}
         <motion.div
           initial={false}
@@ -538,7 +463,7 @@ useEffect(() => {
           transition={{ delay: 0.35 }}
           className="w-full"
         >
-          <div className="w-full rounded-2xl border border-border/60 bg-card shadow-xl shadow-black/[0.04] dark:shadow-black/25 transition-shadow focus-within:shadow-2xl focus-within:shadow-primary/[0.08] focus-within:border-primary/30">
+          <div className="w-full rounded-2xl border border-border/60 bg-card shadow-sm transition-shadow focus-within:shadow-md focus-within:border-primary/30">
             {/* ── Greeting + Profile + Agents ── */}
             <div className="relative z-20 flex items-start justify-between">
               <GreetingBar />
@@ -552,11 +477,11 @@ useEffect(() => {
               ref={textareaRef}
               placeholder={designText(locale,'prompt')}
               aria-label={designText(locale,'prompt')}
-              className="w-full resize-none border-0 bg-transparent px-4 pt-1 pb-2 text-base leading-relaxed placeholder:text-muted-foreground focus:outline-none min-h-[104px] max-h-[300px]"
+              className="w-full resize-none border-0 bg-transparent px-4 pt-1 pb-2 text-base leading-relaxed placeholder:text-muted-foreground focus:outline-none min-h-[96px] max-h-[300px]"
               value={form.requirement}
               onChange={(e) => updateForm('requirement', e.target.value)}
               onKeyDown={handleKeyDown}
-              rows={4}
+              rows={3}
             />
 
             {/* Toolbar row */}
@@ -607,24 +532,11 @@ useEffect(() => {
           </div>
         </motion.div>
 
-        <div className="w-full flex flex-wrap gap-2 mt-4 items-center"><span className="text-sm text-muted-foreground">{designText(locale,'topics')}</span>{(['ohms-law','projectile-motion','quadratic-equations'] as const).map(slug=><button type="button" key={slug} className="rounded-full border bg-card px-3 py-2 text-sm hover:border-primary" onClick={()=>{updateForm('requirement',localizedLabTitle(locale,slug));textareaRef.current?.focus()}}>{localizedLabTitle(locale,slug)}</button>)}</div>
+        <div className="w-full flex flex-wrap justify-center gap-2 mt-4 items-center">{(['ohms-law','projectile-motion','quadratic-equations'] as const).map(slug=><button type="button" key={slug} className="rounded-full border px-3 py-1.5 text-sm hover:border-primary" onClick={()=>{updateForm('requirement',localizedLabTitle(locale,slug));textareaRef.current?.focus()}}>{localizedLabTitle(locale,slug)}</button>)}</div>
         <LearningDiscovery onTopic={topic=>{updateForm('requirement',topic);textareaRef.current?.focus()}}/>
-        <div className="mt-5 w-full text-center space-y-2"><p className="text-sm font-medium">{designText(locale,'free')}</p><div className="flex flex-wrap justify-center gap-3"><Link href="/demo" className="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground"><LabText text="Free demo classrooms"/></Link><Link href="/labs" className="rounded-xl border px-4 py-3 text-sm font-semibold"><LabText text="Free virtual labs"/></Link></div><p className="text-sm text-muted-foreground">{designText(locale,'key')}</p></div>
-      {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
-      {!currentModelId && (
-        <div className="relative z-20 w-full max-w-[800px] mt-4">
-          <AnimatePresence>
-            <OnboardingBanner
-              onSetupClick={() => {
-                setSettingsSection('providers' as import('@/lib/types/settings').SettingsSection);
-                setSettingsOpen(true);
-              }}
-            />
-          </AnimatePresence>
-        </div>
-      )}
-
-
+        <div className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm"><Link href="/demo" className="text-primary font-semibold hover:underline"><LabText text="Free demo classrooms"/></Link><Link href="/labs" className="hover:underline"><LabText text="Free virtual labs"/></Link><Link href="/learn" className="hover:underline"><SiteText k="learn"/></Link></div>
+        <p className="text-xs text-muted-foreground mt-3 text-center">{designText(locale,'key')}</p>
+        <CompactResume/>
         {/* ── Error ── */}
         <AnimatePresence>
           {error && (
@@ -646,7 +558,7 @@ useEffect(() => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="relative z-10 mt-10 w-full max-w-6xl flex flex-col items-center"
+          className="relative z-10 mt-2 w-full max-w-3xl flex flex-col items-center"
         >
           {/* Trigger — divider-line with centered text */}
           <button
@@ -717,10 +629,6 @@ useEffect(() => {
         </motion.div>
       )}
 
-      {/* Footer — flows with content, at the very end */}
-      <div className="mt-auto pt-12 pb-4 text-center text-xs text-muted-foreground/50 flex flex-col items-center gap-1">
-        {locale === 'hi-IN' ? 'BharatAI — भारत की अपनी AI कक्षा 🇮🇳' : 'BharatAI — Bharat ka Apna AI Classroom 🇮🇳'}
-      </div>
     </div>
   );
 }
@@ -1165,232 +1073,12 @@ function ClassroomCard({
 }
 
 // ─── Static SEO content — visible to crawlers, subtle for users ──────────────
-function SEOContent() {
-  const { locale } = useI18n();
-  const tr = (en: string, hi: string) => locale === 'hi-IN' ? hi : en;
-  return (
-    <section aria-label="About BharatAI" className="w-full max-w-4xl mx-auto px-4 pb-16 mt-4">
-      {/* Features */}
-      <div className="mb-12">
-        <h2 className="text-xl font-bold text-center mb-2 text-foreground/80">
-          {tr("What BharatAI Offers","BharatAI की विशेषताएँ")}
-        </h2>
-        <p className="text-center text-sm text-muted-foreground/70 mb-8">
-          {tr("An interactive AI classroom — built for CBSE, JEE, NEET & UPSC","CBSE, JEE, NEET और UPSC के लिए इंटरैक्टिव AI कक्षा")}
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            {
-              emoji: '🎓',
-              title: tr("Multi-Agent AI Classroom","मल्टी-एजेंट AI कक्षा"),
-              desc: tr("A full class with AI Teacher, AI Assistant, and student agents who discuss, debate and explain — not just one bot answering questions.","AI शिक्षक, सहायक और छात्र एजेंट मिलकर चर्चा करते हैं, प्रश्न पूछते हैं और विषय समझाते हैं।"),
-            },
-            {
-              emoji: '📄',
-              title: tr("PDF to Lesson in Seconds","PDF से इंटरैक्टिव पाठ"),
-              desc: tr("Upload your NCERT chapter, notes or any PDF and generate an interactive lesson with slides, quiz and whiteboard where supported.","NCERT अध्याय, नोट्स या PDF अपलोड करें और स्लाइड, प्रश्नोत्तरी तथा व्हाइटबोर्ड सहित पाठ तैयार करें।"),
-            },
-            {
-              emoji: '🇮🇳',
-              title: tr("13 Indian languages + English","13 भारतीय भाषाएँ और अंग्रेज़ी"),
-              desc: tr("Choose a course language from 13 Indian languages or English. Output quality depends on your AI model.","पाठ के लिए 13 भारतीय भाषाओं या अंग्रेज़ी में से चुनें। परिणाम की गुणवत्ता चयनित AI मॉडल पर निर्भर करती है।"),
-            },
-            {
-              emoji: '📝',
-              title: tr("Auto-Generated Quizzes","स्वचालित प्रश्नोत्तरी"),
-              desc: tr("Generated lessons may include MCQs, short answers and AI-graded quizzes to test understanding — like a real exam practice.","बहुविकल्पीय और लघु उत्तरीय प्रश्नों के माध्यम से अपनी समझ जाँचें। AI मूल्यांकन भी उपलब्ध है।"),
-            },
-            {
-              emoji: '🖊️',
-              title: tr("Interactive Whiteboard","इंटरैक्टिव व्हाइटबोर्ड"),
-              desc: tr("AI teacher draws diagrams, writes formulas and explains concepts on a live whiteboard — just like a real class.","AI शिक्षक व्हाइटबोर्ड पर आरेख और सूत्र बनाकर अवधारणाएँ समझाता है।"),
-            },
-            {
-              emoji: '🔒',
-              title: tr("Your API Key and Data","आपकी API कुंजी और डेटा"),
-              desc: tr("BharatAI runs on your own AI API key. Requests may pass through our server and your chosen AI provider.","BharatAI आपकी AI API कुंजी का उपयोग कर सकता है। अनुरोध हमारे सर्वर और चयनित AI प्रदाता तक जा सकते हैं।"),
-            },
-          ].map(({ emoji, title, desc }) => (
-            <div
-              key={title}
-              className="rounded-xl border border-border/40 bg-muted/20 p-4 flex flex-col gap-2"
-            >
-              <span className="text-2xl">{emoji}</span>
-              <h3 className="font-semibold text-sm text-foreground/85">{title}</h3>
-              <p className="text-xs text-muted-foreground/70 leading-relaxed">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Use cases */}
-      <div className="mb-12 rounded-xl border border-border/40 bg-muted/20 p-6">
-        <h2 className="text-lg font-bold mb-4 text-foreground/80">{tr("Who BharatAI Is Designed For","BharatAI किसके लिए है?")}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {[
-            { label: tr("Class 10–12 CBSE Students","CBSE कक्षा 10–12 के विद्यार्थी"), detail: tr("Learn Science, Maths, Social Science with AI explanations and auto-generated notes.","AI की व्याख्याओं और नोट्स से विज्ञान, गणित तथा सामाजिक विज्ञान पढ़ें।") },
-            { label: tr("JEE Aspirants","JEE अभ्यर्थी"), detail: tr("Master Physics, Chemistry and Maths concepts with whiteboard diagrams and formula walkthroughs.","व्हाइटबोर्ड के आरेख और सूत्रों से भौतिकी, रसायन विज्ञान और गणित समझें।") },
-            { label: tr("NEET Aspirants","NEET अभ्यर्थी"), detail: tr("Study Biology and Chemistry with detailed AI explanations and practice quizzes.","विस्तृत व्याख्याओं और अभ्यास प्रश्नों से जीव विज्ञान एवं रसायन विज्ञान पढ़ें।") },
-            { label: tr("UPSC Aspirants","UPSC अभ्यर्थी"), detail: tr("Cover History, Polity, Geography and Current Affairs with structured AI-generated lessons.","संरचित पाठों के साथ इतिहास, राजव्यवस्था, भूगोल और समसामयिक विषय पढ़ें।") },
-            { label: tr("College Students","महाविद्यालय के विद्यार्थी"), detail: tr("Understand complex university topics by uploading lecture notes or textbook PDFs.","व्याख्यान नोट्स और पाठ्यपुस्तक PDF से जटिल विषय समझें।") },
-            { label: tr("Curious Learners","जिज्ञासु शिक्षार्थी"), detail: tr("Learn anything — from Quantum Physics to Indian Classical Music — in minutes.","क्वांटम भौतिकी से भारतीय शास्त्रीय संगीत तक नए विषय सीखें।") },
-          ].map(({ label, detail }) => (
-            <div key={label} className="flex gap-3 items-start">
-              <span className="mt-0.5 text-primary text-sm">✓</span>
-              <div>
-                <p className="text-sm font-medium text-foreground/80">{label}</p>
-                <p className="text-xs text-muted-foreground/60 leading-relaxed">{detail}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-{/* How it works */}
-<div className="mb-12">
-  <h2 className="text-xl font-bold text-foreground/80 mb-3">
-    {tr("How BharatAI Turns Topics Into Lessons","BharatAI विषयों को पाठों में कैसे बदलता है")}
-  </h2>
-
-  <p className="text-sm text-muted-foreground/70 leading-relaxed mb-6">
-    {tr("Start with a question, syllabus topic, chapter name or PDF. BharatAI organizes the material into a structured classroom experience designed to help students understand ideas, practise recall and revise important concepts.","प्रश्न, पाठ्यक्रम, अध्याय या PDF से शुरू करें। BharatAI सामग्री को संरचित कक्षा में बदलता है ताकि विद्यार्थी अवधारणाएँ समझें, याद करने का अभ्यास करें और पुनरावृत्ति कर सकें।")}
-  </p>
-
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-    {[
-      {
-        title: tr("1. Describe What You Want to Learn","1. बताएं कि आप क्या सीखना चाहते हैं"),
-        description:
-          tr("Enter a focused request such as Newton laws for Class 11, organic chemistry reaction mechanisms, Indian polity for UPSC or a summary of an NCERT chapter. You can also upload study material to guide the lesson.","कक्षा 11 के न्यूटन के नियम, कार्बनिक रसायन की अभिक्रियाएँ, UPSC की भारतीय राजव्यवस्था या NCERT अध्याय जैसे किसी विषय को लिखें। अध्ययन सामग्री भी अपलोड कर सकते हैं।"),
-      },
-      {
-        title: tr("2. Generate a Structured AI Classroom","2. संरचित AI कक्षा तैयार करें"),
-        description:
-          tr("BharatAI converts the request into connected explanations, presentation slides, classroom discussions, diagrams, whiteboard activities and quizzes. Each part supports the same learning objective, helping students move from an introduction to practical understanding.","BharatAI आपके अनुरोध से व्याख्याएँ, स्लाइड, चर्चा, आरेख, व्हाइटबोर्ड गतिविधियाँ और प्रश्नोत्तरी तैयार करता है। ये सभी विषय की व्यावहारिक समझ बढ़ाने में मदद करते हैं।"),
-      },
-      {
-        title: tr("3. Learn, Practise and Revise","3. सीखें, अभ्यास करें और दोहराएँ"),
-        description:
-          tr("Follow the AI teacher, answer questions and use quizzes to identify gaps. Students can revisit generated classrooms whenever they need revision, making BharatAI useful for daily study, homework support and exam preparation.","AI शिक्षक की व्याख्या सुनें, प्रश्नों के उत्तर दें और अपनी कमज़ोरियाँ पहचानें। पुनरावृत्ति, गृहकार्य और परीक्षा की तैयारी के लिए पुरानी कक्षाएँ फिर खोल सकते हैं।"),
-      },
-    ].map(({ title, description }) => (
-      <article
-        key={title}
-        className="rounded-xl border border-border/40 bg-muted/20 p-5"
-      >
-        <h3 className="text-sm font-semibold text-foreground/85 mb-2">
-          {title}
-        </h3>
-        <p className="text-xs text-muted-foreground/70 leading-relaxed">
-          {description}
-        </p>
-      </article>
-    ))}
-  </div>
-</div>
-
-{/* Subjects */}
-<div className="mb-12 rounded-xl border border-border/40 bg-muted/20 p-6">
-  <h2 className="text-lg font-bold text-foreground/80 mb-3">
-    {tr("Subjects and Exams You Can Study","विषय और परीक्षाएँ")}
-  </h2>
-
-  <p className="text-sm text-muted-foreground/70 leading-relaxed">
-    {tr("Create lessons for school Science, Mathematics, Social Science, English and Computer Science, or explore college and professional topics. Competitive-exam learners can build focused classrooms for JEE Physics, Chemistry and Mathematics, NEET Biology, and UPSC History, Geography, Economy, Environment and Indian Polity.","स्कूल के विज्ञान, गणित, सामाजिक विज्ञान, अंग्रेज़ी और कंप्यूटर विज्ञान के पाठ बनाएँ या उच्च शिक्षा के विषय पढ़ें। JEE के लिए भौतिकी, रसायन और गणित; NEET के लिए जीव विज्ञान; तथा UPSC के लिए इतिहास, भूगोल, अर्थव्यवस्था, पर्यावरण और राजव्यवस्था पढ़ें।")}
-  </p>
-</div>
-
-{/* Active learning */}
-<div className="mb-12">
-  <h2 className="text-lg font-bold text-foreground/80 mb-3">
-    {tr("Designed for Active Learning","सक्रिय अध्ययन के लिए बनाया गया")}
-  </h2>
-
-  <div className="space-y-3 text-sm text-muted-foreground/70 leading-relaxed">
-    <p>
-      {tr("BharatAI is designed to make students participate instead of passively reading long answers. Explanations are divided into manageable sections and reinforced through questions, examples and visual teaching. Indian language options help learners study in the language they understand best, while PDF-based generation keeps lessons connected to their own books and notes.","BharatAI विद्यार्थियों को केवल लंबे उत्तर पढ़ने के बजाय सक्रिय भागीदारी के लिए प्रेरित करता है। छोटे खंडों, प्रश्नों, उदाहरणों और दृश्य शिक्षण से अवधारणाएँ स्पष्ट होती हैं। भारतीय भाषाओं में पढ़ने और अपनी PDF से पाठ बनाने की सुविधा मिलती है।")}
-    </p>
-
-    <p>
-      {tr("Unlike a standard chatbot response, a generated classroom combines several learning formats in one place. This gives learners multiple ways to approach difficult concepts and makes the material easier to review before tests. Teachers and parents can also use the generated structure to support guided study sessions.","सामान्य चैटबॉट से अलग, यह कक्षा कई अध्ययन प्रारूप एक जगह लाती है। इससे कठिन अवधारणाओं को अलग-अलग तरीकों से समझना और परीक्षा से पहले दोहराना आसान होता है। शिक्षक और अभिभावक भी निर्देशित अध्ययन में इसका उपयोग कर सकते हैं।")}
-    </p>
-  </div>
-</div>
-      {/* FAQ */}
-      <div className="mb-8">
-        <h2 className="text-lg font-bold mb-6 text-foreground/80">
-          {tr("Frequently Asked Questions","अक्सर पूछे जाने वाले प्रश्न")}
-        </h2>
-        <div className="flex flex-col gap-4">
-          {[
-            {
-              q: tr("What is BharatAI?","BharatAI क्या है?"),
-              a: tr("BharatAI is India-focused multi-agent AI classroom. Type any topic or upload a PDF and request an interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in your selected language.","BharatAI भारतीय विद्यार्थियों के लिए मल्टी-एजेंट AI कक्षा है। विषय लिखें या PDF अपलोड करें और अपनी चुनी हुई भाषा में पाठ, प्रश्नोत्तरी, व्हाइटबोर्ड तथा चर्चा प्राप्त करें।"),
-            },
-            {
-              q: tr("Is BharatAI free?","क्या BharatAI मुफ़्त है?"),
-              a: tr("Public labs, lessons and prepared classrooms are free without a key. Personalised generation may require your own API key; provider limits and charges apply.","सार्वजनिक पाठ मुफ़्त हैं। व्यक्तिगत कक्षा बनाने के लिए AI प्रदाता की API कुंजी आवश्यक हो सकती है। प्रदाता का शुल्क और उपयोग सीमा लागू हो सकती है।"),
-            },
-            {
-              q: tr("Can BharatAI help with JEE, NEET and UPSC preparation?","क्या BharatAI JEE, NEET और UPSC की तैयारी में मदद करता है?"),
-              a: tr("Yes. BharatAI is purpose-built for Indian competitive exam preparation. Generate lessons on any Physics, Chemistry, Biology, Mathematics, History, Polity or Geography topic. Use official syllabi and past papers to verify exam alignment.","हाँ। भौतिकी, रसायन विज्ञान, जीव विज्ञान, गणित, इतिहास, राजव्यवस्था और भूगोल के पाठ तैयार करें। अभ्यास के लिए आधिकारिक पाठ्यक्रम और पुराने प्रश्नपत्रों से भी मिलान करें।"),
-            },
-            {
-              q: tr("Which languages can I learn in?","मैं किन भाषाओं में सीख सकता हूँ?"),
-              a: tr("Choose Hindi, Bengali, Telugu, Marathi, Tamil, Urdu, Gujarati, Kannada, Odia, Malayalam, Punjabi, Assamese, Maithili or English for classroom generation. Interface translations are being expanded; voice support varies by provider.","कक्षा के लिए हिन्दी, बंगाली, तेलुगु, मराठी, तमिल, उर्दू, गुजराती, कन्नड़, ओड़िया, मलयालम, पंजाबी, असमिया, मैथिली या अंग्रेज़ी चुनें। इंटरफ़ेस अनुवाद का विस्तार जारी है; आवाज़ की उपलब्धता प्रदाता पर निर्भर है।"),
-            },
-            {
-              q: tr("Can I upload an NCERT PDF and get a lesson?","क्या NCERT PDF से पाठ बना सकता हूँ?"),
-              a: tr("Yes. Upload a permitted PDF within the size and page limits. Text extraction works best with selectable text; scanned pages may require OCR. Review generated content against the source.","हाँ। अनुमति प्राप्त NCERT पुस्तक, नोट्स या पुराने प्रश्नपत्र की PDF अपलोड करें। BharatAI उससे पाठ तैयार करने का प्रयास करेगा। परिणाम मूल सामग्री से जाँचें।"),
-            },
-            {
-              q: tr("Which AI models work with BharatAI?","BharatAI के साथ कौन से AI मॉडल काम करते हैं?"),
-              a: tr("Supported providers include NVIDIA, OpenRouter and other configured providers. Check Settings for available models; availability and pricing can change.","OpenAI, Google Gemini, Anthropic Claude, DeepSeek, Qwen, Groq, Kimi, GLM, MiniMax, SiliconFlow और OpenAI-संगत प्रदाता समर्थित हैं। उपलब्ध मॉडल सेटिंग्स में देखें।"),
-            },
-            {
-              q: tr("Is my data private?","क्या मेरा डेटा निजी है?"),
-              a: tr("BharatAI stores classroom data locally for browser-based sessions and uses server endpoints and external AI providers for processing. See our privacy policy before uploading sensitive material.","ब्राउज़र आधारित कक्षाओं का डेटा स्थानीय रूप से रखा जाता है। प्रसंस्करण के लिए सर्वर और बाहरी AI प्रदाता उपयोग हो सकते हैं। संवेदनशील सामग्री अपलोड करने से पहले गोपनीयता नीति पढ़ें।"),
-            },
-          ].map(({ q, a }) => (
-            <div
-              key={q}
-              className="rounded-xl border border-border/40 bg-muted/20 p-4"
-            >
-              <h3 className="text-sm font-semibold text-foreground/85 mb-1.5">{q}</h3>
-              <p className="text-xs text-muted-foreground/70 leading-relaxed">{a}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Footer trust line */}
-     {/* Footer */}
-<footer className="mt-16 border-t border-border/40 pt-8 pb-6">
-  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
-    <p className="text-muted-foreground/60">
-      {tr("BharatAI — Bharat Ka Apna AI Classroom 🇮🇳","BharatAI — भारत की अपनी AI कक्षा 🇮🇳")}
-    </p>
-    <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"><Link href="/labs" className="text-muted-foreground hover:text-foreground transition-colors">{tr("Virtual labs","आभासी प्रयोगशाला")}</Link><Link href="/demo" className="text-muted-foreground hover:text-foreground transition-colors">{tr("Demo classrooms","नमूना कक्षाएँ")}</Link>
-      <Link href="/learn" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="learn"/></Link>
-      <Link href="/guides" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="guides"/></Link>
-      <Link href="/editorial-policy" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="editorial"/></Link>
-      <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="about"/></Link>
-      <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="privacy"/></Link>
-      <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="terms"/></Link>
-      <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="contact"/></Link>
-    </nav>
-  </div>
-  <p className="text-center text-xs text-muted-foreground/40 mt-4">
-    {tr("Made with ❤️ for Indian students · CBSE · JEE · NEET · UPSC","भारतीय विद्यार्थियों के लिए ❤️ · CBSE · JEE · NEET · UPSC")}
-  </p>
-</footer>
-    </section>
-  );
-}
+function SEOContent(){const {locale}=useI18n();return <footer className="mx-auto max-w-4xl px-4 pt-8 pb-6 text-center space-y-3 border-t"><p className="text-sm text-muted-foreground">{designText(locale,'intro')}</p><p className="text-sm text-muted-foreground">14 · {engagementText(locale,'languages')} · 20 <LabText text="Labs"/></p><nav className="flex flex-wrap gap-x-4 gap-y-2 justify-center text-xs">{(['about','guides','editorial','privacy','terms','contact'] as const).map(k=><Link key={k} href={k==='editorial'?'/editorial-policy':'/'+k} className="hover:underline"><SiteText k={k}/></Link>)}<Link href="/history" className="hover:underline">{engagementText(locale,'history')}</Link></nav></footer>}
 
 export default function Page() {
   return (
     <>
-      <MotionConfig reducedMotion="user"><main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningPreview/><EngagementHome/><LearningHome /><SEOContent /></main></MotionConfig>
+      <MotionConfig reducedMotion="user"><main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><SEOContent /></main></MotionConfig>
     </>
   );
 }
