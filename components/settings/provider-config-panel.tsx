@@ -68,6 +68,7 @@ export function ProviderConfigPanel({
   isBuiltIn,
 }: ProviderConfigPanelProps) {
   const { t,locale } = useI18n();
+  const [testModel,setTestModel]=useState('');
   const [catalogBusy,setCatalogBusy]=useState(false);
   const [catalogMessage,setCatalogMessage]=useState('');
   const setProviderConfig=useSettingsStore(s=>s.setProviderConfig);
@@ -77,9 +78,10 @@ export function ProviderConfigPanel({
       const r=await fetch('/api/model-catalog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({provider:provider.id,apiKey:provider.id==='nvidia'?apiKey:undefined,freeOnly:true})});
       const result=await r.json();
       if(!r.ok||!Array.isArray(result.models)||!result.models.length)throw Error(result.error||'No compatible models found');
-      const merged=new Map(provider.models.map(m=>[m.id,m]));
+      const merged=new Map(provider.models.filter(m=>provider.id!=='nvidia'||m.id!=='qwen/qwen3-next-80b-a3b-instruct').map(m=>[m.id,m]));
       for(const m of result.models)merged.set(m.id,m);
       setProviderConfig(provider.id,{models:Array.from(merged.values())});
+      setTestModel(result.models.find((m:{id:string})=>m.id==='z-ai/glm-5.3-flash')?.id || result.models[0].id);
       setCatalogMessage(locale==='hi-IN'?'मॉडल सूची अपडेट हुई': 'Live models added; test the selected model before use.');
     }catch(e){setCatalogMessage(e instanceof Error?e.message:'Catalogue unavailable');}
     finally{setCatalogBusy(false);}
@@ -136,15 +138,15 @@ export function ProviderConfigPanel({
       return;
     }
 
-    const testModelId = availableModels[0].id;
+    const testModelId = availableModels.find(m=>m.id===testModel)?.id || availableModels.find(m=>provider.id==='nvidia'&&m.id==='z-ai/glm-5.3-flash')?.id || availableModels[0].id;
 
     try {
       const response = await fetch('/api/verify-model', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          apiKey,
-          baseUrl,
+          apiKey:apiKey.trim(),
+          baseUrl:baseUrl.trim().replace(/\/+$/, '').replace(/\/chat\/completions$/, ''),
           model: `${provider.id}:${testModelId}`,
           providerType: provider.type,
           requiresApiKey: requiresApiKey,
@@ -158,13 +160,13 @@ export function ProviderConfigPanel({
         setTestMessage(t('settings.connectionSuccess'));
       } else {
         setTestStatus('error');
-        setTestMessage(data.error || t('settings.connectionFailed'));
+        setTestMessage(typeof data.error==='string'?data.error: data.message || data.error?.message || t('settings.connectionFailed'));
       }
     } catch (_error) {
       setTestStatus('error');
       setTestMessage(t('settings.connectionFailed'));
     }
-  }, [apiKey, baseUrl, provider.id, provider.type, requiresApiKey, providersConfig, t]);
+  }, [apiKey, baseUrl, provider.id, provider.type, requiresApiKey, providersConfig, t, testModel]);
 
   const models = providersConfig[provider.id]?.models || [];
   const isServerConfigured = providersConfig[provider.id]?.isServerConfigured;
@@ -225,6 +227,7 @@ export function ProviderConfigPanel({
             )}
           </Button>
         </div>
+        {models.length>0&&<label className="block text-xs">{locale==='hi-IN'?'परीक्षण मॉडल':'Model to test'}<select className="block w-full border rounded-md bg-background p-2 mt-1" value={models.some(m=>m.id===testModel)?testModel:(models.find(m=>provider.id==='nvidia'&&m.id==='z-ai/glm-5.3-flash')?.id||models[0].id)} onChange={e=>setTestModel(e.target.value)}>{models.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select></label>}
         {testMessage && (
           <div
             className={cn(

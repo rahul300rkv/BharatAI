@@ -418,7 +418,7 @@ function ensureBuiltInProviders(state: Partial<SettingsState>): void {
 
       state.providersConfig![providerId] = {
         ...existing,
-        models: mergedModels,
+        models: provider.id === 'nvidia' ? (mergedModels || []).filter(m=>m.id!=='qwen/qwen3-next-80b-a3b-instruct') : mergedModels,
         name: existing.name || provider.name,
         type: existing.type || provider.type,
         defaultBaseUrl: existing.defaultBaseUrl || provider.defaultBaseUrl,

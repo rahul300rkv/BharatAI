@@ -1052,7 +1052,7 @@ export const PROVIDERS: Record<ProviderId, ProviderConfig> = {
     id: 'nvidia', name: 'NVIDIA NIM', type: 'openai',
     defaultBaseUrl: 'https://integrate.api.nvidia.com/v1',
     requiresApiKey: true,
-    models: [{id:'qwen/qwen3-next-80b-a3b-instruct',name:'Qwen3 Next 80B Instruct (check availability)',capabilities:{streaming:true,tools:true,vision:false}}],
+    models: [{id:'z-ai/glm-5.3-flash',name:'GLM 5.3 Flash (hosted availability varies)',capabilities:{streaming:true,tools:true,vision:true}}],
   },
   openrouter: {
     id:'openrouter',name:'OpenRouter',type:'openai',

@@ -35,7 +35,10 @@ export async function POST(req: NextRequest) {
     // Send a minimal test message
     const { text } = await generateText({
       model: languageModel,
-      prompt: 'Say "OK" if you can hear me.',
+      prompt: 'Reply with OK only.',
+      maxOutputTokens: 256,
+      maxRetries: 0,
+      abortSignal: AbortSignal.timeout(25000),
     });
 
     return apiSuccess({
@@ -50,6 +53,8 @@ export async function POST(req: NextRequest) {
       // Parse common error messages
       if (error.message.includes('401') || error.message.includes('Unauthorized')) {
         errorMessage = 'API key is invalid or expired';
+      } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
+        errorMessage = 'Provider denied access. Check your API key permissions, model availability and quota.';
       } else if (error.message.includes('404') || error.message.includes('not found')) {
         errorMessage = 'Model not found or API endpoint error';
       } else if (error.message.includes('429')) {
