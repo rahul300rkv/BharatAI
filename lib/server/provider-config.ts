@@ -51,6 +51,7 @@ const LLM_ENV_MAP: Record<string, string> = {
   GROK: 'grok',
   GROQ: 'groq',
   OPENROUTER: 'openrouter',
+  NVIDIA: 'nvidia',
 };
 
 const TTS_ENV_MAP: Record<string, string> = {

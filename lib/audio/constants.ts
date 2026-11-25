@@ -153,24 +153,629 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
     icon: '/logos/azure.svg',
     voices: [
       {
-        id: 'hi-IN-SwaraNeural',
-        name: 'Swara',
-        language: 'hi-IN',
-        gender: 'female',
+        "id": "as-IN-YashicaNeural",
+        "name": "Yashica (as-IN)",
+        "language": "as-IN",
+        "gender": "female"
       },
       {
-        id: 'hi-IN-MadhurNeural',
-        name: 'Madhur',
-        language: 'hi-IN',
-        gender: 'male',
+        "id": "as-IN-PriyomNeural",
+        "name": "Priyom (as-IN)",
+        "language": "as-IN",
+        "gender": "male"
       },
       {
-        id: 'en-US-JennyNeural',
-        name: 'Jenny',
-        language: 'en-US',
-        gender: 'female',
+        "id": "bn-IN-TanishaaNeural",
+        "name": "Tanishaa (bn-IN)",
+        "language": "bn-IN",
+        "gender": "female"
       },
-      { id: 'en-US-GuyNeural', name: 'Guy', language: 'en-US', gender: 'male' },
+      {
+        "id": "bn-IN-BashkarNeural",
+        "name": "Bashkar (bn-IN)",
+        "language": "bn-IN",
+        "gender": "male"
+      },
+      {
+        "id": "en-IN-AartiIndicNeural",
+        "name": "Aarti Indic (en-IN)",
+        "language": "en-IN",
+        "gender": "female"
+      },
+      {
+        "id": "en-IN-ArjunIndicNeural",
+        "name": "Arjun Indic (en-IN)",
+        "language": "en-IN",
+        "gender": "male"
+      },
+      {
+        "id": "en-IN-NeerjaIndicNeural",
+        "name": "Neerja Indic (en-IN)",
+        "language": "en-IN",
+        "gender": "female"
+      },
+      {
+        "id": "en-IN-PrabhatIndicNeural",
+        "name": "Prabhat Indic (en-IN)",
+        "language": "en-IN",
+        "gender": "male"
+      },
+      {
+        "id": "en-IN-AaravNeural",
+        "name": "Aarav (en-IN)",
+        "language": "en-IN",
+        "gender": "male"
+      },
+      {
+        "id": "en-IN-AashiNeural",
+        "name": "Aashi (en-IN)",
+        "language": "en-IN",
+        "gender": "female"
+      },
+      {
+        "id": "en-IN-AartiNeural",
+        "name": "Aarti (en-IN)",
+        "language": "en-IN",
+        "gender": "female"
+      },
+      {
+        "id": "en-IN-ArjunNeural",
+        "name": "Arjun (en-IN)",
+        "language": "en-IN",
+        "gender": "male"
+      },
+      {
+        "id": "en-IN-AnanyaNeural",
+        "name": "Ananya (en-IN)",
+        "language": "en-IN",
+        "gender": "female"
+      },
+      {
+        "id": "en-IN-KavyaNeural",
+        "name": "Kavya (en-IN)",
+        "language": "en-IN",
+        "gender": "female"
+      },
+      {
+        "id": "en-IN-KunalNeural",
+        "name": "Kunal (en-IN)",
+        "language": "en-IN",
+        "gender": "male"
+      },
+      {
+        "id": "en-IN-NeerjaNeural",
+        "name": "Neerja (en-IN)",
+        "language": "en-IN",
+        "gender": "female"
+      },
+      {
+        "id": "en-IN-PrabhatNeural",
+        "name": "Prabhat (en-IN)",
+        "language": "en-IN",
+        "gender": "male"
+      },
+      {
+        "id": "en-IN-RehaanNeural",
+        "name": "Rehaan (en-IN)",
+        "language": "en-IN",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-AvaMultilingualNeural",
+        "name": "Ava Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-AndrewMultilingualNeural",
+        "name": "Andrew Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-AmandaMultilingualNeural",
+        "name": "Amanda Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-AdamMultilingualNeural",
+        "name": "Adam Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-EmmaMultilingualNeural",
+        "name": "Emma Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-PhoebeMultilingualNeural",
+        "name": "Phoebe Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-AlloyTurboMultilingualNeural",
+        "name": "Alloy Turbo Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-EchoTurboMultilingualNeural",
+        "name": "Echo Turbo Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-FableTurboMultilingualNeural",
+        "name": "Fable Turbo Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "neutral"
+      },
+      {
+        "id": "en-US-OnyxTurboMultilingualNeural",
+        "name": "Onyx Turbo Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-NovaTurboMultilingualNeural",
+        "name": "Nova Turbo Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-ShimmerTurboMultilingualNeural",
+        "name": "Shimmer Turbo Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-BrianMultilingualNeural",
+        "name": "Brian Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-AvaNeural",
+        "name": "Ava (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-AndrewNeural",
+        "name": "Andrew (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-EmmaNeural",
+        "name": "Emma (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-BrianNeural",
+        "name": "Brian (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-JennyNeural",
+        "name": "Jenny (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-GuyNeural",
+        "name": "Guy (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-AriaNeural",
+        "name": "Aria (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-DavisNeural",
+        "name": "Davis (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-JaneNeural",
+        "name": "Jane (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-JasonNeural",
+        "name": "Jason (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-KaiNeural",
+        "name": "Kai (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-LunaNeural",
+        "name": "Luna (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-SaraNeural",
+        "name": "Sara (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-TonyNeural",
+        "name": "Tony (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-NancyNeural",
+        "name": "Nancy (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-CoraMultilingualNeural",
+        "name": "Cora Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-ChristopherMultilingualNeural",
+        "name": "Christopher Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-BrandonMultilingualNeural",
+        "name": "Brandon Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-AmberNeural",
+        "name": "Amber (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-AnaNeural",
+        "name": "Ana (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-AshleyNeural",
+        "name": "Ashley (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-BrandonNeural",
+        "name": "Brandon (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-ChristopherNeural",
+        "name": "Christopher (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-CoraNeural",
+        "name": "Cora (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-DavisMultilingualNeural",
+        "name": "Davis Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-DerekMultilingualNeural",
+        "name": "Derek Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-DustinMultilingualNeural",
+        "name": "Dustin Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-ElizabethNeural",
+        "name": "Elizabeth (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-EricNeural",
+        "name": "Eric (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-EvelynMultilingualNeural",
+        "name": "Evelyn Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-JacobNeural",
+        "name": "Jacob (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-JennyMultilingualNeural",
+        "name": "Jenny Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-Jimmie:DragonHDFlashLatestNeural",
+        "name": "Jimmie Dragon HD Flash Latest (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-LewisMultilingualNeural",
+        "name": "Lewis Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-LolaMultilingualNeural",
+        "name": "Lola Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-MichelleNeural",
+        "name": "Michelle (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-MonicaNeural",
+        "name": "Monica (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-NancyMultilingualNeural",
+        "name": "Nancy Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-RogerNeural",
+        "name": "Roger (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-RyanMultilingualNeural",
+        "name": "Ryan Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-SamuelMultilingualNeural",
+        "name": "Samuel Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-SerenaMultilingualNeural",
+        "name": "Serena Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-SteffanMultilingualNeural",
+        "name": "Steffan Multilingual (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-SteffanNeural",
+        "name": "Steffan (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "en-US-Tiana:DragonHDFlashLatestNeural",
+        "name": "Tiana Dragon HD Flash Latest (en-US)",
+        "language": "en-US",
+        "gender": "female"
+      },
+      {
+        "id": "en-US-Tyler:DragonHDFlashLatestNeural",
+        "name": "Tyler Dragon HD Flash Latest (en-US)",
+        "language": "en-US",
+        "gender": "male"
+      },
+      {
+        "id": "gu-IN-DhwaniNeural",
+        "name": "Dhwani (gu-IN)",
+        "language": "gu-IN",
+        "gender": "female"
+      },
+      {
+        "id": "gu-IN-NiranjanNeural",
+        "name": "Niranjan (gu-IN)",
+        "language": "gu-IN",
+        "gender": "male"
+      },
+      {
+        "id": "hi-IN-AaravNeural",
+        "name": "Aarav (hi-IN)",
+        "language": "hi-IN",
+        "gender": "male"
+      },
+      {
+        "id": "hi-IN-AnanyaNeural",
+        "name": "Ananya (hi-IN)",
+        "language": "hi-IN",
+        "gender": "female"
+      },
+      {
+        "id": "hi-IN-AartiNeural",
+        "name": "Aarti (hi-IN)",
+        "language": "hi-IN",
+        "gender": "female"
+      },
+      {
+        "id": "hi-IN-ArjunNeural",
+        "name": "Arjun (hi-IN)",
+        "language": "hi-IN",
+        "gender": "male"
+      },
+      {
+        "id": "hi-IN-KavyaNeural",
+        "name": "Kavya (hi-IN)",
+        "language": "hi-IN",
+        "gender": "female"
+      },
+      {
+        "id": "hi-IN-KunalNeural",
+        "name": "Kunal (hi-IN)",
+        "language": "hi-IN",
+        "gender": "male"
+      },
+      {
+        "id": "hi-IN-RehaanNeural",
+        "name": "Rehaan (hi-IN)",
+        "language": "hi-IN",
+        "gender": "male"
+      },
+      {
+        "id": "hi-IN-SwaraNeural",
+        "name": "Swara (hi-IN)",
+        "language": "hi-IN",
+        "gender": "female"
+      },
+      {
+        "id": "hi-IN-MadhurNeural",
+        "name": "Madhur (hi-IN)",
+        "language": "hi-IN",
+        "gender": "male"
+      },
+      {
+        "id": "kn-IN-SapnaNeural",
+        "name": "Sapna (kn-IN)",
+        "language": "kn-IN",
+        "gender": "female"
+      },
+      {
+        "id": "kn-IN-GaganNeural",
+        "name": "Gagan (kn-IN)",
+        "language": "kn-IN",
+        "gender": "male"
+      },
+      {
+        "id": "ml-IN-SobhanaNeural",
+        "name": "Sobhana (ml-IN)",
+        "language": "ml-IN",
+        "gender": "female"
+      },
+      {
+        "id": "ml-IN-MidhunNeural",
+        "name": "Midhun (ml-IN)",
+        "language": "ml-IN",
+        "gender": "male"
+      },
+      {
+        "id": "mr-IN-AarohiNeural",
+        "name": "Aarohi (mr-IN)",
+        "language": "mr-IN",
+        "gender": "female"
+      },
+      {
+        "id": "mr-IN-ManoharNeural",
+        "name": "Manohar (mr-IN)",
+        "language": "mr-IN",
+        "gender": "male"
+      },
+      {
+        "id": "or-IN-SubhasiniNeural",
+        "name": "Subhasini (or-IN)",
+        "language": "or-IN",
+        "gender": "female"
+      },
+      {
+        "id": "or-IN-SukantNeural",
+        "name": "Sukant (or-IN)",
+        "language": "or-IN",
+        "gender": "male"
+      },
+      {
+        "id": "pa-IN-OjasNeural",
+        "name": "Ojas (pa-IN)",
+        "language": "pa-IN",
+        "gender": "male"
+      },
+      {
+        "id": "pa-IN-VaaniNeural",
+        "name": "Vaani (pa-IN)",
+        "language": "pa-IN",
+        "gender": "female"
+      },
+      {
+        "id": "ta-IN-PallaviNeural",
+        "name": "Pallavi (ta-IN)",
+        "language": "ta-IN",
+        "gender": "female"
+      },
+      {
+        "id": "ta-IN-ValluvarNeural",
+        "name": "Valluvar (ta-IN)",
+        "language": "ta-IN",
+        "gender": "male"
+      },
+      {
+        "id": "te-IN-ShrutiNeural",
+        "name": "Shruti (te-IN)",
+        "language": "te-IN",
+        "gender": "female"
+      },
+      {
+        "id": "te-IN-MohanNeural",
+        "name": "Mohan (te-IN)",
+        "language": "te-IN",
+        "gender": "male"
+      },
+      {
+        "id": "ur-IN-GulNeural",
+        "name": "Gul (ur-IN)",
+        "language": "ur-IN",
+        "gender": "female"
+      },
+      {
+        "id": "ur-IN-SalmanNeural",
+        "name": "Salman (ur-IN)",
+        "language": "ur-IN",
+        "gender": "male"
+      }
     ],
     supportedFormats: ['mp3', 'wav', 'ogg'],
     speedRange: { min: 0.5, max: 2.0, default: 1.0 },
@@ -248,203 +853,203 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
       {
         id: 'Cherry',
         name: '芊悦 (Cherry)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceCherry',
       },
       {
         id: 'Serena',
         name: '苏瑶 (Serena)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceSerena',
       },
       {
         id: 'Ethan',
         name: '晨煦 (Ethan)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceEthan',
       },
       {
         id: 'Chelsie',
         name: '千雪 (Chelsie)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceChelsie',
       },
       {
         id: 'Momo',
         name: '茉兔 (Momo)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceMomo',
       },
       {
         id: 'Vivian',
         name: '十三 (Vivian)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceVivian',
       },
       {
         id: 'Moon',
         name: '月白 (Moon)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceMoon',
       },
       {
         id: 'Maia',
         name: '四月 (Maia)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceMaia',
       },
       {
         id: 'Kai',
         name: '凯 (Kai)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceKai',
       },
       {
         id: 'Nofish',
         name: '不吃鱼 (Nofish)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceNofish',
       },
       {
         id: 'Bella',
         name: '萌宝 (Bella)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceBella',
       },
       {
         id: 'Jennifer',
         name: '詹妮弗 (Jennifer)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceJennifer',
       },
       {
         id: 'Ryan',
         name: '甜茶 (Ryan)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceRyan',
       },
       {
         id: 'Katerina',
         name: '卡捷琳娜 (Katerina)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceKaterina',
       },
       {
         id: 'Aiden',
         name: '艾登 (Aiden)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceAiden',
       },
       {
         id: 'Eldric Sage',
         name: '沧明子 (Eldric Sage)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceEldricSage',
       },
       {
         id: 'Mia',
         name: '乖小妹 (Mia)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceMia',
       },
       {
         id: 'Mochi',
         name: '沙小弥 (Mochi)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceMochi',
       },
       {
         id: 'Bellona',
         name: '燕铮莺 (Bellona)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceBellona',
       },
       {
         id: 'Vincent',
         name: '田叔 (Vincent)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceVincent',
       },
       {
         id: 'Bunny',
         name: '萌小姬 (Bunny)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceBunny',
       },
       {
         id: 'Neil',
         name: '阿闻 (Neil)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceNeil',
       },
       {
         id: 'Elias',
         name: '墨讲师 (Elias)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceElias',
       },
       {
         id: 'Arthur',
         name: '徐大爷 (Arthur)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceArthur',
       },
       {
         id: 'Nini',
         name: '邻家妹妹 (Nini)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceNini',
       },
       {
         id: 'Ebona',
         name: '诡婆婆 (Ebona)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceEbona',
       },
       {
         id: 'Seren',
         name: '小婉 (Seren)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceSeren',
       },
       {
         id: 'Pip',
         name: '顽屁小孩 (Pip)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoicePip',
       },
       {
         id: 'Stella',
         name: '少女阿月 (Stella)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceStella',
       },
@@ -508,7 +1113,7 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
       {
         id: 'Andre',
         name: '安德雷 (Andre)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceAndre',
       },
@@ -523,56 +1128,56 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
       {
         id: 'Jada',
         name: '上海-阿珍 (Jada)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceJada',
       },
       {
         id: 'Dylan',
         name: '北京-晓东 (Dylan)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceDylan',
       },
       {
         id: 'Li',
         name: '南京-老李 (Li)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceLi',
       },
       {
         id: 'Marcus',
         name: '陕西-秦川 (Marcus)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceMarcus',
       },
       {
         id: 'Roy',
         name: '闽南-阿杰 (Roy)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceRoy',
       },
       {
         id: 'Peter',
         name: '天津-李彼得 (Peter)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoicePeter',
       },
       {
         id: 'Sunny',
         name: '四川-晴儿 (Sunny)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'female',
         description: 'qwenVoiceSunny',
       },
       {
         id: 'Eric',
         name: '四川-程川 (Eric)',
-        language: 'hi-IN',
+        language: 'zh',
         gender: 'male',
         description: 'qwenVoiceEric',
       },
@@ -664,7 +1269,7 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
     voices: [
       // Note: Actual voices are determined by the browser and OS
       // These are placeholder - real voices are fetched dynamically via speechSynthesis.getVoices()
-      { id: 'default', name: '默认', language: 'hi-IN', gender: 'neutral' },
+      { id: 'default', name: 'Automatic', language: 'multi', gender: 'neutral' },
     ],
     supportedFormats: ['browser'], // Browser native audio
     speedRange: { min: 0.1, max: 10.0, default: 1.0 },
@@ -677,8 +1282,8 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
     defaultBaseUrl: 'https://openspeech.bytedance.com/api/v1/tts',
     icon: '/logos/doubao.svg',
     voices: [
-      { id: 'zh_female_shuangkuaishuohua_moon_bigtts', name: '爽快说话 (zh)', language: 'hi-IN', gender: 'female' },
-      { id: 'zh_male_rap_moon_bigtts', name: '说唱 (zh)', language: 'hi-IN', gender: 'male' },
+      { id: 'zh_female_shuangkuaishuohua_moon_bigtts', name: '爽快说话 (zh)', language: 'zh', gender: 'female' },
+      { id: 'zh_male_rap_moon_bigtts', name: '说唱 (zh)', language: 'zh', gender: 'male' },
       { id: 'en_female_anna_mars_bigtts', name: 'Anna (en)', language: 'en-US', gender: 'female' },
       { id: 'en_male_adam_mars_bigtts', name: 'Adam (en)', language: 'en-US', gender: 'male' },
     ],
@@ -693,10 +1298,10 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
     defaultBaseUrl: 'https://api.minimaxi.com',
     icon: '/logos/minimax.svg',
     voices: [
-      { id: 'male-qn-qingse', name: '青涩青年', language: 'hi-IN', gender: 'male' },
-      { id: 'male-qn-jingying', name: '精英青年', language: 'hi-IN', gender: 'male' },
-      { id: 'female-shaonv', name: '少女', language: 'hi-IN', gender: 'female' },
-      { id: 'female-yujie', name: '御姐', language: 'hi-IN', gender: 'female' },
+      { id: 'male-qn-qingse', name: '青涩青年', language: 'zh', gender: 'male' },
+      { id: 'male-qn-jingying', name: '精英青年', language: 'zh', gender: 'male' },
+      { id: 'female-shaonv', name: '少女', language: 'zh', gender: 'female' },
+      { id: 'female-yujie', name: '御姐', language: 'zh', gender: 'female' },
       { id: 'audiobook_male_1', name: 'Audiobook Male', language: 'en-US', gender: 'male' },
       { id: 'audiobook_female_1', name: 'Audiobook Female', language: 'en-US', gender: 'female' },
     ],
@@ -835,7 +1440,7 @@ export const ASR_PROVIDERS: Record<ASRProviderId, ASRProviderConfig> = {
     icon: '/logos/browser.svg',
     supportedLanguages: [
       // Chinese variants
-      'hi-IN', // Mandarin (Simplified, China)
+      'zh-CN', // Mandarin (Simplified, China)
       'zh-TW', // Mandarin (Traditional, Taiwan)
       'zh-HK', // Cantonese (Hong Kong)
       'yue-Hant-HK', // Cantonese (Traditional)
