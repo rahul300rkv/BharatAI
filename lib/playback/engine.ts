@@ -486,9 +486,13 @@ export class PlaybackEngine {
           }, readingMs);
         };
 
+        const speechSettings=useSettingsStore.getState();
+        if (!speechSettings.ttsEnabled) { scheduleReadingTimer(); break; }
+        if ((speechSettings.ttsProviderId==='browser-native-tts'||useStageStore.getState().stage?.id.startsWith('demo-v1-')) && typeof window!=='undefined' && window.speechSynthesis) { this.playBrowserTTS(speechAction); break; }
         this.audioPlayer
-          .play(speechAction.audioId || '', speechAction.audioUrl)
+          .play(speechAction.audioId || `tts_${speechAction.id}`, speechAction.audioUrl)
           .then((audioStarted) => {
+            if (this.mode !== 'playing') return;
             if (!audioStarted) {
               // Missing cloud audio: use the browser voice if available.
               const settings = useSettingsStore.getState();
@@ -505,7 +509,8 @@ export class PlaybackEngine {
           })
           .catch((err) => {
             log.error('TTS error:', err);
-            scheduleReadingTimer();
+            if(this.mode!=='playing') return;
+            if(typeof window!=='undefined' && window.speechSynthesis) this.playBrowserTTS(speechAction); else scheduleReadingTimer();
           });
         break;
       }
@@ -597,7 +602,7 @@ export class PlaybackEngine {
   private splitIntoChunks(text: string): string[] {
     // Split on sentence-ending punctuation (Latin + CJK) and newlines
     const chunks = text
-      .split(/(?<=[.!?。！？\n])\s*/)
+      .split(/(?<=[.!?।॥。！？\n])\s*/)
       .map((s) => s.trim())
       .filter((s) => s.length > 0);
     // If splitting produced nothing (no punctuation), return the original text
@@ -638,7 +643,8 @@ export class PlaybackEngine {
     utterance.volume = settings.ttsMuted ? 0 : (settings.ttsVolume ?? 1);
 
     // Ensure voices are loaded (Chrome loads them asynchronously)
-    const voices = await this.ensureVoicesLoaded();
+    const voices = window.speechSynthesis.getVoices();
+    if (!this.browserTTSActive || this.mode !== 'playing') return;
 
     const locale = normalizeLocale(useStageStore.getState().stage?.language);
     utterance.lang = locale;
@@ -669,7 +675,7 @@ export class PlaybackEngine {
 
     // Chrome bug workaround: cancel() before speak() to clear stale synthesis
     // state that can produce garbled/broken audio output.
-    window.speechSynthesis.cancel();
+    window.speechSynthesis.resume();
     window.speechSynthesis.speak(utterance);
   }
 

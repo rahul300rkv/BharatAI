@@ -130,6 +130,10 @@ export async function generateAndStoreTTS(
   if (settings.ttsProviderId === 'browser-native-tts') return;
 
   const ttsProviderConfig = settings.ttsProvidersConfig?.[settings.ttsProviderId];
+  const locale=useStageStore.getState().stage?.language;
+  const sarvamLanguage=locale==='en-US'?'en-IN':locale==='or-IN'?'od-IN':locale;
+  const voice=settings.ttsProviderId==='sarvam-tts' && sarvamLanguage && ['hi-IN','bn-IN','te-IN','mr-IN','ta-IN','gu-IN','kn-IN','od-IN','ml-IN','pa-IN','en-IN'].includes(sarvamLanguage) ? sarvamLanguage+'|'+(settings.ttsVoice.endsWith('|priya')?'priya':'shubh') : settings.ttsVoice;
+  if(settings.ttsProviderId==='sarvam-tts' && locale && !['hi-IN','bn-IN','te-IN','mr-IN','ta-IN','gu-IN','kn-IN','or-IN','ml-IN','pa-IN','en-US'].includes(locale)) throw new Error('Sarvam does not support this classroom language; using browser speech.');
   const response = await fetch('/api/generate/tts', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -138,7 +142,7 @@ export async function generateAndStoreTTS(
       audioId,
       ttsProviderId: settings.ttsProviderId,
       ttsModelId: ttsProviderConfig?.modelId,
-      ttsVoice: settings.ttsVoice,
+      ttsVoice: voice,
       ttsSpeed: settings.ttsSpeed,
       ttsApiKey: ttsProviderConfig?.apiKey || undefined,
       ttsBaseUrl: ttsProviderConfig?.baseUrl || undefined,
@@ -179,7 +183,7 @@ export function prepareSceneSpeech(scene: Scene, providerId: TTSProviderId): voi
   }
 }
 
-async function generateTTSForScene(
+export async function generateTTSForScene(
   scene: Scene,
   signal?: AbortSignal,
 ): Promise<{ success: boolean; failedCount: number; error?: string }> {
@@ -207,7 +211,7 @@ async function generateTTSForScene(
       } catch (error) {
         failedCount++;
         lastError = error instanceof Error ? error.message : 'Speech generation failed';
-        log.warn('TTS generation failed for action', action.id);
+        log.warn('TTS generation failed for action', action.id, lastError);
       }
     }
   };

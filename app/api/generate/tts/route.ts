@@ -17,7 +17,7 @@ import { validateUrlForSSRF } from '@/lib/server/ssrf-guard';
 
 const log = createLogger('TTS API');
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   try {
@@ -56,7 +56,9 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const apiKey = clientBaseUrl
+    const apiKey = ttsProviderId === 'sarvam-tts'
+      ? resolveTTSApiKey(ttsProviderId, ttsApiKey?.trim() || undefined)
+      : clientBaseUrl
       ? ttsApiKey || ''
       : resolveTTSApiKey(ttsProviderId, ttsApiKey || undefined);
     const baseUrl = clientBaseUrl

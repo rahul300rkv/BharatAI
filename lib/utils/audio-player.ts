@@ -47,6 +47,7 @@ export class AudioPlayer {
       }
 
       // 2. Fall back to IndexedDB (client-generated TTS)
+      if (!audioId) return false;
       const audioRecord = await db.audioFiles.get(audioId);
 
       if (!audioRecord) {
@@ -61,7 +62,7 @@ export class AudioPlayer {
       this.audio = new Audio();
 
       // Set audio source
-      const blobUrl = URL.createObjectURL(audioRecord.blob);
+      const blobUrl = URL.createObjectURL(audioRecord.blob.type==='audio/mp3' ? new Blob([audioRecord.blob],{type:'audio/mpeg'}) : audioRecord.blob);
       this.audio.src = blobUrl;
       if (this.muted) this.audio.volume = 0;
       else this.audio.volume = this.volume;
