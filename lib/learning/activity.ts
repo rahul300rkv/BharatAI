@@ -12,3 +12,7 @@ export function completeActivity(id:string,event:ActivityEvent){if(!/^(lab|lesso
 export function recordVisit(id:string,sceneId:string,total:number){if(!/^[a-zA-Z0-9_-]{1,100}$/.test(id)||!sceneId||!total)return;const a=readActivity(),old=a.visits.find(v=>v.id===id);a.visits=[{id,sceneId,visited:[...new Set([...(old?.visited||[]),sceneId])].slice(-200),total,at:Date.now()},...a.visits.filter(v=>v.id!==id)].slice(0,30);write(a);}
 export function lastVisit(id:string){return readActivity().visits.find(v=>v.id===id)}
 export function clearActivity(){try{localStorage.removeItem(KEY);window.dispatchEvent(new Event('bharatai-activity'));}catch{}}
+
+// Forget one visit without deleting the saved classroom.
+export function removeVisit(id:string){const a=readActivity();a.visits=a.visits.filter(v=>v.id!==id);write(a);}
+export function removeCompletion(id:string){const a=readActivity();a.completed=a.completed.filter(x=>x!==id);write(a);}
