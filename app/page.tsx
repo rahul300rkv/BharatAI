@@ -7,7 +7,7 @@ import { LearningPreview } from '@/components/learning-preview';
 import { designText, localizedLabTitle } from '@/lib/i18n/learning-design';
 import { LabText } from '@/components/site-language';
 import { LearningHome } from '@/components/learning-home';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig } from 'motion/react';
 import {
   ArrowUp,
   Check,
@@ -405,7 +405,7 @@ useEffect(() => {
       {/* ═══ Top-right pill (unchanged) ═══ */}
       <div
         ref={toolbarRef}
-        className="fixed top-4 right-4 z-50 flex items-center gap-1 bg-[#FFF9F2]/80 dark:bg-[#2A1500]/80 backdrop-blur-md px-2 py-1.5 rounded-full border border-primary/15 shadow-sm"
+        className="fixed top-4 right-4 z-50 flex items-center gap-1 bg-popover/95 backdrop-blur-md px-2 py-1.5 rounded-full border border-primary/15 shadow-sm"
       >
         {/* Language Selector */}
           <div className="relative" >
@@ -431,7 +431,7 @@ useEffect(() => {
             {theme === 'system' && <Monitor className="w-4 h-4" />}
           </button>
           {themeOpen && (
-            <div className="absolute top-full mt-2 right-0 bg-[#FFF9F2] dark:bg-[#2A1500] border border-primary/15 rounded-xl shadow-lg overflow-hidden z-50 min-w-[140px]">
+            <div className="absolute top-full mt-2 right-0 bg-popover border border-primary/15 rounded-xl shadow-lg overflow-hidden z-50 min-w-[140px]">
               <button
                 onClick={() => {
                   setTheme('light');
@@ -1385,7 +1385,7 @@ function SEOContent() {
 export default function Page() {
   return (
     <>
-      <main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningPreview/><LearningHome /><SEOContent /></main>
+      <MotionConfig reducedMotion="user"><main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningPreview/><LearningHome /><SEOContent /></main></MotionConfig>
     </>
   );
 }
