@@ -8,7 +8,8 @@ import { useStageStore } from '@/lib/store';
 import { loadImageMapping } from '@/lib/utils/image-storage';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { useSceneGenerator } from '@/lib/hooks/use-scene-generator';
+import { useSettingsStore } from '@/lib/store/settings';
+import { generateTTSForScene, useSceneGenerator } from '@/lib/hooks/use-scene-generator';
 import { useMediaGenerationStore } from '@/lib/store/media-generation';
 import { useWhiteboardHistoryStore } from '@/lib/store/whiteboard-history';
 import { createLogger } from '@/lib/logger';
@@ -170,6 +171,10 @@ export default function ClassroomDetailPage() {
       // Resume media generation for any tasks not yet in IndexedDB.
       // generateMediaForOutlines skips already-completed tasks automatically.
       generationStartedRef.current = true;
+      const audio=useSettingsStore.getState();
+      if(audio.ttsEnabled && audio.ttsProviderId!=='browser-native-tts' && !stage.id.startsWith('demo-v1-')) {
+        void (async()=>{for(const scene of scenes){if(useStageStore.getState().stage?.id!==stage.id)break;await generateTTSForScene({...scene,actions:(scene.actions||[]).map(a=>({...a}))});}})().catch(err=>log.warn('Audio warmup failed',err));
+      }
       generateMediaForOutlines(outlines, stage.id).catch((err) => {
         log.warn('[Classroom] Media generation resume error:', err);
       });

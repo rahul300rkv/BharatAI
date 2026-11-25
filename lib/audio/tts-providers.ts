@@ -599,7 +599,7 @@ async function generateSarvamTTS(config:TTSModelConfig,text:string):Promise<TTSG
  if(!["hi-IN","bn-IN","te-IN","mr-IN","ta-IN","gu-IN","kn-IN","od-IN","ml-IN","pa-IN","en-IN"].includes(language)||!['shubh','priya'].includes(speaker))throw Error('Choose a supported Sarvam language and speaker.');
  if(!text.trim()||text.length>2500)throw Error('Sarvam TTS accepts 1–2500 characters per request.');
  const response=await fetch('https://api.sarvam.ai/text-to-speech',{method:'POST',headers:{'api-subscription-key':config.apiKey!,'Content-Type':'application/json'},body:JSON.stringify({text,language_code:language,speaker,model:'bulbul:v3',pace:Math.max(.5,Math.min(2,config.speed||1)),output_audio_codec:'mp3'}),redirect:'error',signal:AbortSignal.timeout(30000)});
- if(!response.ok)throw Error('Sarvam speech request failed ('+response.status+'). Check key and quota.');
+ if(!response.ok)throw Error('Sarvam speech request failed ('+response.status+'). Check key, voice, language and quota.');
  const result=await response.json();if(typeof result.audios?.[0]!=='string')throw Error('Sarvam returned no audio.');
  return {audio:new Uint8Array(Buffer.from(result.audios[0],'base64')),format:'mp3'};
 }

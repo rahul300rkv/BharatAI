@@ -11,6 +11,7 @@ const log = createLogger('TTS');
 /** Provider-specific max text length limits. */
 export const TTS_MAX_TEXT_LENGTH: Partial<Record<TTSProviderId, number>> = {
   'glm-tts': 1024,
+  'sarvam-tts': 2500,
 };
 
 /**
@@ -23,7 +24,7 @@ export function splitLongSpeechText(text: string, maxLength: number): string[] {
   if (!normalized || normalized.length <= maxLength) return [normalized];
 
   const units = normalized
-    .split(/(?<=[।॥。！？!?；;：:\n])/u)
+    .split(/(?<=[.!?।॥。！？；;：:\n])/u)
     .map((part) => part.trim())
     .filter(Boolean);
 
@@ -40,8 +41,8 @@ export function splitLongSpeechText(text: string, maxLength: number): string[] {
       current = unit;
       return;
     }
-    if ((current + unit).length <= maxLength) {
-      current += unit;
+    if ((current + ' ' + unit).length <= maxLength) {
+      current += ' ' + unit;
       return;
     }
     pushChunk(current);
