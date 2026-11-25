@@ -185,7 +185,7 @@ async function generateTTSForScene(
 ): Promise<{ success: boolean; failedCount: number; error?: string }> {
   const providerId = useSettingsStore.getState().ttsProviderId;
   prepareSceneSpeech(scene, providerId);
-  const speechActions = scene.actions.filter(
+  const speechActions = (scene.actions || []).filter(
     (a): a is SpeechAction => a.type === 'speech' && !!a.text,
   );
   if (speechActions.length === 0) return { success: true, failedCount: 0 };
