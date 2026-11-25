@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { LearningHome } from '@/components/learning-home';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowUp,
@@ -397,7 +398,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="min-h-[100dvh] w-full bg-gradient-to-b from-background to-muted dark:from-background dark:to-card flex flex-col items-center p-4 pt-16 md:p-8 md:pt-16 overflow-x-hidden">
+    <div className="w-full bg-gradient-to-b from-background to-muted dark:from-background dark:to-card flex flex-col items-center p-4 pt-16 md:p-8 md:pt-16 overflow-x-hidden">
       {/* ═══ Top-right pill (unchanged) ═══ */}
       <div
         ref={toolbarRef}
@@ -514,7 +515,7 @@ useEffect(() => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={cn(
           'relative z-20 w-full max-w-[800px] flex flex-col items-center',
-          classrooms.length === 0 ? 'justify-center min-h-[calc(100dvh-8rem)]' : 'mt-[10vh]',
+          'justify-center py-8',
         )}
       >
         {/* ── Logo ── */}
@@ -532,6 +533,9 @@ useEffect(() => {
           className="h-14 md:h-20 mb-3 -ml-2 md:-ml-3 drop-shadow-sm"
         />
 
+        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-2">{locale==='hi-IN'?'आपकी अपनी AI कक्षा':'Your personal AI classroom'}</h1>
+        <p className="text-center text-sm text-muted-foreground max-w-xl mb-3">{locale==='hi-IN'?'विषय चुनें, AI शिक्षक से सीखें और प्रश्नोत्तरी व प्रयोगों से अभ्यास करें।':'Learn a topic with AI teachers, slides, whiteboards and quizzes. Try a prepared classroom free, or generate your own with a supported AI provider.'}</p>
+        <nav aria-label="Learning resources" className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm mb-4"><Link href="/demo">{locale==='hi-IN'?'मुफ़्त कक्षाएँ':'Free classrooms'}</Link><Link href="/labs">{locale==='hi-IN'?'प्रयोगशालाएँ':'Virtual labs'}</Link><Link href="/learn">{locale==='hi-IN'?'पाठ':'Lessons'}</Link><Link href="/guides">{locale==='hi-IN'?'अध्ययन मार्गदर्शिका':'Study guide'}</Link></nav>
         {/* ── Slogan ── */}
         <motion.p
           initial={{ opacity: 0 }}
@@ -1200,7 +1204,7 @@ function SEOContent() {
             {
               emoji: '📄',
               title: tr("PDF to Lesson in Seconds","PDF से इंटरैक्टिव पाठ"),
-              desc: tr("Upload your NCERT chapter, notes or any PDF and get an interactive lesson with slides, quiz and whiteboard instantly.","NCERT अध्याय, नोट्स या PDF अपलोड करें और स्लाइड, प्रश्नोत्तरी तथा व्हाइटबोर्ड सहित पाठ तैयार करें।"),
+              desc: tr("Upload your NCERT chapter, notes or any PDF and generate an interactive lesson with slides, quiz and whiteboard where supported.","NCERT अध्याय, नोट्स या PDF अपलोड करें और स्लाइड, प्रश्नोत्तरी तथा व्हाइटबोर्ड सहित पाठ तैयार करें।"),
             },
             {
               emoji: '🇮🇳',
@@ -1210,7 +1214,7 @@ function SEOContent() {
             {
               emoji: '📝',
               title: tr("Auto-Generated Quizzes","स्वचालित प्रश्नोत्तरी"),
-              desc: tr("Every lesson includes MCQs, short answers and AI-graded quizzes to test understanding — like a real exam practice.","बहुविकल्पीय और लघु उत्तरीय प्रश्नों के माध्यम से अपनी समझ जाँचें। AI मूल्यांकन भी उपलब्ध है।"),
+              desc: tr("Generated lessons may include MCQs, short answers and AI-graded quizzes to test understanding — like a real exam practice.","बहुविकल्पीय और लघु उत्तरीय प्रश्नों के माध्यम से अपनी समझ जाँचें। AI मूल्यांकन भी उपलब्ध है।"),
             },
             {
               emoji: '🖊️',
@@ -1336,15 +1340,15 @@ function SEOContent() {
           {[
             {
               q: tr("What is BharatAI?","BharatAI क्या है?"),
-              a: tr("BharatAI is India-focused multi-agent AI classroom. Type any topic or upload a PDF and instantly get a full interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in your selected language.","BharatAI भारतीय विद्यार्थियों के लिए मल्टी-एजेंट AI कक्षा है। विषय लिखें या PDF अपलोड करें और अपनी चुनी हुई भाषा में पाठ, प्रश्नोत्तरी, व्हाइटबोर्ड तथा चर्चा प्राप्त करें।"),
+              a: tr("BharatAI is India-focused multi-agent AI classroom. Type any topic or upload a PDF and request an interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in your selected language.","BharatAI भारतीय विद्यार्थियों के लिए मल्टी-एजेंट AI कक्षा है। विषय लिखें या PDF अपलोड करें और अपनी चुनी हुई भाषा में पाठ, प्रश्नोत्तरी, व्हाइटबोर्ड तथा चर्चा प्राप्त करें।"),
             },
             {
               q: tr("Is BharatAI free?","क्या BharatAI मुफ़्त है?"),
-              a: tr("BharatAI is free to use. You need to bring your own AI API key (OpenAI, Gemini, Claude, DeepSeek, Groq and more are all supported). There are no subscription fees.","सार्वजनिक पाठ मुफ़्त हैं। व्यक्तिगत कक्षा बनाने के लिए AI प्रदाता की API कुंजी आवश्यक हो सकती है। प्रदाता का शुल्क और उपयोग सीमा लागू हो सकती है।"),
+              a: tr("Public labs, lessons and prepared classrooms are free without a key. Personalised generation may require your own API key; provider limits and charges apply.","सार्वजनिक पाठ मुफ़्त हैं। व्यक्तिगत कक्षा बनाने के लिए AI प्रदाता की API कुंजी आवश्यक हो सकती है। प्रदाता का शुल्क और उपयोग सीमा लागू हो सकती है।"),
             },
             {
               q: tr("Can BharatAI help with JEE, NEET and UPSC preparation?","क्या BharatAI JEE, NEET और UPSC की तैयारी में मदद करता है?"),
-              a: tr("Yes. BharatAI is purpose-built for Indian competitive exam preparation. Generate lessons on any Physics, Chemistry, Biology, Mathematics, History, Polity or Geography topic. The AI quizzes are modelled after exam patterns.","हाँ। भौतिकी, रसायन विज्ञान, जीव विज्ञान, गणित, इतिहास, राजव्यवस्था और भूगोल के पाठ तैयार करें। अभ्यास के लिए आधिकारिक पाठ्यक्रम और पुराने प्रश्नपत्रों से भी मिलान करें।"),
+              a: tr("Yes. BharatAI is purpose-built for Indian competitive exam preparation. Generate lessons on any Physics, Chemistry, Biology, Mathematics, History, Polity or Geography topic. Use official syllabi and past papers to verify exam alignment.","हाँ। भौतिकी, रसायन विज्ञान, जीव विज्ञान, गणित, इतिहास, राजव्यवस्था और भूगोल के पाठ तैयार करें। अभ्यास के लिए आधिकारिक पाठ्यक्रम और पुराने प्रश्नपत्रों से भी मिलान करें।"),
             },
             {
               q: tr("Which languages can I learn in?","मैं किन भाषाओं में सीख सकता हूँ?"),
@@ -1352,11 +1356,11 @@ function SEOContent() {
             },
             {
               q: tr("Can I upload an NCERT PDF and get a lesson?","क्या NCERT PDF से पाठ बना सकता हूँ?"),
-              a: tr("Yes. Upload any PDF — NCERT textbook, reference notes, previous year papers — and BharatAI will extract the content and generate a complete AI classroom from it in seconds.","हाँ। अनुमति प्राप्त NCERT पुस्तक, नोट्स या पुराने प्रश्नपत्र की PDF अपलोड करें। BharatAI उससे पाठ तैयार करने का प्रयास करेगा। परिणाम मूल सामग्री से जाँचें।"),
+              a: tr("Yes. Upload a permitted PDF within the size and page limits. Text extraction works best with selectable text; scanned pages may require OCR. Review generated content against the source.","हाँ। अनुमति प्राप्त NCERT पुस्तक, नोट्स या पुराने प्रश्नपत्र की PDF अपलोड करें। BharatAI उससे पाठ तैयार करने का प्रयास करेगा। परिणाम मूल सामग्री से जाँचें।"),
             },
             {
               q: tr("Which AI models work with BharatAI?","BharatAI के साथ कौन से AI मॉडल काम करते हैं?"),
-              a: tr("BharatAI supports OpenAI (GPT-4o, GPT-4o mini), Google Gemini (2.0 Flash, 1.5 Pro), Anthropic Claude (3.5 Sonnet), DeepSeek, Qwen, Groq (Llama 3), Kimi, GLM, MiniMax, SiliconFlow and any OpenAI-compatible provider.","OpenAI, Google Gemini, Anthropic Claude, DeepSeek, Qwen, Groq, Kimi, GLM, MiniMax, SiliconFlow और OpenAI-संगत प्रदाता समर्थित हैं। उपलब्ध मॉडल सेटिंग्स में देखें।"),
+              a: tr("Supported providers include NVIDIA, OpenRouter and other configured providers. Check Settings for available models; availability and pricing can change.","OpenAI, Google Gemini, Anthropic Claude, DeepSeek, Qwen, Groq, Kimi, GLM, MiniMax, SiliconFlow और OpenAI-संगत प्रदाता समर्थित हैं। उपलब्ध मॉडल सेटिंग्स में देखें।"),
             },
             {
               q: tr("Is my data private?","क्या मेरा डेटा निजी है?"),
@@ -1402,8 +1406,7 @@ function SEOContent() {
 export default function Page() {
   return (
     <>
-      <HomePage />
-      <SEOContent />
+      <main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningHome /><SEOContent /></main>
     </>
   );
 }
