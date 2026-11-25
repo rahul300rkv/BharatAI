@@ -4,3 +4,5 @@ export const dynamic = 'force-dynamic';
 export default function GenerationPreviewLayout({ children }: { children: React.ReactNode }) {
   return children;
 }
+
+export const metadata = { robots: { index: false, follow: false } };

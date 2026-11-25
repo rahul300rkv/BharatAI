@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/terms' },
   title: 'Terms of Service — BharatAI',
 };
 
@@ -31,7 +32,7 @@ export default function TermsPage() {
             <Link href="/privacy" className="text-primary underline">Privacy Policy</Link>.
           </p>
           <p>
-            Contact: <a href="mailto:rahul.verma300@rediffmail.com" className="text-primary underline">bharatai@rediffmail.com</a>
+            Contact: <a href="mailto:rahul.verma300@rediffmail.com" className="text-primary underline">rahul.verma300@rediffmail.com</a>
           </p>
         </div>
       </div>

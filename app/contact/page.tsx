@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/contact' },
   title: 'Contact — BharatAI',
   description: 'Contact BharatAI support',
 };
@@ -26,7 +27,7 @@ export default function ContactPage() {
               href="mailto:rahul.verma300@rediffmail.com" 
               className="text-primary text-lg underline"
             >
-              bharatai@rediffmail.com
+              rahul.verma300@rediffmail.com
             </a>
           </div>
           

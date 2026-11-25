@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/about' },
   title: 'About — BharatAI',
   description: 'About BharatAI — India\'s multi-agent AI classroom',
 };
@@ -18,7 +19,7 @@ export default function AboutPage() {
 
         <div className="space-y-6 text-[15px] leading-relaxed">
           <p>
-            <strong>BharatAI</strong> is India's first multi-agent AI classroom platform. 
+            <strong>BharatAI</strong> is an India-focused multi-agent AI classroom platform. 
             Type any topic or upload a PDF and instantly get a full interactive lesson 
             with an AI teacher, quizzes, whiteboard, and classroom discussion — in Hindi or English.
           </p>
@@ -38,7 +39,7 @@ export default function AboutPage() {
           <h2 className="text-xl font-semibold pt-4">How it works</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li>You bring your own free API key (Groq is recommended and free)</li>
-            <li>Your data never leaves your browser — we don't store conversations</li>
+            <li>Browser sessions use local storage; requests may pass through server endpoints and external AI providers</li>
             <li>Lessons are generated on the fly with multi-agent AI teachers and students</li>
           </ul>
 
@@ -49,7 +50,7 @@ export default function AboutPage() {
           </p>
 
           <p className="pt-4">
-            Questions? <Link href="/contact" className="text-primary underline">Contact us</Link>.
+            Explore our <Link href="/learn" className="text-primary underline">free learning resources</Link> and <Link href="/editorial-policy" className="text-primary underline">editorial policy</Link>. Questions? <Link href="/contact" className="text-primary underline">Contact us</Link>.
           </p>
         </div>
       </div>
