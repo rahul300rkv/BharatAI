@@ -10,9 +10,8 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
-        <PublicLanguageNav/><h1 className="text-3xl font-bold mb-2"><SiteText k="contact"/></h1><EnglishContent>
+    <main className="site-page site-reading">
+        <h1 className="site-title"><SiteText k="contact"/></h1><EnglishContent>
         <p className="text-muted-foreground mb-8">
           We'd love to hear from you. Reach out for support, feedback, or partnership.
         </p>
@@ -44,6 +43,6 @@ export default function ContactPage() {
             </ul>
           </div>
         </div>
-      </EnglishContent></div></main>
+      </EnglishContent></main>
   );
 }

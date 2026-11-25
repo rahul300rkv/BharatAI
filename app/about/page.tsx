@@ -10,9 +10,8 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-        <PublicLanguageNav/><h1 className="text-3xl font-bold mb-6"><SiteText k="about"/></h1><EnglishContent>
+    <main className="site-page site-reading">
+        <h1 className="site-title"><SiteText k="about"/></h1><EnglishContent>
 
         <div className="space-y-6 text-[15px] leading-relaxed">
           <p>
@@ -27,20 +26,20 @@ export default function AboutPage() {
             that understand Hinglish, Indian curriculum, and the way we actually learn.
           </p>
 
-          <h2 className="text-xl font-semibold pt-4">Our Mission</h2>
+          <h2 className="site-section-title">Our Mission</h2>
           <p>
             Make public interactive learning resources free and accessible 
             to every Indian student — regardless of language, location, or income.
           </p>
 
-          <h2 className="text-xl font-semibold pt-4">How it works</h2>
+          <h2 className="site-section-title">How it works</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li>Personalised generation may require a provider API key; provider limits and charges may apply.</li>
             <li>Browser sessions use local storage; requests may pass through server endpoints and external AI providers</li>
             <li>Lessons are generated on the fly with multi-agent AI teachers and students</li>
           </ul>
 
-          <h2 className="text-xl font-semibold pt-4">Who built this</h2>
+          <h2 className="site-section-title">Who built this</h2>
           <p>
             BharatAI is an independent project created by an Indian developer passionate 
             about education and AI. It is independent of NCERT, CBSE and the exam authorities; our resources are not official textbooks or endorsements.
@@ -50,6 +49,6 @@ export default function AboutPage() {
             Explore our <Link href="/learn" className="text-primary underline">free learning resources</Link> and <Link href="/editorial-policy" className="text-primary underline">editorial policy</Link>. Questions? <Link href="/contact" className="text-primary underline">Contact us</Link>.
           </p>
         </div>
-      </EnglishContent></div></main>
+      </EnglishContent></main>
   );
 }
