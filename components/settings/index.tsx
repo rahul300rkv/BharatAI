@@ -76,7 +76,7 @@ function ProviderListColumn<T extends string>({
   t: (key: string) => string;
 }) {
   return (
-    <div className="flex-shrink-0 bg-background flex flex-col" style={{ width }}>
+    <div className="hidden lg:flex flex-shrink-0 bg-background flex-col min-h-0" style={{ width }}>
       <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
         {providers.map((provider) => (
           <button
@@ -665,12 +665,25 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="h-[85vh] p-0 gap-0 block" showCloseButton={false}>
+      <DialogContent className="w-[calc(100vw-16px)] max-w-[calc(100vw-16px)] h-[calc(100dvh-16px)] lg:w-[95vw] lg:max-w-[1200px] lg:h-[85dvh] p-0 gap-0 block overflow-hidden" showCloseButton={false}>
         <DialogTitle className="sr-only">{t('settings.title')}</DialogTitle>
         <DialogDescription className="sr-only">{t('settings.description')}</DialogDescription>
-        <div className="flex h-full overflow-hidden">
+        <div className="flex flex-col lg:flex-row h-full min-h-0 overflow-hidden">
+          <div className="lg:hidden shrink-0 border-b p-3 space-y-2">
+            <div className="flex items-center justify-between gap-2"><h2 className="font-semibold">{t('settings.title')}</h2><Button variant="ghost" size="icon" aria-label={t('settings.close')} onClick={()=>onOpenChange(false)}><X className="h-5 w-5"/></Button></div>
+            <select aria-label={t('settings.title')} className="w-full min-w-0 rounded-md border bg-background text-foreground p-2 text-base" value={activeSection} onChange={e=>setActiveSection(e.target.value as SettingsSection)}>
+              {([["providers","providers"],["image","imageSettings"],["video","videoSettings"],["tts","ttsSettings"],["asr","asrSettings"],["pdf","pdfSettings"],["web-search","webSearchSettings"],["general","systemSettings"]] as const).map(([id,key])=><option key={id} value={id}>{t(`settings.${key}`)}</option>)}
+            </select>
+            {activeSection === 'providers' && <div className="flex gap-2 items-center"><select aria-label={t('settings.providers')} className="flex-1 min-w-0 rounded-md border bg-background p-2 text-base" value={selectedProviderId} onChange={e=>handleProviderSelect(e.target.value as ProviderId)}>{allProviders.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select><Button variant="outline" size="sm" onClick={()=>setShowAddProviderDialog(true)}>{t('settings.addProviderButton')}</Button></div>}
+            {activeSection === 'pdf' && <select aria-label={t('settings.pdfSettings')} className="w-full rounded-md border bg-background p-2 text-base" value={selectedPdfProviderId} onChange={e=>setSelectedPdfProviderId(e.target.value as PDFProviderId)}>{Object.values(PDF_PROVIDERS).map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select>}
+            {activeSection === 'web-search' && <select aria-label={t('settings.webSearchSettings')} className="w-full rounded-md border bg-background p-2 text-base" value={selectedWebSearchProviderId} onChange={e=>setSelectedWebSearchProviderId(e.target.value as WebSearchProviderId)}>{Object.values(WEB_SEARCH_PROVIDERS).map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select>}
+            {activeSection === 'image' && <select aria-label={t('settings.imageSettings')} className="w-full rounded-md border bg-background p-2 text-base" value={selectedImageProviderId} onChange={e=>setSelectedImageProviderId(e.target.value as ImageProviderId)}>{Object.values(IMAGE_PROVIDERS).map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select>}
+            {activeSection === 'video' && <select aria-label={t('settings.videoSettings')} className="w-full rounded-md border bg-background p-2 text-base" value={selectedVideoProviderId} onChange={e=>setSelectedVideoProviderId(e.target.value as VideoProviderId)}>{Object.values(VIDEO_PROVIDERS).map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select>}
+            {activeSection === 'tts' && <select aria-label={t('settings.ttsSettings')} className="w-full rounded-md border bg-background p-2 text-base" value={ttsProviderId} onChange={e=>setTTSProvider(e.target.value as TTSProviderId)}>{Object.values(TTS_PROVIDERS).map(p=><option key={p.id} value={p.id}>{getTTSProviderName(p.id,t)}</option>)}</select>}
+            {activeSection === 'asr' && <select aria-label={t('settings.asrSettings')} className="w-full rounded-md border bg-background p-2 text-base" value={asrProviderId} onChange={e=>setASRProvider(e.target.value as ASRProviderId)}>{Object.values(ASR_PROVIDERS).map(p=><option key={p.id} value={p.id}>{getASRProviderName(p.id,t)}</option>)}</select>}
+          </div>
           {/* Left Sidebar - Navigation */}
-          <div className="flex-shrink-0 bg-muted/30 p-3 space-y-1" style={{ width: sidebarWidth }}>
+          <div className="hidden lg:block flex-shrink-0 bg-muted/30 p-3 space-y-1 overflow-y-auto" style={{ width: sidebarWidth }}>
             <button
               onClick={() => setActiveSection('providers')}
               className={cn(
@@ -779,7 +792,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
           {/* Sidebar resize handle */}
           <div
             onMouseDown={(e) => handleResizeStart(e, 'sidebar')}
-            className="flex-shrink-0 w-[5px] cursor-col-resize group flex justify-center"
+            className="hidden lg:flex flex-shrink-0 w-[5px] cursor-col-resize group justify-center"
           >
             <div className="w-px h-full bg-border group-hover:bg-primary/50 transition-colors" />
           </div>
@@ -796,7 +809,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               />
               <div
                 onMouseDown={(e) => handleResizeStart(e, 'providerList')}
-                className="flex-shrink-0 w-[5px] cursor-col-resize group flex justify-center"
+                className="hidden lg:flex flex-shrink-0 w-[5px] cursor-col-resize group justify-center"
               >
                 <div className="w-px h-full bg-border group-hover:bg-primary/50 transition-colors" />
               </div>
@@ -815,7 +828,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               />
               <div
                 onMouseDown={(e) => handleResizeStart(e, 'providerList')}
-                className="flex-shrink-0 w-[5px] cursor-col-resize group flex justify-center"
+                className="hidden lg:flex flex-shrink-0 w-[5px] cursor-col-resize group justify-center"
               >
                 <div className="w-px h-full bg-border group-hover:bg-primary/50 transition-colors" />
               </div>
@@ -834,7 +847,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               />
               <div
                 onMouseDown={(e) => handleResizeStart(e, 'providerList')}
-                className="flex-shrink-0 w-[5px] cursor-col-resize group flex justify-center"
+                className="hidden lg:flex flex-shrink-0 w-[5px] cursor-col-resize group justify-center"
               >
                 <div className="w-px h-full bg-border group-hover:bg-primary/50 transition-colors" />
               </div>
@@ -857,7 +870,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               />
               <div
                 onMouseDown={(e) => handleResizeStart(e, 'providerList')}
-                className="flex-shrink-0 w-[5px] cursor-col-resize group flex justify-center"
+                className="hidden lg:flex flex-shrink-0 w-[5px] cursor-col-resize group justify-center"
               >
                 <div className="w-px h-full bg-border group-hover:bg-primary/50 transition-colors" />
               </div>
@@ -880,7 +893,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               />
               <div
                 onMouseDown={(e) => handleResizeStart(e, 'providerList')}
-                className="flex-shrink-0 w-[5px] cursor-col-resize group flex justify-center"
+                className="hidden lg:flex flex-shrink-0 w-[5px] cursor-col-resize group justify-center"
               >
                 <div className="w-px h-full bg-border group-hover:bg-primary/50 transition-colors" />
               </div>
@@ -903,7 +916,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               />
               <div
                 onMouseDown={(e) => handleResizeStart(e, 'providerList')}
-                className="flex-shrink-0 w-[5px] cursor-col-resize group flex justify-center"
+                className="hidden lg:flex flex-shrink-0 w-[5px] cursor-col-resize group justify-center"
               >
                 <div className="w-px h-full bg-border group-hover:bg-primary/50 transition-colors" />
               </div>
@@ -926,7 +939,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
               />
               <div
                 onMouseDown={(e) => handleResizeStart(e, 'providerList')}
-                className="flex-shrink-0 w-[5px] cursor-col-resize group flex justify-center"
+                className="hidden lg:flex flex-shrink-0 w-[5px] cursor-col-resize group justify-center"
               >
                 <div className="w-px h-full bg-border group-hover:bg-primary/50 transition-colors" />
               </div>
@@ -934,10 +947,10 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
           )}
 
           {/* Right - Configuration Panel */}
-          <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+          <div className="flex-1 flex flex-col overflow-hidden min-w-0 min-h-0">
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b">
-              <div className="flex items-center gap-3">{getHeaderContent()}</div>
+            <div className="flex shrink-0 items-center justify-between gap-2 p-3 lg:p-5 border-b">
+              <div className="flex min-w-0 items-center gap-2 break-words">{getHeaderContent()}</div>
               <div className="flex items-center gap-2">
                 {activeSection === 'providers' &&
                   !providersConfig[selectedProviderId]?.isBuiltIn && (
@@ -950,14 +963,14 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   )}
-                <Button variant="ghost" size="icon" onClick={() => onOpenChange(false)}>
+                <Button className="hidden lg:inline-flex" variant="ghost" size="icon" aria-label={t('settings.close')} onClick={() => onOpenChange(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-5">
+            <div className="flex-1 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden overscroll-contain p-3 lg:p-5">
               {activeSection === 'general' && <GeneralSettings />}
 
               {activeSection === 'providers' && selectedProvider && (
@@ -998,7 +1011,7 @@ export function SettingsDialog({ open, onOpenChange, initialSection }: SettingsD
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-end gap-3 px-5 py-3 border-t bg-muted/30">
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 px-3 lg:px-5 py-3 border-t bg-muted/30 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               {saveStatus === 'saved' && (
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <CheckCircle2 className="h-4 w-4" />

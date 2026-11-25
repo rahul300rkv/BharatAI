@@ -153,7 +153,7 @@ export function ProviderConfigPanel({
   const isServerConfigured = providersConfig[provider.id]?.isServerConfigured;
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 max-w-3xl min-w-0">
       {/* Server-configured notice */}
       {isServerConfigured && (
         <div className="rounded-lg border border-primary/20 bg-primary/6 dark:border-primary/25 dark:bg-primary/950/30 p-3 text-sm text-primary700 dark:text-primary300">
@@ -164,8 +164,8 @@ export function ProviderConfigPanel({
       {/* API Key */}
       <div className="space-y-2">
         <Label>{t('settings.apiSecret')}</Label>
-        <div className="flex gap-2">
-          <div className="relative flex-1">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2">
+          <div className="relative flex-1 min-w-0">
             <Input
               name={`llm-api-key-${provider.id}`}
               type={showApiKey ? 'text' : 'password'}
@@ -316,11 +316,11 @@ export function ProviderConfigPanel({
             return (
               <div
                 key={model.id}
-                className="flex items-center justify-between p-3 rounded-lg border border-border/50 bg-card"
+                className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg border border-border/50 bg-card"
               >
-                <div className="flex-1">
-                  <div className="font-mono text-sm font-medium mb-1.5">{model.name}</div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="flex-1 min-w-0">
+                  <div className="font-mono text-sm font-medium mb-1.5 break-all">{model.name}</div>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                     {/* Capabilities */}
                     <div className="flex items-center gap-1">
                       {model.capabilities?.vision && (

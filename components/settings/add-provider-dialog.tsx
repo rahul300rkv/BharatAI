@@ -63,7 +63,7 @@ export function AddProviderDialog({ open, onOpenChange, onAdd }: AddProviderDial
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[450px]">
+      <DialogContent className="w-[calc(100vw-24px)] max-w-[calc(100vw-24px)] sm:max-w-[450px] max-h-[calc(100dvh-24px)] overflow-y-auto p-4 sm:p-6">
         <DialogTitle className="sr-only">{t('settings.addProviderDialog')}</DialogTitle>
         <DialogDescription className="sr-only">
           {t('settings.addProviderDescription')}
@@ -86,7 +86,7 @@ export function AddProviderDialog({ open, onOpenChange, onAdd }: AddProviderDial
           {/* API Mode */}
           <div className="space-y-2">
             <Label>{t('settings.providerApiMode')}</Label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <button
                 onClick={() => setType('openai')}
                 className={cn(

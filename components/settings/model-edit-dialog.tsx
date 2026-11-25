@@ -100,7 +100,7 @@ export function ModelEditDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="w-[calc(100vw-24px)] max-w-[calc(100vw-24px)] sm:max-w-[500px] max-h-[calc(100dvh-24px)] overflow-y-auto p-4 sm:p-6">
         <DialogTitle className="sr-only">
           {editingModel.modelIndex === null ? t('settings.addNewModel') : t('settings.editModel')}
         </DialogTitle>
@@ -168,7 +168,7 @@ export function ModelEditDialog({
           {/* Capabilities */}
           <div className="space-y-2">
             <Label>{t('settings.modelCapabilities')}</Label>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="cap-vision"
