@@ -175,6 +175,7 @@ export async function transcribeAudio(
   }
 
   switch (config.providerId) {
+    case 'sarvam-asr': return transcribeSarvam(config,audioBuffer);
     case 'openai-whisper':
       return await transcribeOpenAIWhisper(config, audioBuffer);
 
@@ -403,3 +404,14 @@ export async function getCurrentASRConfig(): Promise<ASRModelConfig> {
 
 // Re-export from constants for convenience
 export { getAllASRProviders, getASRProvider, getASRSupportedLanguages } from './constants';
+
+async function transcribeSarvam(config:ASRModelConfig,audio:Buffer|Blob):Promise<ASRTranscriptionResult>{
+ const blob=audio instanceof Blob?audio:new Blob([new Uint8Array(audio)],{type:'application/octet-stream'});
+ const form=new FormData();form.append('file',blob,blob instanceof File?blob.name:'audio.webm');form.append('model','saaras:v4');form.append('mode','transcribe');
+ const lang=config.language==='or-IN'?'od-IN':config.language==='en-US'?'en-IN':config.language;
+ if(lang&&lang!=='auto')form.append('language_code',lang);
+ const response=await fetch('https://api.sarvam.ai/speech-to-text',{method:'POST',headers:{'api-subscription-key':config.apiKey!},body:form,redirect:'error',signal:AbortSignal.timeout(40000)});
+ if(!response.ok)throw Error('Sarvam transcription failed ('+response.status+'). Check key, quota and audio duration.');
+ const result=await response.json();if(typeof result.transcript!=='string')throw Error('Sarvam returned no transcript.');
+ return {text:result.transcript};
+}

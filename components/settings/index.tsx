@@ -117,6 +117,7 @@ function ProviderListColumn<T extends string>({
 // ─── Helper: get TTS/ASR provider display name ───
 function getTTSProviderName(providerId: TTSProviderId, t: (key: string) => string): string {
   const names: Record<TTSProviderId, string> = {
+    'sarvam-tts': 'Sarvam Bulbul',
     'openai-tts': t('settings.providerOpenAITTS'),
     'azure-tts': t('settings.providerAzureTTS'),
     'glm-tts': t('settings.providerGLMTTS'),
@@ -131,6 +132,7 @@ function getTTSProviderName(providerId: TTSProviderId, t: (key: string) => strin
 
 function getASRProviderName(providerId: ASRProviderId, t: (key: string) => string): string {
   const names: Record<ASRProviderId, string> = {
+    'sarvam-asr': 'Sarvam Saaras v4',
     'openai-whisper': t('settings.providerOpenAIWhisper'),
     'browser-native': t('settings.providerBrowserNative'),
     'qwen-asr': t('settings.providerQwenASR'),

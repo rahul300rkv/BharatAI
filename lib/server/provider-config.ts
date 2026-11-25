@@ -55,6 +55,7 @@ const LLM_ENV_MAP: Record<string, string> = {
 };
 
 const TTS_ENV_MAP: Record<string, string> = {
+  TTS_SARVAM: 'sarvam-tts',
   TTS_OPENAI: 'openai-tts',
   TTS_AZURE: 'azure-tts',
   TTS_GLM: 'glm-tts',
@@ -63,6 +64,7 @@ const TTS_ENV_MAP: Record<string, string> = {
 };
 
 const ASR_ENV_MAP: Record<string, string> = {
+  ASR_SARVAM: 'sarvam-asr',
   ASR_OPENAI: 'openai-whisper',
   ASR_QWEN: 'qwen-asr',
   ASR_GROQ: 'groq-whisper',

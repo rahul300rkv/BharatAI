@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
 
     // Transcribe using the provider system
-    const result = await transcribeAudio(config, buffer);
+    const result = await transcribeAudio(config, effectiveProviderId === 'sarvam-asr' ? audioFile : buffer);
 
     return apiSuccess({ text: result.text });
   } catch (error) {

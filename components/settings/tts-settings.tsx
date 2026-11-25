@@ -154,6 +154,7 @@ export function TTSSettings({ selectedProviderId }: TTSSettingsProps) {
             if (!effectiveBaseUrl) return null;
             let endpointPath = '';
             switch (selectedProviderId) {
+              case 'sarvam-tts': return 'https://api.sarvam.ai/text-to-speech';
               case 'openai-tts':
               case 'glm-tts':
                 endpointPath = '/audio/speech';
