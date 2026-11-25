@@ -1,18 +1,21 @@
 'use client';
 import {useState} from 'react';
+import {useI18n} from '@/lib/hooks/use-i18n';
+import {labText} from '@/lib/i18n/lab-ui';
 import type {LabSlug} from '@/lib/virtual-labs';
 const fmt=(n:number)=>Number(n.toFixed(4)).toString();
 const defaults:Partial<Record<LabSlug,number[]>>={'simple-pendulum':[1,9.8],'convex-lens':[10,20],'hookes-law':[100,.1],'wave-motion':[2,5,1],buoyancy:[600,1000,1],'ph-scale':[7],'balancing-chemical-equations':[1,1,1],molarity:[.5,2],'ideal-gas-law':[1,300,24],trigonometry:[30]};
 export const extendedSlugs=[...Object.keys(defaults),'coin-toss-probability','punnett-square','bubble-sort','binary-search'];
 const initial=[8,3,7,2,9,1,5],sorted=[1,3,5,7,9,11,13,15,17];
 export function ExtendedVirtualLab({slug}:{slug:LabSlug}){
+ const {locale}=useI18n();const tr=(s:string)=>labText(locale,s);
  const d=defaults[slug]??[];const [a,A]=useState(d[0]??0),[b,B]=useState(d[1]??0),[c,C]=useState(d[2]??0);
  const [heads,H]=useState(0),[trials,T]=useState(0),[p1,P1]=useState('Aa'),[p2,P2]=useState('Aa'),[arr,Arr]=useState(initial),[pass,Pass]=useState(0),[idx,Idx]=useState(0),[comparisons,Comp]=useState(0),[swaps,Swap]=useState(0),[target,Target]=useState(7),[low,Low]=useState(0),[high,High]=useState(sorted.length-1),[found,Found]=useState<number|null>(null);
  const resetSearch=()=>{Low(0);High(sorted.length-1);Found(null)};
  const reset=()=>{A(d[0]??0);B(d[1]??0);C(d[2]??0);H(0);T(0);P1('Aa');P2('Aa');Arr([...initial]);Pass(0);Idx(0);Comp(0);Swap(0);Target(7);resetSearch()};
  const button='rounded-md border px-3 py-2 text-sm hover:bg-muted disabled:opacity-40';
- const range=(name:string,value:number,min:number,max:number,step:number,set:(v:number)=>void)=><label className="block space-y-1"><span className="flex justify-between text-sm"><span>{name}</span><output>{value}</output></span><input type="range" className="w-full h-8 accent-primary" min={min} max={max} step={step} value={value} onChange={e=>set(+e.target.value)}/></label>;
- const result=(items:[string,string][]) => <dl aria-live="polite" className="grid grid-cols-2 sm:grid-cols-3 gap-2">{items.map(([k,v])=><div key={k} className="border rounded-lg p-3"><dt className="text-xs text-muted-foreground">{k}</dt><dd className="font-mono text-lg break-words">{v}</dd></div>)}</dl>;
+ const range=(name:string,value:number,min:number,max:number,step:number,set:(v:number)=>void)=><label className="block space-y-1"><span className="flex justify-between text-sm"><span>{tr(name)}</span><output>{value}</output></span><input type="range" className="w-full h-8 accent-primary" min={min} max={max} step={step} value={value} onChange={e=>set(+e.target.value)}/></label>;
+ const result=(items:[string,string][]) => <dl aria-live="polite" className="grid grid-cols-2 sm:grid-cols-3 gap-2">{items.map(([k,v])=><div key={k} className="border rounded-lg p-3"><dt className="text-xs text-muted-foreground">{tr(k)}</dt><dd className="font-mono text-lg break-words">{v}</dd></div>)}</dl>;
  const svg='w-full max-h-60 text-foreground';
  let body:React.ReactNode=null;
  switch(slug){
@@ -31,5 +34,5 @@ export function ExtendedVirtualLab({slug}:{slug:LabSlug}){
  case 'bubble-sort':body=<><div className="flex items-end gap-2 h-40">{arr.map((n,i)=><div key={i} className="flex-1 text-center"><div className={i===idx||i===idx+1?'bg-amber-500':'bg-blue-600'} style={{height:n*12}}/><span>{n}</span></div>)}</div><button className={button} disabled={pass>=arr.length-1} onClick={()=>{const next=[...arr];if(next[idx]>next[idx+1]){[next[idx],next[idx+1]]=[next[idx+1],next[idx]];Swap(x=>x+1)}Arr(next);Comp(x=>x+1);if(idx>=arr.length-pass-2){Idx(0);Pass(x=>x+1)}else Idx(x=>x+1)}}>Next comparison</button>{result([['Comparisons',String(comparisons)],['Swaps',String(swaps)],['Status',pass>=arr.length-1?'Sorted':'In progress']])}</>;break;
  case 'binary-search':{const mid=Math.floor((low+high)/2);body=<><label>Target <input type="number" min="0" max="20" value={target} onChange={e=>{Target(Math.max(0,Math.min(20,Math.trunc(+e.target.value||0))));resetSearch()}} className="border rounded p-2 bg-background w-24"/></label><div className="grid grid-cols-5 sm:grid-cols-9 gap-1">{sorted.map((n,i)=><div key={n} className={'border rounded p-2 text-center '+(i===found?'bg-green-600 text-white':i===mid&&low<=high?'bg-amber-500 text-black':i<low||i>high?'opacity-30':'')}>{n}</div>)}</div><button className={button} disabled={found!==null||low>high} onClick={()=>{if(sorted[mid]===target)Found(mid);else if(sorted[mid]<target)Low(mid+1);else High(mid-1)}}>Next comparison</button>{result([['Low index',String(low)],['High index',String(high)],['Status',found!==null?'Found at '+found:low>high?'Not found':'Searching']])}</>;break}
  }
- return <div lang="en" dir="ltr" className="space-y-4">{body}<button className={button} onClick={reset}>Reset experiment</button></div>;
+ return <div  className="space-y-4">{body}<button className={button} onClick={reset}>{tr('Reset experiment')}</button></div>;
 }
