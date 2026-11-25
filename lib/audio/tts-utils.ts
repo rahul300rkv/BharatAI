@@ -23,7 +23,7 @@ export function splitLongSpeechText(text: string, maxLength: number): string[] {
   if (!normalized || normalized.length <= maxLength) return [normalized];
 
   const units = normalized
-    .split(/(?<=[。！？!?；;：:\n])/u)
+    .split(/(?<=[।॥。！？!?；;：:\n])/u)
     .map((part) => part.trim())
     .filter(Boolean);
 

@@ -45,7 +45,8 @@ export function Stage({
 }: {
   onRetryOutline?: (outlineId: string) => Promise<void>;
 }) {
-  const { t } = useI18n();
+  const { t,locale } = useI18n();
+  const isDemo=useStageStore(s=>s.stage?.id.startsWith('demo-v1-')??false);
   const { mode, getCurrentScene, scenes, currentSceneId, setCurrentSceneId, generatingOutlines } =
     useStageStore();
   const failedOutlines = useStageStore.use.failedOutlines();
@@ -1048,6 +1049,7 @@ export function Stage({
               isCueUser={isCueUser}
               isTopicPending={isTopicPending}
               onMessageSend={(msg) => {
+                if(isDemo){return;}
                 // Clear soft-paused state — user is continuing the topic
                 if (isTopicPending) {
                   setIsTopicPending(false);
@@ -1133,8 +1135,9 @@ export function Stage({
         )}
       </div>
 
+      {isDemo && <div role="note" className="shrink-0 p-2 text-xs text-muted-foreground border-t">{locale==='hi-IN'?'नमूना कक्षा: लाइव AI चैट उपलब्ध नहीं है।':'Demo classroom: live AI chat is not included.'}</div>}
       {/* Chat Area */}
-      <ChatArea
+      {!isDemo && <ChatArea
         ref={chatAreaRef}
         width={chatAreaWidth}
         onWidthChange={setChatAreaWidth}
@@ -1186,7 +1189,7 @@ export function Stage({
         onStopSession={doSessionCleanup}
         onSegmentSealed={discussionTTS.handleSegmentSealed}
         shouldHoldAfterReveal={discussionTTS.shouldHold}
-      />
+      />}
 
       {/* Scene switch confirmation dialog */}
       <AlertDialog

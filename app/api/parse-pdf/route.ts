@@ -26,10 +26,11 @@ export async function POST(req: NextRequest) {
     const apiKey = formData.get('apiKey') as string | null;
     const baseUrl = formData.get('baseUrl') as string | null;
 
-    if (!pdfFile) {
+    if (!(pdfFile instanceof File)) {
       return apiError('MISSING_REQUIRED_FIELD', 400, 'No PDF file provided');
     }
 
+    if(pdfFile.size>4*1024*1024)return apiError('INVALID_REQUEST',413,'PDF exceeds 4 MB. Split it into smaller chapters.');
     // providerId is required from the client — no server-side store to fall back to
     const effectiveProviderId = providerId || ('unpdf' as PDFProviderId);
 
@@ -55,6 +56,7 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await pdfFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
+    if(!buffer.subarray(0,1024).includes(Buffer.from('%PDF-')))return apiError('INVALID_REQUEST',400,'Invalid PDF file.');
     // Parse PDF using the provider system
     const result = await parsePDF(config, buffer);
 

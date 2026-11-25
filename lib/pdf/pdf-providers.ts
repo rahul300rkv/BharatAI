@@ -53,7 +53,7 @@
  *      const texts: string[] = [];
  *      const images: string[] = [];
  *
- *      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+ *      for (let pageNum = 1; pageNum <= numPages && imageCounter < 30; pageNum++) {
  *        // Render page to canvas/image
  *        const page = await pdf.getPage(pageNum);
  *        const viewport = page.getViewport({ scale: 2.0 });
@@ -195,11 +195,14 @@ async function parseWithUnpdf(pdfBuffer: Buffer): Promise<ParsedPdfContent> {
   const uint8Array = new Uint8Array(pdfBuffer);
   const pdf = await getDocumentProxy(uint8Array);
   const numPages = pdf.numPages;
+  if(numPages>100){await pdf.destroy();throw new Error('PDF exceeds 100 pages. Upload a smaller chapter.');}
 
   // Extract text using the document proxy
   const { text: pdfText } = await extractText(pdf, {
     mergePages: true,
   });
+
+  if(!pdfText.trim()){await pdf.destroy();throw new Error('No selectable text found. This may be a scanned PDF. Use an OCR-enabled MinerU server or convert the scan to searchable PDF first.');}
 
   // Extract images using the same document proxy
   const images: string[] = [];
@@ -215,10 +218,11 @@ async function parseWithUnpdf(pdfBuffer: Buffer): Promise<ParsedPdfContent> {
   for (let pageNum = 1; pageNum <= numPages; pageNum++) {
     try {
       const pageImages = await extractImages(pdf, pageNum);
-      for (let i = 0; i < pageImages.length; i++) {
+      for (let i = 0; i < pageImages.length && imageCounter < 30; i++) {
         const imgData = pageImages[i];
         try {
           // Use sharp to convert raw image data to PNG base64
+          if(imgData.width*imgData.height>16000000)continue;
           const pngBuffer = await sharp(Buffer.from(imgData.data), {
             raw: {
               width: imgData.width,
@@ -226,6 +230,7 @@ async function parseWithUnpdf(pdfBuffer: Buffer): Promise<ParsedPdfContent> {
               channels: imgData.channels,
             },
           })
+            .resize({width:1600,height:1600,fit:'inside',withoutEnlargement:true})
             .png()
             .toBuffer();
 
@@ -250,6 +255,7 @@ async function parseWithUnpdf(pdfBuffer: Buffer): Promise<ParsedPdfContent> {
     }
   }
 
+  await pdf.destroy();
   return {
     text: pdfText,
     images,

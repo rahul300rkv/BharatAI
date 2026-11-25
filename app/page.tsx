@@ -632,6 +632,7 @@ useEffect(() => {
       )}
 
 
+        <Link href="/demo" className="mt-4 inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-background px-4 py-3 text-sm font-semibold text-primary hover:bg-muted">{locale==='hi-IN'?'मुफ़्त नमूना कक्षा देखें — API कुंजी नहीं चाहिए':'Try a free demo classroom — no API key needed'}</Link>
         {/* ── Error ── */}
         <AnimatePresence>
           {error && (
@@ -1376,7 +1377,7 @@ function SEOContent() {
     <p className="text-muted-foreground/60">
       {tr("BharatAI — Bharat Ka Apna AI Classroom 🇮🇳","BharatAI — भारत की अपनी AI कक्षा 🇮🇳")}
     </p>
-    <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+    <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"><Link href="/demo" className="text-muted-foreground hover:text-foreground transition-colors">{tr("Demo classrooms","नमूना कक्षाएँ")}</Link>
       <Link href="/learn" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="learn"/></Link>
       <Link href="/guides" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="guides"/></Link>
       <Link href="/editorial-policy" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="editorial"/></Link>
