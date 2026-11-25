@@ -305,10 +305,12 @@ export async function callLLM<T extends GenerateTextParams>(
       // Wrap in thinkingContext so the custom fetch wrapper in providers.ts
       // can read the config and inject vendor-specific body params for
       // OpenAI-compatible providers.
+      const startedAt = Date.now();
       const result = await thinkingContext.run(effectiveThinking, () =>
         generateText(injectedParams),
       );
 
+      log.info(`[${source}] LLM completed in ${Date.now() - startedAt}ms (attempt ${attempt}/${maxAttempts})`);
       // Validate result (only when retries are configured)
       if (validate && !validate(result.text)) {
         log.warn(
