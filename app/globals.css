@@ -332,3 +332,13 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Learning surfaces: lightweight, readable, native-script friendly. */
+:root { --background: #faf9f6; --foreground: #172638; --card: #ffffff; --card-foreground: #172638; --muted-foreground: #526174; --primary: #b74e12; --primary-foreground:#ffffff; }
+.dark { --background:#121d2a; --foreground:#edf2f7; --card:#1b2938; --card-foreground:#edf2f7; --muted-foreground:#b6c4d4; --primary:#ffad73; --primary-foreground:#172638; }
+.learning-shell,.learning-hero { font-family: var(--font-sans), "Noto Sans", "Noto Sans Bengali", "Noto Sans Tamil", "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Gujarati", "Noto Sans Gurmukhi", "Noto Sans Oriya", "Noto Nastaliq Urdu", system-ui, sans-serif; }
+.learning-hero { background:var(--background); }
+.learning-preview { background:var(--background); box-shadow:0 16px 44px rgb(20 35 52 / .06); }
+.learning-card { transition:transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease; }
+@media(hover:hover) { .learning-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgb(20 35 52 / .08);border-color:var(--primary);} }
+@media(prefers-reduced-motion:reduce){.learning-card{transition:none}.learning-card:hover{transform:none}}

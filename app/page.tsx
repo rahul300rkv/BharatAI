@@ -3,6 +3,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { LearningPreview } from '@/components/learning-preview';
+import { designText, localizedLabTitle } from '@/lib/i18n/learning-design';
+import { LabText } from '@/components/site-language';
 import { LearningHome } from '@/components/learning-home';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -398,7 +401,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="w-full bg-gradient-to-b from-background to-muted dark:from-background dark:to-card flex flex-col items-center p-4 pt-16 md:p-8 md:pt-16 overflow-x-hidden">
+    <div className="learning-hero relative w-full flex flex-col items-center px-4 pt-16 sm:px-8 sm:pt-20 overflow-x-clip">
       {/* ═══ Top-right pill (unchanged) ═══ */}
       <div
         ref={toolbarRef}
@@ -406,7 +409,7 @@ useEffect(() => {
       >
         {/* Language Selector */}
           <div className="relative" >
-            <select aria-label={t('settings.language')} value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
+            <select aria-label={t('settings.language')} value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);updateForm('language',value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
             {languages.map(l=><option key={l.code} value={l.code} lang={l.code}>{l.native}</option>)}
             </select>
           </div>
@@ -496,21 +499,9 @@ useEffect(() => {
         initialSection={settingsSection}
       />
 
-      {/* ═══ Background Decor ═══ */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-[#E8650A]/8 rounded-full blur-3xl animate-pulse"
-          style={{ animationDuration: '4s' }}
-        />
-        <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse"
-          style={{ animationDuration: '6s' }}
-        />
-      </div>
-
       {/* ═══ Hero section: title + input (centered, wider) ═══ */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className={cn(
@@ -522,7 +513,7 @@ useEffect(() => {
         <motion.img
           src="/logo-horizontal.svg"
           alt="BharatAI"
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={false}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
             delay: 0.1,
@@ -533,27 +524,17 @@ useEffect(() => {
           className="h-14 md:h-20 mb-3 -ml-2 md:-ml-3 drop-shadow-sm"
         />
 
-        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-2">{locale==='hi-IN'?'आपकी अपनी AI कक्षा':'Your personal AI classroom'}</h1>
-        <p className="text-center text-sm text-muted-foreground max-w-xl mb-3">{locale==='hi-IN'?'विषय चुनें, AI शिक्षक से सीखें और प्रश्नोत्तरी व प्रयोगों से अभ्यास करें।':'Learn a topic with AI teachers, slides, whiteboards and quizzes. Try a prepared classroom free, or generate your own with a supported AI provider.'}</p>
-        <nav aria-label="Learning resources" className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm mb-4"><Link href="/demo">{locale==='hi-IN'?'मुफ़्त कक्षाएँ':'Free classrooms'}</Link><Link href="/labs">{locale==='hi-IN'?'प्रयोगशालाएँ':'Virtual labs'}</Link><Link href="/learn">{locale==='hi-IN'?'पाठ':'Lessons'}</Link><Link href="/guides">{locale==='hi-IN'?'अध्ययन मार्गदर्शिका':'Study guide'}</Link></nav>
-        {/* ── Slogan ── */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.25 }}
-          className="text-sm text-muted-foreground/60 mb-8"
-        >
-          {t('home.slogan')}
-        </motion.p>
-
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-semibold text-center mb-3 tracking-tight max-w-3xl">{designText(locale,'hero')}</h1>
+        <p className="text-center text-base text-muted-foreground max-w-xl mb-4">{designText(locale,'intro')}</p>
+        <nav aria-label={designText(locale,'resources')} className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm mb-6"><Link href="/demo"><LabText text="Free demo classrooms"/></Link><Link href="/labs"><LabText text="Labs"/></Link><Link href="/learn"><SiteText k="learn"/></Link><Link href="/guides"><SiteText k="guides"/></Link></nav>
         {/* ── Unified input area ── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
+          initial={false}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.35 }}
           className="w-full"
         >
-          <div className="w-full rounded-2xl border border-border/60 bg-[#FFF9F2]/85 dark:bg-[#241200]/85 backdrop-blur-xl shadow-xl shadow-black/[0.04] dark:shadow-black/25 transition-shadow focus-within:shadow-2xl focus-within:shadow-primary/[0.08] focus-within:border-primary/30">
+          <div className="w-full rounded-2xl border border-border/60 bg-card shadow-xl shadow-black/[0.04] dark:shadow-black/25 transition-shadow focus-within:shadow-2xl focus-within:shadow-primary/[0.08] focus-within:border-primary/30">
             {/* ── Greeting + Profile + Agents ── */}
             <div className="relative z-20 flex items-start justify-between">
               <GreetingBar />
@@ -565,8 +546,9 @@ useEffect(() => {
             {/* Textarea */}
             <textarea
               ref={textareaRef}
-              placeholder={t('upload.requirementPlaceholder')}
-              className="w-full resize-none border-0 bg-transparent px-4 pt-1 pb-2 text-[13px] leading-relaxed placeholder:text-muted-foreground/40 focus:outline-none min-h-[140px] max-h-[300px]"
+              placeholder={designText(locale,'prompt')}
+              aria-label={designText(locale,'prompt')}
+              className="w-full resize-none border-0 bg-transparent px-4 pt-1 pb-2 text-base leading-relaxed placeholder:text-muted-foreground focus:outline-none min-h-[104px] max-h-[300px]"
               value={form.requirement}
               onChange={(e) => updateForm('requirement', e.target.value)}
               onKeyDown={handleKeyDown}
@@ -614,18 +596,15 @@ useEffect(() => {
                     : 'bg-muted text-muted-foreground/40 cursor-not-allowed',
                 )}
               >
-                <span className="text-xs font-medium">{t('toolbar.enterClassroom')}</span>
+                <span className="text-xs font-medium">{designText(locale,'create')}</span>
                 <ArrowUp className="size-3.5" />
               </button>
             </div>
           </div>
         </motion.div>
 
-        <div className="mt-4 w-full rounded-xl border border-primary/20 bg-background p-4 text-center space-y-2">
-          <p className="text-sm font-semibold">{locale==='hi-IN'?'बिना खाते या API कुंजी के सीखें':'Learn without an account or API key'}</p>
-          <Link href="/demo" className="inline-flex rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">{locale==='hi-IN'?'मुफ़्त नमूना कक्षाएँ खोलें':'Explore free interactive classrooms'}</Link>
-          <Link href="/labs" className="inline-flex ml-2 rounded-lg border border-primary px-4 py-3 text-sm font-semibold text-primary">{locale==='hi-IN'?'आभासी प्रयोगशाला':'Try virtual labs'}</Link><p className="text-xs text-muted-foreground">{locale==='hi-IN'?'व्यक्तिगत AI कक्षा के लिए ही अपनी API कुंजी जोड़ें।':'Only custom AI generation needs your own provider key.'}</p>
-        </div>
+        <div className="w-full flex flex-wrap gap-2 mt-4 items-center"><span className="text-sm text-muted-foreground">{designText(locale,'topics')}</span>{(['ohms-law','projectile-motion','quadratic-equations'] as const).map(slug=><button type="button" key={slug} className="rounded-full border bg-card px-3 py-2 text-sm hover:border-primary" onClick={()=>{updateForm('requirement',localizedLabTitle(locale,slug));textareaRef.current?.focus()}}>{localizedLabTitle(locale,slug)}</button>)}</div>
+        <div className="mt-5 w-full text-center space-y-2"><p className="text-sm font-medium">{designText(locale,'free')}</p><div className="flex flex-wrap justify-center gap-3"><Link href="/demo" className="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground"><LabText text="Free demo classrooms"/></Link><Link href="/labs" className="rounded-xl border px-4 py-3 text-sm font-semibold"><LabText text="Free virtual labs"/></Link></div><p className="text-sm text-muted-foreground">{designText(locale,'key')}</p></div>
       {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
       {!currentModelId && (
         <div className="relative z-20 w-full max-w-[800px] mt-4">
@@ -1406,7 +1385,7 @@ function SEOContent() {
 export default function Page() {
   return (
     <>
-      <main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningHome /><SEOContent /></main>
+      <main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningPreview/><LearningHome /><SEOContent /></main>
     </>
   );
 }
