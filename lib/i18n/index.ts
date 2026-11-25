@@ -1,5 +1,7 @@
-import { defaultLocale, type Locale } from './types';
-export { type Locale, defaultLocale } from './types';
+import { defaultLocale, isLocale, type Locale } from './types';
+export { type Locale, defaultLocale, languages, isLocale, normalizeLocale, languageName, languageInstruction } from './types';
+import { siteStrings } from './site';
+import { indianStrings } from './indian';
 import { commonHiIN, commonEnUS } from './common';
 import { stageHiIN, stageEnUS } from './stage';
 import { chatHiIN, chatEnUS } from './chat';
@@ -23,11 +25,15 @@ export const translations = {
   },
 } as const;
 
-export type TranslationKey = keyof (typeof translations)[typeof defaultLocale];
+export type TranslationKey = keyof (typeof translations)['en-US'];
 
 export function translate(locale: Locale, key: string): string {
   const keys = key.split('.');
-  let value: unknown = translations[locale];
+  const site = siteStrings[locale]?.[key] ?? siteStrings['en-US']?.[key];
+  if (site !== undefined) return site;
+  const localized = indianStrings[locale]?.[key];
+  if (localized && locale !== 'hi-IN' && locale !== 'en-US') return localized;
+  let value: unknown = translations[locale === 'hi-IN' ? 'hi-IN' : 'en-US'];
   for (const k of keys) {
     value = (value as Record<string, unknown>)?.[k];
   }
@@ -40,7 +46,7 @@ export function getClientTranslation(key: string): string {
   if (typeof window !== 'undefined') {
     try {
       const storedLocale = localStorage.getItem('locale');
-      if (storedLocale === 'hi-IN' || storedLocale === 'en-US') {
+      if (isLocale(storedLocale)) {
         locale = storedLocale;
       }
     } catch {

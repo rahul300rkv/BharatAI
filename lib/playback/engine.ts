@@ -1,3 +1,5 @@
+import { normalizeLocale } from '@/lib/i18n/types';
+import { useStageStore } from '@/lib/store/stage';
 /**
  * Playback Engine - Unified state machine for lecture playback and live discussion
  *
@@ -41,12 +43,6 @@ import { createLogger } from '@/lib/logger';
 
 const log = createLogger('PlaybackEngine');
 
-/**
- * If more than 30% of characters are CJK, treat the text as Chinese.
- * Intentionally low: mixed Chinese text often contains punctuation,
- * numbers, and short Latin fragments (e.g. "AI课堂").
- */
-const CJK_LANG_THRESHOLD = 0.3;
 
 export class PlaybackEngine {
   private scenes: Scene[] = [];
@@ -645,23 +641,12 @@ export class PlaybackEngine {
     // Ensure voices are loaded (Chrome loads them asynchronously)
     const voices = await this.ensureVoicesLoaded();
 
-    // Set voice: try user's configured voice, fall back to auto-detect language
-    let voiceFound = false;
-    if (settings.ttsVoice && settings.ttsVoice !== 'default') {
-      const voice = voices.find((v) => v.voiceURI === settings.ttsVoice);
-      if (voice) {
-        utterance.voice = voice;
-        utterance.lang = voice.lang;
-        voiceFound = true;
-      }
-    }
-    if (!voiceFound) {
-      // No usable voice configured — detect text language so the browser
-      // auto-selects an appropriate voice.
-      const cjkRatio =
-        (chunkText.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g) || []).length / chunkText.length;
-      utterance.lang = cjkRatio > CJK_LANG_THRESHOLD ? 'hi-IN' : 'en-US';
-    }
+    const locale = normalizeLocale(useStageStore.getState().stage?.language);
+    utterance.lang = locale;
+    const language = locale.split('-')[0];
+    const compatible = (v: SpeechSynthesisVoice) => v.lang.split('-')[0] === language;
+    const voice = voices.find(v => v.voiceURI === settings.ttsVoice && compatible(v)) ?? voices.find(v => v.lang === locale) ?? voices.find(compatible);
+    if (voice) utterance.voice = voice;
 
     utterance.onend = () => {
       this.browserTTSChunkIndex++;

@@ -1,3 +1,4 @@
+import { normalizeLocale } from '@/lib/i18n/types';
 /**
  * Scene Content Generation API
  *
@@ -67,7 +68,7 @@ export async function POST(req: NextRequest) {
     // Ensure outline has language from stageInfo (fallback for older outlines)
     const outline: SceneOutline = {
       ...rawOutline,
-      language: rawOutline.language || (stageInfo?.language as 'hi-IN' | 'en-US') || 'hi-IN',
+      language: normalizeLocale(rawOutline.language || stageInfo?.language),
     };
 
     // ── Model resolution from request headers ──

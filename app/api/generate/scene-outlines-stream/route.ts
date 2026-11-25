@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
 
     // Build prompt (same logic as generateSceneOutlinesFromRequirements)
     let availableImagesText =
-      requirements.language === 'hi-IN' ? '无可用图片' : 'No images available';
+      'No images available';
     let visionImages: Array<{ id: string; src: string }> | undefined;
 
     if (pdfImages && pdfImages.length > 0) {
@@ -177,11 +177,9 @@ export async function POST(req: NextRequest) {
       language: requirements.language,
       pdfContent: pdfText
         ? pdfText.substring(0, MAX_PDF_CONTENT_CHARS)
-        : requirements.language === 'hi-IN'
-          ? '无'
-          : 'None',
+        : 'None',
       availableImages: availableImagesText,
-      researchContext: researchContext || (requirements.language === 'hi-IN' ? '无' : 'None'),
+      researchContext: researchContext || ('None'),
       mediaGenerationPolicy,
       teacherContext,
     });
@@ -263,6 +261,8 @@ export async function POST(req: NextRequest) {
                     ...outline,
                     id: outline.id || nanoid(),
                     order: parsedOutlines.length + 1,
+                    language: requirements.language,
+                    ...(outline.pblConfig ? {pblConfig:{...outline.pblConfig,language:requirements.language}} : {}),
                   };
                   parsedOutlines.push(enriched);
 

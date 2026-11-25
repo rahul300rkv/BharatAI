@@ -1,3 +1,4 @@
+import { PublicLanguageNav, SiteText, EnglishContent } from '@/components/site-language';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -11,17 +12,13 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-        <Link href="/" className="text-sm text-primary hover:underline mb-8 inline-block">
-          ← Back to BharatAI
-        </Link>
-
-        <h1 className="text-3xl font-bold mb-6">About BharatAI</h1>
+        <PublicLanguageNav/><h1 className="text-3xl font-bold mb-6"><SiteText k="about"/></h1><EnglishContent>
 
         <div className="space-y-6 text-[15px] leading-relaxed">
           <p>
             <strong>BharatAI</strong> is an India-focused multi-agent AI classroom platform. 
             Type any topic or upload a PDF and instantly get a full interactive lesson 
-            with an AI teacher, quizzes, whiteboard, and classroom discussion — in Hindi or English.
+            with an AI teacher, quizzes, whiteboard, and classroom discussion — in your selected course language.
           </p>
 
           <p>
@@ -38,7 +35,7 @@ export default function AboutPage() {
 
           <h2 className="text-xl font-semibold pt-4">How it works</h2>
           <ul className="list-disc pl-5 space-y-2">
-            <li>You bring your own free API key (Groq is recommended and free)</li>
+            <li>Personalised generation may require a provider API key; provider limits and charges may apply.</li>
             <li>Browser sessions use local storage; requests may pass through server endpoints and external AI providers</li>
             <li>Lessons are generated on the fly with multi-agent AI teachers and students</li>
           </ul>
@@ -53,7 +50,6 @@ export default function AboutPage() {
             Explore our <Link href="/learn" className="text-primary underline">free learning resources</Link> and <Link href="/editorial-policy" className="text-primary underline">editorial policy</Link>. Questions? <Link href="/contact" className="text-primary underline">Contact us</Link>.
           </p>
         </div>
-      </div>
-    </main>
+      </EnglishContent></div></main>
   );
 }

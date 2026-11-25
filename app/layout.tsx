@@ -27,7 +27,7 @@ const yatraOne = Yatra_One({
 export const metadata: Metadata = {
   title: 'BharatAI — Bharat Ka Apna AI Classroom | AI Teacher for Students',
   description:
-    'BharatAI is a multi-agent AI classroom. Get an AI teacher, AI assistant, and AI students for CBSE, JEE, NEET, UPSC preparation. Learn any topic in Hindi or English — free, instant, and personalized.',
+    'BharatAI is a multi-agent AI classroom. Get an AI teacher, AI assistant, and AI students for CBSE, JEE, NEET, UPSC preparation. Generate lessons in 13 Indian languages and English; public starter lessons are free.',
   keywords: [
     'BharatAI', 'AI classroom India', 'AI teacher Hindi', 'CBSE AI tutor',
     'JEE preparation AI', 'NEET study AI', 'UPSC AI assistant', 'Hindi AI learning',

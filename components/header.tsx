@@ -11,6 +11,7 @@ import {
   FileDown,
   Package,
 } from 'lucide-react';
+import { languages, isLocale } from '@/lib/i18n';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { useTheme } from '@/lib/hooks/use-theme';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -101,46 +102,11 @@ export function Header({ currentSceneTitle }: HeaderProps) {
         <div className="flex items-center gap-4 bg-[#FFF9F2]/80 dark:bg-[#2A1500]/80 backdrop-blur-md px-2 py-1.5 rounded-full border border-primary/15 shadow-sm shrink-0">
           {/* Language Selector */}
           <div className="relative" ref={languageRef}>
-            <button
-              onClick={() => {
-                setLanguageOpen(!languageOpen);
-                setThemeOpen(false);
-              }}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-muted-foreground hover:bg-primary/8 hover:text-primary hover:shadow-sm transition-all"
-            >
-              {locale === 'hi-IN' ? 'हि' : 'EN'}
-            </button>
-            {languageOpen && (
-              <div className="absolute top-full mt-2 right-0 bg-[#FFF9F2] dark:bg-[#2A1500] border border-primary/15 rounded-xl shadow-lg overflow-hidden z-50 min-w-[120px]">
-                <button
-                  onClick={() => {
-                    setLocale('hi-IN');
-                    setLanguageOpen(false);
-                  }}
-                  className={cn(
-                    'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary dark:hover:bg-primary/12 transition-colors',
-                    locale === 'hi-IN' &&
-                      'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
-                  )}
-                >
-                  हिन्दी
-                </button>
-                <button
-                  onClick={() => {
-                    setLocale('en-US');
-                    setLanguageOpen(false);
-                  }}
-                  className={cn(
-                    'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary dark:hover:bg-primary/12 transition-colors',
-                    locale === 'en-US' &&
-                      'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
-                  )}
-                >
-                  English
-                </button>
-              </div>
-            )}
+            <select aria-label="Interface language" value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
+            {languages.map(l=><option key={l.code} value={l.code} lang={l.code}>{l.native}</option>)}
+            </select>
           </div>
+
 
           <div className="w-[1px] h-4 bg-border" />
 

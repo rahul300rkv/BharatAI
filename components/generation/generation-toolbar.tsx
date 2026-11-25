@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/select';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { languages, isLocale, type Locale } from '@/lib/i18n';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { useSettingsStore } from '@/lib/store/settings';
 import { PDF_PROVIDERS } from '@/lib/pdf/constants';
@@ -28,8 +29,8 @@ const MAX_PDF_SIZE_BYTES = MAX_PDF_SIZE_MB * 1024 * 1024;
 
 // ─── Types ───────────────────────────────────────────────────
 export interface GenerationToolbarProps {
-  language: 'hi-IN' | 'en-US';
-  onLanguageChange: (lang: 'hi-IN' | 'en-US') => void;
+  language: Locale;
+  onLanguageChange: (lang: Locale) => void;
   webSearch: boolean;
   onWebSearchChange: (v: boolean) => void;
   onSettingsOpen: (section?: SettingsSection) => void;
@@ -357,19 +358,7 @@ export function GenerationToolbar({
         </Tooltip>
       )}
 
-      {/* ── Language pill ── */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <button
-            onClick={() => onLanguageChange(language === 'hi-IN' ? 'en-US' : 'hi-IN')}
-            className={pillMuted}
-          >
-            <Globe className="size-3.5" />
-            <span>{language === 'hi-IN' ? 'हि' : 'EN'}</span>
-          </button>
-        </TooltipTrigger>
-        <TooltipContent>{t('toolbar.languageHint')}</TooltipContent>
-      </Tooltip>
+      <label className="flex items-center gap-1 text-xs"><Globe className="size-3.5"/><select aria-label={t('toolbar.languageHint')} value={language} onChange={e=>{if(isLocale(e.target.value))onLanguageChange(e.target.value)}} className="max-w-[120px] bg-background text-foreground rounded-md border p-1">{languages.map(l=><option key={l.code} value={l.code} lang={l.code}>{l.native}</option>)}</select></label>
 
       {/* ── Separator ── */}
       <div className="w-px h-4 bg-border/60 mx-1" />

@@ -1,3 +1,4 @@
+import { languageInstruction } from '@/lib/i18n/types';
 /**
  * PBL Generation System Prompt
  *
@@ -16,11 +17,9 @@ export interface PBLSystemPromptConfig {
 export function buildPBLSystemPrompt(config: PBLSystemPromptConfig): string {
   const { projectTopic, projectDescription, targetSkills, issueCount = 3, language } = config;
 
-  if (language === 'hi-IN') {
-    return buildPBLSystemPromptZH(config);
-  }
 
-  return `You are a Teaching Assistant (TA) on a Project-Based Learning platform. You are fully responsible for designing group projects for students based on the course information provided by the teacher.
+
+  return `${languageInstruction(language)}\nYou are a Teaching Assistant (TA) on a Project-Based Learning platform. You are fully responsible for designing group projects for students based on the course information provided by the teacher.
 
 ## Your Responsibility
 

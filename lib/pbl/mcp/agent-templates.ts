@@ -1,3 +1,4 @@
+import { languageInstruction } from '@/lib/i18n/types';
 /**
  * Agent template prompts for PBL Question and Judge agents.
  *
@@ -5,17 +6,13 @@
  */
 
 export function getQuestionAgentPrompt(language: string = 'en-US'): string {
-  if (language === 'hi-IN') {
-    return QUESTION_AGENT_TEMPLATE_PROMPT_ZH;
-  }
-  return QUESTION_AGENT_TEMPLATE_PROMPT;
+
+  return languageInstruction(language)+'\n'+QUESTION_AGENT_TEMPLATE_PROMPT;
 }
 
 export function getJudgeAgentPrompt(language: string = 'en-US'): string {
-  if (language === 'hi-IN') {
-    return JUDGE_AGENT_TEMPLATE_PROMPT_ZH;
-  }
-  return JUDGE_AGENT_TEMPLATE_PROMPT;
+
+  return languageInstruction(language)+'\n'+JUDGE_AGENT_TEMPLATE_PROMPT;
 }
 
 export const QUESTION_AGENT_TEMPLATE_PROMPT = `You are a Question Agent in a Project-Based Learning platform. Your role is to help students understand and complete their assigned issue.

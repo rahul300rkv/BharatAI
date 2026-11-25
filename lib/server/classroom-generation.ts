@@ -1,3 +1,4 @@
+import { normalizeLocale, type Locale } from '@/lib/i18n/types';
 import { nanoid } from 'nanoid';
 import { callLLM } from '@/lib/ai/llm';
 import { createStageAPI } from '@/lib/api/stage-api';
@@ -96,9 +97,7 @@ function createInMemoryStore(stage: Stage): StageStore {
   };
 }
 
-function normalizeLanguage(language?: string): 'hi-IN' | 'en-US' {
-  return language === 'en-US' ? 'en-US' : 'hi-IN';
-}
+function normalizeLanguage(language?: string): Locale {return normalizeLocale(language);}
 
 function stripCodeFences(text: string): string {
   let cleaned = text.trim();

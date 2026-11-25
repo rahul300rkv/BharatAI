@@ -1,6 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';
+import { useStageStore } from '@/lib/store/stage';
+import { normalizeLocale } from '@/lib/i18n/types';
 import { useSettingsStore } from '@/lib/store/settings';
 import { useBrowserTTS } from '@/lib/hooks/use-browser-tts';
 import {
@@ -29,6 +31,7 @@ interface QueueItem {
 }
 
 export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: DiscussionTTSOptions) {
+  const courseLocale = useStageStore(s=>s.stage?.language);
   const ttsProvidersConfig = useSettingsStore((s) => s.ttsProvidersConfig);
   const ttsSpeed = useSettingsStore((s) => s.ttsSpeed);
   const ttsMuted = useSettingsStore((s) => s.ttsMuted);
@@ -56,6 +59,7 @@ export function useDiscussionTTS({ enabled, agents, onAudioStateChange }: Discus
     resume: browserResume,
     cancel: browserCancel,
   } = useBrowserTTS({
+    lang: normalizeLocale(courseLocale),
     rate: ttsSpeed,
     onEnd: () => {
       isPlayingRef.current = false;
