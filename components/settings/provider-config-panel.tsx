@@ -126,7 +126,7 @@ export function ProviderConfigPanel({
     onConfigChange(apiKey, baseUrl, requires);
   };
 
-  const handleTestApi = useCallback(async () => {
+  const handleTestApi = useCallback(async (mode: 'inference' | 'credentials' = 'inference') => {
     setTestStatus('testing');
     setTestMessage('');
 
@@ -150,6 +150,7 @@ export function ProviderConfigPanel({
           model: `${provider.id}:${testModelId}`,
           providerType: provider.type,
           requiresApiKey: requiresApiKey,
+          testMode: mode,
         }),
       });
 
@@ -157,7 +158,7 @@ export function ProviderConfigPanel({
 
       if (data.success) {
         setTestStatus('success');
-        setTestMessage(t('settings.connectionSuccess'));
+        setTestMessage(mode==='credentials' ? data.message + (data.modelListed === false ? ' Selected model is not listed.' : '') : t('settings.connectionSuccess'));
       } else {
         setTestStatus('error');
         setTestMessage(typeof data.error==='string'?data.error: data.message || data.error?.message || t('settings.connectionFailed'));
@@ -211,7 +212,7 @@ export function ProviderConfigPanel({
           <Button
             variant="outline"
             size="sm"
-            onClick={handleTestApi}
+            onClick={()=>handleTestApi('inference')}
             disabled={
               testStatus === 'testing' || (requiresApiKey && !apiKey && !isServerConfigured)
             }
@@ -227,6 +228,7 @@ export function ProviderConfigPanel({
             )}
           </Button>
         </div>
+        {provider.id==='nvidia'&&<Button variant="outline" size="sm" disabled={testStatus==='testing'||(!apiKey&&!isServerConfigured)} onClick={()=>handleTestApi('credentials')}>Check NVIDIA API key (no inference)</Button>}
         {models.length>0&&<label className="block text-xs">{locale==='hi-IN'?'परीक्षण मॉडल':'Model to test'}<select className="block w-full border rounded-md bg-background p-2 mt-1" value={models.some(m=>m.id===testModel)?testModel:(models.find(m=>provider.id==='nvidia'&&m.id==='z-ai/glm-5.3-flash')?.id||models[0].id)} onChange={e=>setTestModel(e.target.value)}>{models.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select></label>}
         {testMessage && (
           <div
