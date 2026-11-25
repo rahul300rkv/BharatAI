@@ -3,7 +3,6 @@
 </p>
 
 <h3 align="center">Bharat ka Apna AI Classroom 🇮🇳</h3>
-
 <p align="center">
   Multi-agent interactive learning — CBSE, JEE, NEET, UPSC & more — in Hinglish
 </p>
