@@ -1,13 +1,6 @@
-import { MetadataRoute } from 'next';
-
+import type { MetadataRoute } from 'next';
+import { lessons } from '@/lib/public-lessons';
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://bharat-ai2.vercel.app';
-  
-  return [
-    { url: base, lastModified: new Date(), changeFrequency: 'weekly', priority: 1 },
-    { url: `${base}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/terms`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${base}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-  ];
+ const base='https://bharat-ai2.vercel.app';
+ return ['', '/about','/contact','/privacy','/terms','/learn','/guides','/editorial-policy',...lessons.map(l=>'/learn/'+l.slug)].map(path=>({url:base+path}));
 }

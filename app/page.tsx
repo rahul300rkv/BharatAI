@@ -1209,10 +1209,10 @@ function SEOContent() {
       {/* Features */}
       <div className="mb-12">
         <h2 className="text-xl font-bold text-center mb-2 text-foreground/80">
-          Why Students Love BharatAI
+          What BharatAI Offers
         </h2>
         <p className="text-center text-sm text-muted-foreground/70 mb-8">
-          India&apos;s most advanced AI classroom — built for CBSE, JEE, NEET &amp; UPSC
+          An interactive AI classroom — built for CBSE, JEE, NEET &amp; UPSC
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
@@ -1243,8 +1243,8 @@ function SEOContent() {
             },
             {
               emoji: '🔒',
-              title: 'Your API Key, Your Data',
-              desc: 'BharatAI runs on your own AI API key. Your data stays private — we never store your conversations.',
+              title: 'Your API Key and Data',
+              desc: 'BharatAI runs on your own AI API key. Requests may pass through our server and your chosen AI provider.',
             },
           ].map(({ emoji, title, desc }) => (
             <div
@@ -1261,7 +1261,7 @@ function SEOContent() {
 
       {/* Use cases */}
       <div className="mb-12 rounded-xl border border-border/40 bg-muted/20 p-6">
-        <h2 className="text-lg font-bold mb-4 text-foreground/80">Who Uses BharatAI?</h2>
+        <h2 className="text-lg font-bold mb-4 text-foreground/80">Who BharatAI Is Designed For</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
             { label: 'Class 10–12 CBSE Students', detail: 'Learn Science, Maths, Social Science with AI explanations and auto-generated notes.' },
@@ -1376,7 +1376,7 @@ function SEOContent() {
           {[
             {
               q: 'What is BharatAI?',
-              a: "BharatAI is India's first multi-agent AI classroom. Type any topic or upload a PDF and instantly get a full interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in Hindi or English.",
+              a: "BharatAI is India-focused multi-agent AI classroom. Type any topic or upload a PDF and instantly get a full interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in Hindi or English.",
             },
             {
               q: 'Is BharatAI free?',
@@ -1400,7 +1400,7 @@ function SEOContent() {
             },
             {
               q: 'Is my data private?',
-              a: 'Yes. BharatAI uses your own API key and runs entirely in your browser. Your lessons, PDFs and conversations are never stored on our servers.',
+              a: 'BharatAI stores classroom data locally for browser-based sessions and uses server endpoints and external AI providers for processing. See our privacy policy before uploading sensitive material.',
             },
           ].map(({ q, a }) => (
             <div
@@ -1422,6 +1422,9 @@ function SEOContent() {
       BharatAI — Bharat Ka Apna AI Classroom 🇮🇳
     </p>
     <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+      <Link href="/learn" className="text-primary underline">Free learning resources</Link>
+      <Link href="/guides" className="text-primary underline">Study guides</Link>
+      <Link href="/editorial-policy" className="text-muted-foreground hover:text-foreground">Editorial policy</Link>
       <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
         About
       </Link>
@@ -1447,6 +1450,7 @@ function SEOContent() {
 export default function Page() {
   return (
     <>
+      <div className="mx-auto max-w-5xl px-4 py-3 text-sm"><Link href="/learn" className="text-primary underline">Explore free lessons — no API key required</Link> · <Link href="/guides" className="text-primary underline">Classroom guides</Link></div>
       <HomePage />
       <SEOContent />
     </>
