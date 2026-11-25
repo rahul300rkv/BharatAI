@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { EngagementHome, LearningDiscovery } from '@/components/learning-engagement';
+import { track } from '@/lib/learning/activity';
 import { LearningPreview } from '@/components/learning-preview';
 import { designText, localizedLabTitle } from '@/lib/i18n/learning-design';
 import { LabText } from '@/components/site-language';
@@ -140,6 +142,7 @@ function HomePage() {
   const router = useRouter();
   const [form, setForm] = useState<FormState>(initialFormState);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  useEffect(()=>{if(new URLSearchParams(window.location.search).get('settings')==='1'){setSettingsOpen(true);const url=new URL(window.location.href);url.searchParams.delete('settings');window.history.replaceState(window.history.state,'',url.pathname+url.search+url.hash)}},[]);
   const [settingsSection, setSettingsSection] = useState<
     import('@/lib/types/settings').SettingsSection | undefined
   >(undefined);
@@ -372,6 +375,7 @@ useEffect(() => {
       };
       sessionStorage.setItem('generationSession', JSON.stringify(sessionState));
 
+      track('classroom_generation_started');
       router.push('/generation-preview');
     } catch (err) {
       log.error('Error preparing generation:', err);
@@ -604,6 +608,7 @@ useEffect(() => {
         </motion.div>
 
         <div className="w-full flex flex-wrap gap-2 mt-4 items-center"><span className="text-sm text-muted-foreground">{designText(locale,'topics')}</span>{(['ohms-law','projectile-motion','quadratic-equations'] as const).map(slug=><button type="button" key={slug} className="rounded-full border bg-card px-3 py-2 text-sm hover:border-primary" onClick={()=>{updateForm('requirement',localizedLabTitle(locale,slug));textareaRef.current?.focus()}}>{localizedLabTitle(locale,slug)}</button>)}</div>
+        <LearningDiscovery onTopic={topic=>{updateForm('requirement',topic);textareaRef.current?.focus()}}/>
         <div className="mt-5 w-full text-center space-y-2"><p className="text-sm font-medium">{designText(locale,'free')}</p><div className="flex flex-wrap justify-center gap-3"><Link href="/demo" className="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground"><LabText text="Free demo classrooms"/></Link><Link href="/labs" className="rounded-xl border px-4 py-3 text-sm font-semibold"><LabText text="Free virtual labs"/></Link></div><p className="text-sm text-muted-foreground">{designText(locale,'key')}</p></div>
       {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
       {!currentModelId && (
@@ -1385,7 +1390,7 @@ function SEOContent() {
 export default function Page() {
   return (
     <>
-      <MotionConfig reducedMotion="user"><main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningPreview/><LearningHome /><SEOContent /></main></MotionConfig>
+      <MotionConfig reducedMotion="user"><main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningPreview/><EngagementHome/><LearningHome /><SEOContent /></main></MotionConfig>
     </>
   );
 }

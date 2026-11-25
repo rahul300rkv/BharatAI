@@ -1,5 +1,7 @@
 'use client';
 
+import { DailyChallenge } from '@/components/learning-engagement';
+import { track } from '@/lib/learning/activity';
 import { useEffect, useState, Suspense, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
@@ -734,6 +736,7 @@ function GenerationPreviewContent() {
       sessionStorage.removeItem('generationSession');
       await store.saveToStorage();
       log.info(`[Generation] Classroom ready in ${Math.round(performance.now()-generationStartedAt)}ms`);
+      track('classroom_generation_completed');
       router.push(`/classroom/${stage.id}`);
     } catch (err) {
       // AbortError is expected when navigating away — don't show as error
@@ -742,6 +745,7 @@ function GenerationPreviewContent() {
         return;
       }
       sessionStorage.removeItem('generationSession');
+      track('classroom_generation_failed');
       setError(err instanceof Error ? err.message : String(err));
     }
   };
@@ -976,6 +980,7 @@ function GenerationPreviewContent() {
           </Card>
         </motion.div>
 
+        {!error&&!isComplete&&<div className="w-full"><DailyChallenge waiting/></div>}
         {/* Footer Action */}
         <div className="h-16 flex items-center justify-center w-full">
           <AnimatePresence>

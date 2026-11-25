@@ -1,5 +1,6 @@
 'use client';
 
+import {track} from '@/lib/learning/activity';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Locale, translate, defaultLocale, isLocale, normalizeLocale } from '@/lib/i18n';
 
@@ -38,6 +39,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => { document.documentElement.lang = locale; document.documentElement.dir = locale === 'ur-IN' ? 'rtl' : 'ltr'; }, [locale]);
 
   const setLocale = (newLocale: Locale) => {
+    if(newLocale!==locale)track('language_changed');
     setLocaleState(newLocale);
     try { localStorage.setItem(LOCALE_STORAGE_KEY, newLocale); } catch {}
   };
