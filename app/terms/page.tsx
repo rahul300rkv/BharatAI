@@ -18,7 +18,7 @@ export default function TermsPage() {
           <p>
             By using BharatAI you agree to these terms. The service is provided "as is". 
             You are responsible for any API costs from the providers you connect 
-            (Groq, OpenAI, etc.).
+            (such as NVIDIA or OpenRouter). Public experiments are educational models, not professional advice or safety instructions. AI-generated content may contain errors.
           </p>
           <p>
             You may not use the service for illegal purposes or to generate harmful content. 

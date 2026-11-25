@@ -27,7 +27,7 @@ const yatraOne = Yatra_One({
 export const metadata: Metadata = {
   title: 'BharatAI — Bharat Ka Apna AI Classroom | AI Teacher for Students',
   description:
-    'BharatAI is a multi-agent AI classroom. Get an AI teacher, AI assistant, and AI students for CBSE, JEE, NEET, UPSC preparation. Generate lessons in 13 Indian languages and English; public starter lessons are free.',
+    'BharatAI is a multi-agent AI classroom. Get an AI teacher, AI assistant, and AI students for CBSE, JEE, NEET, UPSC preparation. Explore 20 free virtual labs, worked lessons and prepared classrooms without sign-in; personalised AI generation is optional.',
   keywords: [
     'BharatAI', 'AI classroom India', 'AI teacher Hindi', 'CBSE AI tutor',
     'JEE preparation AI', 'NEET study AI', 'UPSC AI assistant', 'Hindi AI learning',
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     siteName: 'BharatAI',
     title: 'BharatAI — AI Classroom for Every Indian Student',
     description:
-      'Generate a full AI classroom with teacher, quiz, whiteboard & discussion for any topic. Free. Instant. Made for India.',
+      'Generate a full AI classroom with teacher, quiz, whiteboard & discussion for any topic. Public labs and prepared lessons are free; optional AI generation may require provider setup.',
 
   },
   twitter: {

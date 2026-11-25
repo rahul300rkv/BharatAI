@@ -17,7 +17,7 @@ export default function AboutPage() {
         <div className="space-y-6 text-[15px] leading-relaxed">
           <p>
             <strong>BharatAI</strong> is an India-focused multi-agent AI classroom platform. 
-            Type any topic or upload a PDF and instantly get a full interactive lesson 
+            Open public labs or prepared classrooms without registration, or request a personalised lesson from a supported AI provider 
             with an AI teacher, quizzes, whiteboard, and classroom discussion — in your selected course language.
           </p>
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
 
           <h2 className="text-xl font-semibold pt-4">Our Mission</h2>
           <p>
-            Make high-quality, interactive AI-powered learning free and accessible 
+            Make public interactive learning resources free and accessible 
             to every Indian student — regardless of language, location, or income.
           </p>
 
@@ -43,7 +43,7 @@ export default function AboutPage() {
           <h2 className="text-xl font-semibold pt-4">Who built this</h2>
           <p>
             BharatAI is an independent project created by an Indian developer passionate 
-            about education and AI. It is not affiliated with any large corporation.
+            about education and AI. It is independent of NCERT, CBSE and the exam authorities; our resources are not official textbooks or endorsements.
           </p>
 
           <p className="pt-4">

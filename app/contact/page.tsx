@@ -31,7 +31,7 @@ export default function ContactPage() {
           <div>
             <h2 className="font-semibold mb-1">Response time</h2>
             <p className="text-sm text-muted-foreground">
-              We usually reply within 24–48 hours.
+              Response times vary. Please include the relevant page URL for corrections.
             </p>
           </div>
 
@@ -40,7 +40,7 @@ export default function ContactPage() {
             <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
               <li>Your question or issue</li>
               <li>Browser / device (if reporting a bug)</li>
-              <li>Screenshots if helpful</li>
+              <li>Screenshots if helpful, with personal details and API keys removed</li>
             </ul>
           </div>
         </div>
