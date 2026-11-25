@@ -398,7 +398,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="min-h-[100dvh] w-full bg-gradient-to-b from-background to-muted dark:from-background dark:to-card flex flex-col items-center p-4 pt-16 md:p-8 md:pt-16 overflow-x-hidden">
+    <div className="w-full bg-gradient-to-b from-background to-muted dark:from-background dark:to-card flex flex-col items-center p-4 pt-16 md:p-8 md:pt-16 overflow-x-hidden">
       {/* ═══ Top-right pill (unchanged) ═══ */}
       <div
         ref={toolbarRef}
@@ -533,6 +533,9 @@ useEffect(() => {
           className="h-14 md:h-20 mb-3 -ml-2 md:-ml-3 drop-shadow-sm"
         />
 
+        <h1 className="text-2xl sm:text-4xl font-bold text-center mb-2">{locale==='hi-IN'?'आपकी अपनी AI कक्षा':'Your personal AI classroom'}</h1>
+        <p className="text-center text-sm text-muted-foreground max-w-xl mb-3">{locale==='hi-IN'?'विषय चुनें, AI शिक्षक से सीखें और प्रश्नोत्तरी व प्रयोगों से अभ्यास करें।':'Learn a topic with AI teachers, slides, whiteboards and quizzes. Try a prepared classroom free, or generate your own with a supported AI provider.'}</p>
+        <nav aria-label="Learning resources" className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm mb-4"><Link href="/demo">{locale==='hi-IN'?'मुफ़्त कक्षाएँ':'Free classrooms'}</Link><Link href="/labs">{locale==='hi-IN'?'प्रयोगशालाएँ':'Virtual labs'}</Link><Link href="/learn">{locale==='hi-IN'?'पाठ':'Lessons'}</Link><Link href="/guides">{locale==='hi-IN'?'अध्ययन मार्गदर्शिका':'Study guide'}</Link></nav>
         {/* ── Slogan ── */}
         <motion.p
           initial={{ opacity: 0 }}
@@ -1403,8 +1406,7 @@ function SEOContent() {
 export default function Page() {
   return (
     <>
-      <main><LearningHome /><section id="personalised-classroom" className="scroll-mt-6"><h2 className="text-2xl font-bold text-center pt-8">Optional: generate a personalised AI classroom</h2><p className="text-center px-4 text-sm text-muted-foreground">Connect a supported AI provider when needed. Usage limits and charges may apply.</p><HomePage /></section></main>
-      <SEOContent />
+      <main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><LearningHome /><SEOContent /></main>
     </>
   );
 }
