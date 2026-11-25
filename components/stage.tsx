@@ -987,7 +987,7 @@ export function Stage({
             sidebarCollapsed={sidebarCollapsed}
             chatCollapsed={chatAreaCollapsed}
             onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
-            onToggleChat={() => setChatAreaCollapsed(!chatAreaCollapsed)}
+            onToggleChat={() => {if(!isDemo)setChatAreaCollapsed(!chatAreaCollapsed);}}
             onPrevSlide={handlePreviousScene}
             onNextSlide={handleNextScene}
             onPlayPause={handlePlayPause}
@@ -1082,6 +1082,7 @@ export function Stage({
                 setThinkingState({ stage: 'director' });
               }}
               onDiscussionStart={() => {
+                if(isDemo)return;
                 // User clicks "Join" on ProactiveCard
                 engineRef.current?.confirmDiscussion();
               }}
@@ -1091,6 +1092,7 @@ export function Stage({
               }}
               onStopDiscussion={handleStopDiscussion}
               onInputActivate={async () => {
+                if(isDemo)return;
                 // Soft-pause QA/Discussion if streaming (opening input = implicit pause)
                 if (chatIsStreaming) {
                   await doSoftPause();
@@ -1121,7 +1123,7 @@ export function Stage({
               sidebarCollapsed={sidebarCollapsed}
               chatCollapsed={chatAreaCollapsed}
               onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
-              onToggleChat={() => setChatAreaCollapsed(!chatAreaCollapsed)}
+              onToggleChat={() => {if(!isDemo)setChatAreaCollapsed(!chatAreaCollapsed);}}
               onPrevSlide={handlePreviousScene}
               onNextSlide={handleNextScene}
               onWhiteboardClose={handleWhiteboardToggle}

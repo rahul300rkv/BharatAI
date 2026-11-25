@@ -14,3 +14,4 @@ jobs:
           node-version: '26'
       - run: npm install --legacy-peer-deps
       - run: npm run build
+      - run: npx vitest run lib/demo-classrooms.test.ts

@@ -195,14 +195,14 @@ async function parseWithUnpdf(pdfBuffer: Buffer): Promise<ParsedPdfContent> {
   const uint8Array = new Uint8Array(pdfBuffer);
   const pdf = await getDocumentProxy(uint8Array);
   const numPages = pdf.numPages;
-  if(numPages>100){await pdf.destroy();throw new Error('PDF exceeds 100 pages. Upload a smaller chapter.');}
+  if(numPages>100){await (pdf as typeof pdf & {destroy?:()=>Promise<void>}).destroy?.();throw new Error('PDF exceeds 100 pages. Upload a smaller chapter.');}
 
   // Extract text using the document proxy
   const { text: pdfText } = await extractText(pdf, {
     mergePages: true,
   });
 
-  if(!pdfText.trim()){await pdf.destroy();throw new Error('No selectable text found. This may be a scanned PDF. Use an OCR-enabled MinerU server or convert the scan to searchable PDF first.');}
+  if(!pdfText.trim()){await (pdf as typeof pdf & {destroy?:()=>Promise<void>}).destroy?.();throw new Error('No selectable text found. This may be a scanned PDF. Use an OCR-enabled MinerU server or convert the scan to searchable PDF first.');}
 
   // Extract images using the same document proxy
   const images: string[] = [];
@@ -255,7 +255,7 @@ async function parseWithUnpdf(pdfBuffer: Buffer): Promise<ParsedPdfContent> {
     }
   }
 
-  await pdf.destroy();
+  await (pdf as typeof pdf & {destroy?:()=>Promise<void>}).destroy?.();
   return {
     text: pdfText,
     images,

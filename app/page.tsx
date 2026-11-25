@@ -617,6 +617,11 @@ useEffect(() => {
           </div>
         </motion.div>
 
+        <div className="mt-4 w-full rounded-xl border border-primary/20 bg-background p-4 text-center space-y-2">
+          <p className="text-sm font-semibold">{locale==='hi-IN'?'बिना खाते या API कुंजी के सीखें':'Learn without an account or API key'}</p>
+          <Link href="/demo" className="inline-flex rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">{locale==='hi-IN'?'मुफ़्त नमूना कक्षाएँ खोलें':'Explore free interactive classrooms'}</Link>
+          <p className="text-xs text-muted-foreground">{locale==='hi-IN'?'व्यक्तिगत AI कक्षा के लिए ही अपनी API कुंजी जोड़ें।':'Only custom AI generation needs your own provider key.'}</p>
+        </div>
       {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
       {!currentModelId && (
         <div className="relative z-20 w-full max-w-[800px] mt-4">
@@ -632,7 +637,6 @@ useEffect(() => {
       )}
 
 
-        <Link href="/demo" className="mt-4 inline-flex items-center gap-2 rounded-xl border border-primary/30 bg-background px-4 py-3 text-sm font-semibold text-primary hover:bg-muted">{locale==='hi-IN'?'मुफ़्त नमूना कक्षा देखें — API कुंजी नहीं चाहिए':'Try a free demo classroom — no API key needed'}</Link>
         {/* ── Error ── */}
         <AnimatePresence>
           {error && (
