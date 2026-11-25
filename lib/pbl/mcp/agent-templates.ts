@@ -1,3 +1,4 @@
+import { languageInstruction } from '@/lib/i18n/types';
 /**
  * Agent template prompts for PBL Question and Judge agents.
  *
@@ -5,16 +6,12 @@
  */
 
 export function getQuestionAgentPrompt(language: string = 'en-US'): string {
-  if (language === 'hi-IN') {
-    return QUESTION_AGENT_TEMPLATE_PROMPT_ZH;
-  }
+
   return QUESTION_AGENT_TEMPLATE_PROMPT;
 }
 
 export function getJudgeAgentPrompt(language: string = 'en-US'): string {
-  if (language === 'hi-IN') {
-    return JUDGE_AGENT_TEMPLATE_PROMPT_ZH;
-  }
+
   return JUDGE_AGENT_TEMPLATE_PROMPT;
 }
 

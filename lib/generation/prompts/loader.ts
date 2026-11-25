@@ -1,3 +1,4 @@
+import { languageInstruction } from '@/lib/i18n/types';
 /**
  * Prompt Loader - Loads prompts from markdown files
  *
@@ -118,7 +119,7 @@ export function buildPrompt(
   if (!prompt) return null;
 
   return {
-    system: interpolateVariables(prompt.systemPrompt, variables),
+    system: interpolateVariables(prompt.systemPrompt, variables) + (typeof variables.language === 'string' ? '\n\n' + languageInstruction(variables.language) : ''),
     user: interpolateVariables(prompt.userPromptTemplate, variables),
   };
 }
