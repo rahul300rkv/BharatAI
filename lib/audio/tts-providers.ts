@@ -212,11 +212,12 @@ async function generateAzureTTS(
 ): Promise<TTSGenerationResult> {
   const baseUrl = config.baseUrl || TTS_PROVIDERS['azure-tts'].defaultBaseUrl;
 
-  // Build SSML
+  // Build SSML using selected voice locale.
+  const voiceLocale = /^[a-z]{2,3}-[A-Z]{2}/.exec(config.voice)?.[0] || 'en-US';
   const rate = config.speed ? `${((config.speed - 1) * 100).toFixed(0)}%` : '0%';
   const ssml = `
-    <speak version='1.0' xml:lang='hi-IN'>
-      <voice xml:lang='hi-IN' name='${config.voice}'>
+    <speak version='1.0' xml:lang='${voiceLocale}'>
+      <voice xml:lang='${voiceLocale}' name='${config.voice}'>
         <prosody rate='${rate}'>${escapeXml(text)}</prosody>
       </voice>
     </speak>
@@ -307,7 +308,7 @@ async function generateQwenTTS(config: TTSModelConfig, text: string): Promise<TT
       input: {
         text,
         voice: config.voice,
-        language_type: 'Chinese', // Default to Chinese, can be made configurable
+        language_type: 'Auto',
       },
       parameters: {
         rate, // Speech rate from -500 to 500

@@ -153,26 +153,14 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
     icon: '/logos/azure.svg',
     voices: [
       {
-        id: 'hi-IN-XiaoxiaoNeural',
-        name: '晓晓 (女)',
+        id: 'hi-IN-SwaraNeural',
+        name: 'Swara',
         language: 'hi-IN',
         gender: 'female',
       },
       {
-        id: 'hi-IN-YunxiNeural',
-        name: '云希 (男)',
-        language: 'hi-IN',
-        gender: 'male',
-      },
-      {
-        id: 'hi-IN-XiaoyiNeural',
-        name: '晓伊 (女)',
-        language: 'hi-IN',
-        gender: 'female',
-      },
-      {
-        id: 'hi-IN-YunjianNeural',
-        name: '云健 (男)',
+        id: 'hi-IN-MadhurNeural',
+        name: 'Madhur',
         language: 'hi-IN',
         gender: 'male',
       },
@@ -251,7 +239,7 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
 
   'qwen-tts': {
     id: 'qwen-tts',
-    name: 'Qwen TTS (阿里云百炼)',
+    name: 'Qwen TTS',
     requiresApiKey: true,
     defaultBaseUrl: 'https://dashscope.aliyuncs.com/api/v1',
     icon: '/logos/bailian.svg',
@@ -962,7 +950,7 @@ export function getTTSProvider(providerId: TTSProviderId): TTSProviderConfig | u
  */
 export const DEFAULT_TTS_VOICES: Record<TTSProviderId, string> = {
   'openai-tts': 'alloy',
-  'azure-tts': 'hi-IN-XiaoxiaoNeural',
+  'azure-tts': 'hi-IN-SwaraNeural',
   'glm-tts': 'tongtong',
   'qwen-tts': 'Cherry',
   'doubao-tts': 'zh_female_shuangkuaishuohua_moon_bigtts',

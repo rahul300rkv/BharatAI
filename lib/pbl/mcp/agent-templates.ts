@@ -7,12 +7,12 @@ import { languageInstruction } from '@/lib/i18n/types';
 
 export function getQuestionAgentPrompt(language: string = 'en-US'): string {
 
-  return QUESTION_AGENT_TEMPLATE_PROMPT;
+  return languageInstruction(language)+'\n'+QUESTION_AGENT_TEMPLATE_PROMPT;
 }
 
 export function getJudgeAgentPrompt(language: string = 'en-US'): string {
 
-  return JUDGE_AGENT_TEMPLATE_PROMPT;
+  return languageInstruction(language)+'\n'+JUDGE_AGENT_TEMPLATE_PROMPT;
 }
 
 export const QUESTION_AGENT_TEMPLATE_PROMPT = `You are a Question Agent in a Project-Based Learning platform. Your role is to help students understand and complete their assigned issue.
