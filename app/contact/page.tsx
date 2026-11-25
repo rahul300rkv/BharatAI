@@ -1,3 +1,4 @@
+import { PublicLanguageNav, SiteText, EnglishContent } from '@/components/site-language';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -11,11 +12,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
-        <Link href="/" className="text-sm text-primary hover:underline mb-8 inline-block">
-          ← Back to BharatAI
-        </Link>
-
-        <h1 className="text-3xl font-bold mb-2">Contact Us</h1>
+        <PublicLanguageNav/><h1 className="text-3xl font-bold mb-2"><SiteText k="contact"/></h1><EnglishContent>
         <p className="text-muted-foreground mb-8">
           We'd love to hear from you. Reach out for support, feedback, or partnership.
         </p>
@@ -47,7 +44,6 @@ export default function ContactPage() {
             </ul>
           </div>
         </div>
-      </div>
-    </main>
+      </EnglishContent></div></main>
   );
 }

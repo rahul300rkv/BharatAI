@@ -1,3 +1,4 @@
+import { PublicLanguageNav, SiteText, EnglishContent } from '@/components/site-language';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -10,11 +11,7 @@ export default function TermsPage() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-        <Link href="/" className="text-sm text-primary hover:underline mb-8 inline-block">
-          ← Back to BharatAI
-        </Link>
-
-        <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
+        <PublicLanguageNav/><h1 className="text-3xl font-bold mb-2"><SiteText k="terms"/></h1><EnglishContent>
         <p className="text-sm text-muted-foreground mb-8">Last updated: November 16, 2026</p>
 
         <div className="space-y-6 text-sm leading-relaxed">
@@ -35,7 +32,6 @@ export default function TermsPage() {
             Contact: <a href="mailto:rahul.verma300@rediffmail.com" className="text-primary underline">rahul.verma300@rediffmail.com</a>
           </p>
         </div>
-      </div>
-    </main>
+      </EnglishContent></div></main>
   );
 }
