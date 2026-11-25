@@ -213,6 +213,7 @@ export function ASRSettings({ selectedProviderId }: ASRSettingsProps) {
             if (!effectiveBaseUrl) return null;
             let endpointPath = '';
             switch (selectedProviderId) {
+              case 'sarvam-asr': return 'https://api.sarvam.ai/speech-to-text';
               case 'openai-whisper':
                 endpointPath = '/audio/transcriptions';
                 break;

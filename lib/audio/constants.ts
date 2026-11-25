@@ -1261,6 +1261,11 @@ export const TTS_PROVIDERS: Record<TTSProviderId, TTSProviderConfig> = {
     speedRange: { min: 0.7, max: 1.2, default: 1.0 },
   },
 
+  'sarvam-tts': {
+    id:'sarvam-tts',name:'Sarvam Bulbul',requiresApiKey:true,defaultBaseUrl:'https://api.sarvam.ai',defaultModelId:'bulbul:v3',
+    voices:[{"id":"hi-IN|shubh","name":"shubh (hi-IN)","language":"hi-IN","gender":"male"},{"id":"hi-IN|priya","name":"priya (hi-IN)","language":"hi-IN","gender":"female"},{"id":"bn-IN|shubh","name":"shubh (bn-IN)","language":"bn-IN","gender":"male"},{"id":"bn-IN|priya","name":"priya (bn-IN)","language":"bn-IN","gender":"female"},{"id":"te-IN|shubh","name":"shubh (te-IN)","language":"te-IN","gender":"male"},{"id":"te-IN|priya","name":"priya (te-IN)","language":"te-IN","gender":"female"},{"id":"mr-IN|shubh","name":"shubh (mr-IN)","language":"mr-IN","gender":"male"},{"id":"mr-IN|priya","name":"priya (mr-IN)","language":"mr-IN","gender":"female"},{"id":"ta-IN|shubh","name":"shubh (ta-IN)","language":"ta-IN","gender":"male"},{"id":"ta-IN|priya","name":"priya (ta-IN)","language":"ta-IN","gender":"female"},{"id":"gu-IN|shubh","name":"shubh (gu-IN)","language":"gu-IN","gender":"male"},{"id":"gu-IN|priya","name":"priya (gu-IN)","language":"gu-IN","gender":"female"},{"id":"kn-IN|shubh","name":"shubh (kn-IN)","language":"kn-IN","gender":"male"},{"id":"kn-IN|priya","name":"priya (kn-IN)","language":"kn-IN","gender":"female"},{"id":"od-IN|shubh","name":"shubh (od-IN)","language":"od-IN","gender":"male"},{"id":"od-IN|priya","name":"priya (od-IN)","language":"od-IN","gender":"female"},{"id":"ml-IN|shubh","name":"shubh (ml-IN)","language":"ml-IN","gender":"male"},{"id":"ml-IN|priya","name":"priya (ml-IN)","language":"ml-IN","gender":"female"},{"id":"pa-IN|shubh","name":"shubh (pa-IN)","language":"pa-IN","gender":"male"},{"id":"pa-IN|priya","name":"priya (pa-IN)","language":"pa-IN","gender":"female"},{"id":"en-IN|shubh","name":"shubh (en-IN)","language":"en-IN","gender":"male"},{"id":"en-IN|priya","name":"priya (en-IN)","language":"en-IN","gender":"female"}],
+    supportedFormats:['mp3'],speedRange:{min:0.5,max:2,default:1},
+  },
   'browser-native-tts': {
     id: 'browser-native-tts',
     name: '浏览器原生 (Web Speech API)',
@@ -1433,6 +1438,7 @@ export const ASR_PROVIDERS: Record<ASRProviderId, ASRProviderConfig> = {
     supportedFormats: ['mp3', 'wav', 'webm', 'm4a', 'flac'],
   },
 
+  'sarvam-asr': {id:'sarvam-asr',name:'Sarvam Saaras v4',requiresApiKey:true,defaultBaseUrl:'https://api.sarvam.ai',defaultModelId:'saaras:v4',supportedLanguages:["auto","hi-IN","bn-IN","te-IN","mr-IN","ta-IN","gu-IN","kn-IN","od-IN","ml-IN","pa-IN","en-IN","ur-IN","as-IN","mai-IN"],supportedFormats:['wav','mp3','webm','ogg','m4a']},
   'browser-native': {
     id: 'browser-native',
     name: '浏览器原生 ASR (Web Speech API)',
@@ -1561,6 +1567,7 @@ export const DEFAULT_TTS_VOICES: Record<TTSProviderId, string> = {
   'doubao-tts': 'zh_female_shuangkuaishuohua_moon_bigtts',
   'elevenlabs-tts': 'EXAVITQu4vr4xnSDxMaL',
   'minimax-tts': 'male-qn-qingse',
+  'sarvam-tts': 'hi-IN|shubh',
   'browser-native-tts': 'default',
 };
 
