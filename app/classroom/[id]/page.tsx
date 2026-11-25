@@ -1,5 +1,6 @@
 'use client';
 
+import { lastVisit, recordVisit, track } from '@/lib/learning/activity';
 import { getDemoClassroom } from '@/lib/demo-classrooms';
 import { SiteText } from '@/components/site-language';
 import { Stage } from '@/components/stage';
@@ -40,10 +41,11 @@ export default function ClassroomDetailPage() {
       const demo=getDemoClassroom(classroomId);
       if(demo){
         useStageStore.getState().clearStore();
-        useStageStore.setState({stage:demo.stage,scenes:demo.scenes,currentSceneId:demo.scenes[0]?.id??null,mode:'playback'});
+        useStageStore.setState({stage:demo.stage,scenes:demo.scenes,currentSceneId:demo.scenes.find(s=>s.id===lastVisit(classroomId)?.sceneId)?.id??demo.scenes[0]?.id??null,mode:'playback'});
         return;
       }
       await loadFromStorage(classroomId);
+      const recent=lastVisit(classroomId);const current=useStageStore.getState();if(recent&&current.stage?.id===classroomId&&current.scenes.some(s=>s.id===recent.sceneId))current.setCurrentSceneId(recent.sceneId);
 
       // If IndexedDB had no data, try server-side storage (API-generated classrooms)
       if (!useStageStore.getState().stage) {
@@ -128,6 +130,8 @@ export default function ClassroomDetailPage() {
       stop();
     };
   }, [classroomId, loadClassroom, stop]);
+
+  useEffect(()=>{if(loading||error)return;const current=useStageStore.getState();if(current.stage?.id!==classroomId)return;if(classroomId.startsWith('demo-v1-'))track('demo_classroom_opened');const record=()=>{const s=useStageStore.getState();if(s.stage?.id===classroomId&&s.currentSceneId&&s.scenes.some(x=>x.id===s.currentSceneId))recordVisit(classroomId,s.currentSceneId,Math.max(s.scenes.length,s.outlines.length))};record();return useStageStore.subscribe((s,prev)=>{if(s.currentSceneId!==prev.currentSceneId||s.scenes.length!==prev.scenes.length)record()})},[loading,error,classroomId]);
 
   // Auto-resume generation for pending outlines
   useEffect(() => {
