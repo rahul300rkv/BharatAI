@@ -20,6 +20,7 @@ import {
   storeImages,
 } from '@/lib/utils/image-storage';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
+import { findReusableClassroom, rememberClassroom, classroomReuseKey } from '@/lib/utils/classroom-reuse';
 import { prepareSceneSpeech } from '@/lib/hooks/use-scene-generator';
 import { MAX_PDF_CONTENT_CHARS, MAX_VISION_IMAGES } from '@/lib/constants/generation';
 import { nanoid } from 'nanoid';
@@ -148,6 +149,11 @@ function GenerationPreviewContent() {
       let activeSteps = getActiveSteps(currentSession);
 
       // Determine if we need the PDF analysis step
+      const reuseKey = classroomReuseKey(currentSession, useSettingsStore.getState(), getCurrentModelConfig());
+      if (reuseKey) {
+        const existing = await findReusableClassroom(reuseKey);
+        if (existing && !signal.aborted) { sessionStorage.removeItem('generationSession'); router.push(`/classroom/${existing}`); return; }
+      }
       const hasPdfToAnalyze = !!currentSession.pdfStorageKey && !currentSession.pdfText;
       // If no PDF to analyze, skip to the next available step
       if (!hasPdfToAnalyze) {
@@ -733,6 +739,7 @@ function GenerationPreviewContent() {
 
       sessionStorage.removeItem('generationSession');
       await store.saveToStorage();
+      if (reuseKey) rememberClassroom(reuseKey, stage.id);
       log.info(`[Generation] Classroom ready in ${Math.round(performance.now()-generationStartedAt)}ms`);
       router.push(`/classroom/${stage.id}`);
     } catch (err) {

@@ -245,6 +245,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
   const generatingRef = useRef(false);
   const mediaAbortRef = useRef<AbortController | null>(null);
   const fetchAbortRef = useRef<AbortController | null>(null);
+  const contentCacheRef = useRef(new Map<string, SceneContentResult>());
   const lastParamsRef = useRef<GenerationParams | null>(null);
   const generateRemainingRef = useRef<((params: GenerationParams) => Promise<void>) | null>(null);
 
@@ -252,6 +253,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
 
   const generateRemaining = useCallback(
     async (params: GenerationParams) => {
+      if(lastParamsRef.current !== params) contentCacheRef.current.clear();
       lastParamsRef.current = params;
       if (generatingRef.current) return;
       generatingRef.current = true;
@@ -337,6 +339,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
           const contentResult = await (prefetched?.id===outline.id ? prefetched.promise : loadContent(outline));
           prefetched = undefined;
 
+          if (contentResult.success && contentResult.content) contentCacheRef.current.set(stage.id+':'+outline.id,contentResult);
           if (!contentResult.success || !contentResult.content) {
             if (abortRef.current || store.getState().generationEpoch !== startEpoch) {
               pausedByFailureOrAbort = true;
@@ -389,6 +392,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
               break;
             }
 
+            contentCacheRef.current.delete(stage.id+':'+outline.id);
             removeGeneratingOutline(outline.id);
             store.getState().addScene(scene);
             options.onSceneGenerated?.(scene, outline.order);
@@ -468,7 +472,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
 
       try {
         // Step 1: Content
-        const contentResult = await fetchSceneContent(
+        const contentResult = contentCacheRef.current.get(state.stage.id+':'+outline.id) || await fetchSceneContent(
           {
             outline,
             allOutlines: state.outlines,
@@ -520,6 +524,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
           if (!ttsResult.success) log.warn('Some audio unavailable on retry');
         }
 
+        contentCacheRef.current.delete(state.stage.id+':'+outline.id);
         removeGeneratingOutline();
         store.getState().addScene(actionsResult.scene);
 

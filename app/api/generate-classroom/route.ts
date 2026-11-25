@@ -6,7 +6,7 @@ import { runClassroomGenerationJob } from '@/lib/server/classroom-job-runner';
 import { createClassroomGenerationJob } from '@/lib/server/classroom-job-store';
 import { buildRequestOrigin } from '@/lib/server/classroom-storage';
 
-export const maxDuration = 30;
+export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
   try {

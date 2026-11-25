@@ -13,5 +13,15 @@ jobs:
         with:
           node-version: '26'
       - run: npm install --legacy-peer-deps
+      - name: Dependency vulnerability report
+        if: always()
+        run: |
+          npm audit --json > npm-audit.json || true
+          npm audit --omit=dev --json > npm-audit-production.json || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-audit
+          path: npm-audit*.json
       - run: npm run build
       - run: npx vitest run lib/demo-classrooms.test.ts tests/virtual-labs.test.ts

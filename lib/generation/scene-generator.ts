@@ -560,7 +560,7 @@ async function generateSlideContent(
     log.debug(`Vision images: ${visionImages.map((img) => img.id).join(', ')}`);
   }
 
-  const response = await aiCall(prompts.system, prompts.user, visionImages);
+  const response = await aiCall(prompts.system, prompts.user + '\nInclude a remark field with a concise, self-contained teacher narration (2–4 sentences) in the requested language; keep all existing slide JSON fields.', visionImages);
   const generatedData = parseJsonResponse<GeneratedSlideData>(response);
 
   if (!generatedData || !generatedData.elements || !Array.isArray(generatedData.elements)) {

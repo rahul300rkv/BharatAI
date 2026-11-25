@@ -306,9 +306,13 @@ export async function generateClassroom(
 
   log.info('Stage 2: Generating scene content and actions...');
   let generatedScenes = 0;
+  let previousSpeeches: string[] = [];
+  const prepared = outlines.map(outline=>applyOutlineFallbacks(outline,true));
+  const loadContent = (outline: typeof prepared[number]) => generateSceneContent(outline,aiCall,undefined,undefined,undefined,undefined,undefined,agents).catch(()=>null);
+  let nextContent = prepared.length ? loadContent(prepared[0]) : Promise.resolve(null);
 
   for (const [index, outline] of outlines.entries()) {
-    const safeOutline = applyOutlineFallbacks(outline, true);
+    const safeOutline = prepared[index];
     const progressStart = 30 + Math.floor((index / Math.max(outlines.length, 1)) * 60);
 
     await options.onProgress?.({
@@ -319,22 +323,14 @@ export async function generateClassroom(
       totalScenes: outlines.length,
     });
 
-    const content = await generateSceneContent(
-      safeOutline,
-      aiCall,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      agents,
-    );
+    const content = await nextContent;
+    nextContent = prepared[index+1] ? loadContent(prepared[index+1]) : Promise.resolve(null);
     if (!content) {
       log.warn(`Skipping scene "${safeOutline.title}" — content generation failed`);
       continue;
     }
 
-    const actions = await generateSceneActions(safeOutline, content, aiCall, undefined, agents);
+    const actions = await generateSceneActions(safeOutline, content, aiCall, {pageIndex:index+1,totalPages:outlines.length,allTitles:outlines.map(o=>o.title),previousSpeeches}, agents);
     log.info(`Scene "${safeOutline.title}": ${actions.length} actions`);
 
     const sceneId = createSceneWithActions(safeOutline, content, actions, api);
@@ -343,6 +339,7 @@ export async function generateClassroom(
       continue;
     }
 
+    previousSpeeches = actions.flatMap(a=>a.type==='speech'?[a.text]:[]);
     generatedScenes += 1;
     const progressEnd = 30 + Math.floor(((index + 1) / Math.max(outlines.length, 1)) * 60);
     await options.onProgress?.({
