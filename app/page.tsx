@@ -20,6 +20,7 @@ import {
   BotOff,
   ChevronUp,
 } from 'lucide-react';
+import { languages, isLocale, type Locale, normalizeLocale } from '@/lib/i18n';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { createLogger } from '@/lib/logger';
 import { Button } from '@/components/ui/button';
@@ -57,7 +58,7 @@ const RECENT_OPEN_STORAGE_KEY = 'recentClassroomsOpen';
 interface FormState {
   pdfFile: File | null;
   requirement: string;
-  language: 'hi-IN' | 'en-US';
+  language: Locale;
   webSearch: boolean;
 }
 
@@ -173,10 +174,10 @@ useEffect(() => {
       const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
       const updates: Partial<FormState> = {};
       if (savedWebSearch === 'true') updates.webSearch = true;
-      if (savedLanguage === 'hi-IN' || savedLanguage === 'en-US') {
+      if (isLocale(savedLanguage)) {
         updates.language = savedLanguage;
       } else {
-        const detected = navigator.language?.startsWith('hi') ? 'hi-IN' : 'en-US';
+        const detected = normalizeLocale(navigator.language);
         updates.language = detected;
       }
       if (Object.keys(updates).length > 0) {
@@ -401,47 +402,12 @@ useEffect(() => {
         className="fixed top-4 right-4 z-50 flex items-center gap-1 bg-[#FFF9F2]/80 dark:bg-[#2A1500]/80 backdrop-blur-md px-2 py-1.5 rounded-full border border-primary/15 shadow-sm"
       >
         {/* Language Selector */}
-        <div className="relative">
-          <button
-            onClick={() => {
-              setLanguageOpen(!languageOpen);
-              setThemeOpen(false);
-            }}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-muted-foreground hover:bg-primary/8 hover:text-primary hover:shadow-sm transition-all"
-          >
-            {locale === 'hi-IN' ? 'हि' : 'EN'}
-          </button>
-          {languageOpen && (
-            <div className="absolute top-full mt-2 right-0 bg-[#FFF9F2] dark:bg-[#2A1500] border border-primary/15 rounded-xl shadow-lg overflow-hidden z-50 min-w-[120px]">
-              <button
-                onClick={() => {
-                  setLocale('hi-IN');
-                  setLanguageOpen(false);
-                }}
-                className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary transition-colors',
-                  locale === 'hi-IN' &&
-                    'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
-                )}
-              >
-                हिन्दी
-              </button>
-              <button
-                onClick={() => {
-                  setLocale('en-US');
-                  setLanguageOpen(false);
-                }}
-                className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary transition-colors',
-                  locale === 'en-US' &&
-                    'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
-                )}
-              >
-                English
-              </button>
-            </div>
-          )}
-        </div>
+          <div className="relative" >
+            <select aria-label="Interface language" value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);updateForm('language', value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
+            {languages.map(l=><option key={l.code} value={l.code} lang={l.code}>{l.native}</option>)}
+            </select>
+          </div>
+
 
         <div className="w-[1px] h-4 bg-border" />
 
@@ -1228,8 +1194,8 @@ function SEOContent() {
             },
             {
               emoji: '🇮🇳',
-              title: 'Hindi + English Support',
-              desc: 'Generate lessons in Hindi (हिन्दी) or English. Perfect for Hindi-medium students and Hinglish learners.',
+              title: '13 Indian languages + English',
+              desc: 'Choose a course language from 13 Indian languages or English. Output quality depends on your AI model.',
             },
             {
               emoji: '📝',
@@ -1352,8 +1318,8 @@ function SEOContent() {
     <p>
       BharatAI is designed to make students participate instead of passively
       reading long answers. Explanations are divided into manageable sections
-      and reinforced through questions, examples and visual teaching. Hindi
-      and English options help learners study in the language they understand
+      and reinforced through questions, examples and visual teaching. Indian language
+      options help learners study in the language they understand
       best, while PDF-based generation keeps lessons connected to their own
       books and notes.
     </p>
@@ -1376,7 +1342,7 @@ function SEOContent() {
           {[
             {
               q: 'What is BharatAI?',
-              a: "BharatAI is India-focused multi-agent AI classroom. Type any topic or upload a PDF and instantly get a full interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in Hindi or English.",
+              a: "BharatAI is India-focused multi-agent AI classroom. Type any topic or upload a PDF and instantly get a full interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in your selected language.",
             },
             {
               q: 'Is BharatAI free?',
@@ -1387,8 +1353,8 @@ function SEOContent() {
               a: 'Yes. BharatAI is purpose-built for Indian competitive exam preparation. Generate lessons on any Physics, Chemistry, Biology, Mathematics, History, Polity or Geography topic. The AI quizzes are modelled after exam patterns.',
             },
             {
-              q: 'Does BharatAI support Hindi?',
-              a: 'Yes. BharatAI fully supports Hindi (हिन्दी) and English. Choose your language before generating a lesson and the AI teacher, quizzes and discussions will all be in your chosen language.',
+              q: 'Which languages can I learn in?',
+              a: 'Choose Hindi, Bengali, Telugu, Marathi, Tamil, Urdu, Gujarati, Kannada, Odia, Malayalam, Punjabi, Assamese, Maithili or English for classroom generation. Interface translations are being expanded; voice support varies by provider.',
             },
             {
               q: 'Can I upload an NCERT PDF and get a lesson?',

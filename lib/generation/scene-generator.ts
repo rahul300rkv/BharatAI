@@ -1,3 +1,4 @@
+import type { Locale } from '@/lib/i18n/types';
 /**
  * Stage 2: Scene content and action generation.
  *
@@ -72,7 +73,7 @@ export async function generateFullScenes(
     currentStage: 3,
     overallProgress: 66,
     stageProgress: 0,
-    statusMessage: `正在并行生成 ${totalScenes} 个场景...`,
+    statusMessage: `Generating ${totalScenes} scenes...`,
     scenesGenerated: 0,
     totalScenes,
   });
@@ -89,7 +90,7 @@ export async function generateFullScenes(
           currentStage: 3,
           overallProgress: 66 + Math.floor((completedCount / totalScenes) * 34),
           stageProgress: Math.floor((completedCount / totalScenes) * 100),
-          statusMessage: `已完成 ${completedCount}/${totalScenes} 个场景`,
+          statusMessage: `Completed ${completedCount}/${totalScenes} scenes`,
           scenesGenerated: completedCount,
           totalScenes,
         });
@@ -345,7 +346,7 @@ function fixElementDefaults(
       const textEl = el as Record<string, unknown>;
 
       if (!textEl.defaultFontName) {
-        textEl.defaultFontName = 'Microsoft YaHei';
+        textEl.defaultFontName = 'Noto Sans';
       }
       if (!textEl.defaultColor) {
         textEl.defaultColor = '#333333';
@@ -470,7 +471,7 @@ async function generateSlideContent(
   const lang = outline.language || 'hi-IN';
 
   // Build assigned images description for the prompt
-  let assignedImagesText = '无可用图片，禁止插入任何 image 元素';
+  let assignedImagesText = 'No images available; do not insert image elements';
   let visionImages: Array<{ id: string; src: string }> | undefined;
 
   if (assignedImages && assignedImages.length > 0) {
@@ -521,7 +522,7 @@ async function generateSlideContent(
 
     if (mediaParts.length > 0) {
       const mediaText = mediaParts.join('\n\n');
-      if (assignedImagesText.includes('禁止插入') || assignedImagesText.includes('No images')) {
+      if (assignedImagesText.includes('No images')) {
         assignedImagesText = mediaText;
       } else {
         assignedImagesText += `\n\n${mediaText}`;
@@ -536,10 +537,11 @@ async function generateSlideContent(
   const teacherContext = formatTeacherPersonaForPrompt(agents);
 
   const prompts = buildPrompt(PROMPT_IDS.SLIDE_CONTENT, {
+      language: outline.language || 'hi-IN',
     title: outline.title,
     description: outline.description,
     keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
-    elements: '（根据要点自动生成）',
+    elements: 'Generate from key points',
     assignedImages: assignedImagesText,
     canvas_width: canvasWidth,
     canvas_height: canvasHeight,
@@ -640,6 +642,7 @@ async function generateQuizContent(
   };
 
   const prompts = buildPrompt(PROMPT_IDS.QUIZ_CONTENT, {
+      language: outline.language || 'hi-IN',
     title: outline.title,
     description: outline.description,
     keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
@@ -735,7 +738,7 @@ function normalizeQuizAnswer(question: Record<string, unknown>): string[] | unde
 async function generateInteractiveContent(
   outline: SceneOutline,
   aiCall: AICallFn,
-  language: 'hi-IN' | 'en-US' = 'hi-IN',
+  language: Locale = 'hi-IN',
 ): Promise<GeneratedInteractiveContent | null> {
   const config = outline.interactiveConfig!;
 
@@ -743,6 +746,7 @@ async function generateInteractiveContent(
   let scientificModel: ScientificModel | undefined;
   try {
     const modelPrompts = buildPrompt(PROMPT_IDS.INTERACTIVE_SCIENTIFIC_MODEL, {
+      language: outline.language || 'hi-IN',
       subject: config.subject || '',
       conceptName: config.conceptName,
       conceptOverview: config.conceptOverview,
@@ -924,6 +928,7 @@ export async function generateSceneActions(
     const elementsText = formatElementsForPrompt(content.elements);
 
     const prompts = buildPrompt(PROMPT_IDS.SLIDE_ACTIONS, {
+      language: outline.language || 'hi-IN',
       title: outline.title,
       keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
       description: outline.description,
@@ -953,6 +958,7 @@ export async function generateSceneActions(
     const questionsText = formatQuestionsForPrompt(content.questions);
 
     const prompts = buildPrompt(PROMPT_IDS.QUIZ_ACTIONS, {
+      language: outline.language || 'hi-IN',
       title: outline.title,
       keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
       description: outline.description,
@@ -979,6 +985,7 @@ export async function generateSceneActions(
     const config = outline.interactiveConfig;
     const agentsText = formatAgentsForPrompt(agents);
     const prompts = buildPrompt(PROMPT_IDS.INTERACTIVE_ACTIONS, {
+      language: outline.language || 'hi-IN',
       title: outline.title,
       keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
       description: outline.description,
@@ -1006,6 +1013,7 @@ export async function generateSceneActions(
     const pblConfig = outline.pblConfig;
     const agentsText = formatAgentsForPrompt(agents);
     const prompts = buildPrompt(PROMPT_IDS.PBL_ACTIONS, {
+      language: outline.language || 'hi-IN',
       title: outline.title,
       keyPoints: (outline.keyPoints || []).map((p, i) => `${i + 1}. ${p}`).join('\n'),
       description: outline.description,
@@ -1040,8 +1048,8 @@ function generateDefaultPBLActions(_outline: SceneOutline): Action[] {
     {
       id: `action_${nanoid(8)}`,
       type: 'speech',
-      title: 'PBL 项目介绍',
-      text: '现在让我们开始一个项目式学习活动。请选择你的角色，查看任务看板，开始协作完成项目。',
+      title: _outline.title,
+      text: _outline.description || _outline.title,
     },
   ];
 }
@@ -1148,19 +1156,19 @@ function generateDefaultSlideActions(outline: SceneOutline, elements: PPTElement
     actions.push({
       id: `action_${nanoid(8)}`,
       type: 'spotlight',
-      title: '聚焦重点',
+      title: outline.title,
       elementId: textElements[0].id,
     });
   }
 
   // Add opening speech based on key points
   const speechText = outline.keyPoints?.length
-    ? outline.keyPoints.join('。') + '。'
+    ? outline.keyPoints.join(' · ')
     : outline.description || outline.title;
   actions.push({
     id: `action_${nanoid(8)}`,
     type: 'speech',
-    title: '场景讲解',
+    title: outline.title,
     text: speechText,
   });
 
@@ -1175,8 +1183,8 @@ function generateDefaultQuizActions(_outline: SceneOutline): Action[] {
     {
       id: `action_${nanoid(8)}`,
       type: 'speech',
-      title: '测验引导',
-      text: '现在让我们来做一个小测验，检验一下学习成果。',
+      title: _outline.title,
+      text: _outline.description || _outline.title,
     },
   ];
 }
@@ -1189,8 +1197,8 @@ function generateDefaultInteractiveActions(_outline: SceneOutline): Action[] {
     {
       id: `action_${nanoid(8)}`,
       type: 'speech',
-      title: '交互引导',
-      text: '现在让我们通过交互式可视化来探索这个概念。请尝试操作页面中的元素，观察变化。',
+      title: _outline.title,
+      text: _outline.description || _outline.title,
     },
   ];
 }
@@ -1214,7 +1222,7 @@ export function createSceneWithActions(
       backgroundColor: '#ffffff',
       themeColors: ['#5b9bd5', '#ed7d31', '#a5a5a5', '#ffc000', '#4472c4'],
       fontColor: '#333333',
-      fontName: 'Microsoft YaHei',
+      fontName: 'Noto Sans',
       outline: { color: '#d14424', width: 2, style: 'solid' },
       shadow: { h: 0, v: 0, blur: 10, color: '#000000' },
     };

@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Locale, translate, defaultLocale } from '@/lib/i18n';
+import { Locale, translate, defaultLocale, isLocale, normalizeLocale } from '@/lib/i18n';
 
 type I18nContextType = {
   locale: Locale;
@@ -10,7 +10,7 @@ type I18nContextType = {
 };
 
 const LOCALE_STORAGE_KEY = 'locale';
-const VALID_LOCALES: Locale[] = ['hi-IN', 'en-US'];
+
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
@@ -22,11 +22,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-      if (stored && VALID_LOCALES.includes(stored as Locale)) {
+      if (isLocale(stored)) {
         setLocaleState(stored as Locale);
         return;
       }
-      const detected = navigator.language?.startsWith('hi') ? 'hi-IN' : 'en-US';
+      const detected = normalizeLocale(navigator.language);
       localStorage.setItem(LOCALE_STORAGE_KEY, detected);
       setLocaleState(detected);
     } catch {
@@ -35,9 +35,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 
+  useEffect(() => { document.documentElement.lang = locale; document.documentElement.dir = locale === 'ur-IN' ? 'rtl' : 'ltr'; }, [locale]);
+
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
-    localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
+    try { localStorage.setItem(LOCALE_STORAGE_KEY, newLocale); } catch {}
   };
 
   const t = (key: string): string => translate(locale, key);
