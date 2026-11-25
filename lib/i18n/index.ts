@@ -24,7 +24,7 @@ export const translations = {
   },
 } as const;
 
-export type TranslationKey = keyof (typeof translations)[typeof defaultLocale];
+export type TranslationKey = keyof (typeof translations)['en-US'];
 
 export function translate(locale: Locale, key: string): string {
   const keys = key.split('.');
