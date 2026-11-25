@@ -72,6 +72,8 @@ const initialFormState: FormState = {
 
 // ─── API Key Onboarding Banner ────────────────────────────────────────────────
 function OnboardingBanner({ onSetupClick }: { onSetupClick: () => void }) {
+  const { locale } = useI18n();
+  const hi = locale === 'hi-IN';
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
@@ -92,10 +94,10 @@ function OnboardingBanner({ onSetupClick }: { onSetupClick: () => void }) {
       <span className="text-2xl shrink-0">🔑</span>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-orange-900 dark:text-orange-200">
-          BharatAI needs your own AI API Key to work
+          {hi ? 'कक्षा बनाने के लिए AI API कुंजी सेट करें' : 'Set up an AI API key to generate a classroom'}
         </p>
         <p className="text-xs text-orange-700/80 dark:text-orange-300/70 mt-0.5 leading-relaxed">
-          It&apos;s <strong>free</strong> — get a Groq API key in 2 minutes at{' '}
+          {hi ? 'Groq की API कुंजी यहाँ प्राप्त करें: ' : 'Get a Groq API key at ' }
           <a
             href="https://console.groq.com"
             target="_blank"
@@ -104,8 +106,7 @@ function OnboardingBanner({ onSetupClick }: { onSetupClick: () => void }) {
           >
             console.groq.com
           </a>
-          . Then click <strong>Settings → LLM → Add API Key</strong>.
-          Also supports OpenAI, Gemini, Claude, DeepSeek &amp; more.
+          {hi ? '। फिर सेटिंग्स में LLM अनुभाग खोलकर API कुंजी जोड़ें। OpenAI, Gemini, Claude और अन्य प्रदाता भी समर्थित हैं। प्रदाता की शुल्क व उपयोग सीमाएँ लागू हो सकती हैं।' : '. Then open Settings → LLM and add your API key. Other providers are supported. Provider charges and limits may apply.'}
         </p>
       </div>
       <div className="flex items-center gap-2 shrink-0">
@@ -113,7 +114,7 @@ function OnboardingBanner({ onSetupClick }: { onSetupClick: () => void }) {
           onClick={onSetupClick}
           className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm"
         >
-          Set up now
+          {hi ? 'अभी सेट करें' : 'Set up now'}
         </button>
         <button
           onClick={() => {
@@ -258,7 +259,7 @@ useEffect(() => {
       await loadClassrooms();
     } catch (err) {
       log.error('Failed to delete classroom:', err);
-      toast.error('Failed to delete classroom');
+      toast.error(locale === 'hi-IN' ? 'कक्षा हटाने में विफल' : 'Failed to delete classroom');
     }
   };
 
@@ -383,7 +384,7 @@ useEffect(() => {
     if (diffDays === 0) return t('classroom.today');
     if (diffDays === 1) return t('classroom.yesterday');
     if (diffDays < 7) return `${diffDays} ${t('classroom.daysAgo')}`;
-    return date.toLocaleDateString();
+    return date.toLocaleDateString(locale);
   };
 
   const canGenerate = !!form.requirement.trim();
@@ -404,7 +405,7 @@ useEffect(() => {
       >
         {/* Language Selector */}
           <div className="relative" >
-            <select aria-label="Interface language" value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
+            <select aria-label={t('settings.language')} value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
             {languages.map(l=><option key={l.code} value={l.code} lang={l.code}>{l.native}</option>)}
             </select>
           </div>
@@ -505,20 +506,6 @@ useEffect(() => {
           style={{ animationDuration: '6s' }}
         />
       </div>
-
-      {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
-      {!currentModelId && (
-        <div className="relative z-20 w-full max-w-[800px] mt-2">
-          <AnimatePresence>
-            <OnboardingBanner
-              onSetupClick={() => {
-                setSettingsSection('providers' as import('@/lib/types/settings').SettingsSection);
-                setSettingsOpen(true);
-              }}
-            />
-          </AnimatePresence>
-        </div>
-      )}
 
       {/* ═══ Hero section: title + input (centered, wider) ═══ */}
       <motion.div
@@ -630,6 +617,21 @@ useEffect(() => {
           </div>
         </motion.div>
 
+      {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
+      {!currentModelId && (
+        <div className="relative z-20 w-full max-w-[800px] mt-4">
+          <AnimatePresence>
+            <OnboardingBanner
+              onSetupClick={() => {
+                setSettingsSection('providers' as import('@/lib/types/settings').SettingsSection);
+                setSettingsOpen(true);
+              }}
+            />
+          </AnimatePresence>
+        </div>
+      )}
+
+
         {/* ── Error ── */}
         <AnimatePresence>
           {error && (
@@ -724,7 +726,7 @@ useEffect(() => {
 
       {/* Footer — flows with content, at the very end */}
       <div className="mt-auto pt-12 pb-4 text-center text-xs text-muted-foreground/50 flex flex-col items-center gap-1">
-        BharatAI — Bharat ka Apna AI Classroom 🇮🇳
+        {locale === 'hi-IN' ? 'BharatAI — भारत की अपनी AI कक्षा 🇮🇳' : 'BharatAI — Bharat ka Apna AI Classroom 🇮🇳'}
       </div>
     </div>
   );
@@ -1171,47 +1173,49 @@ function ClassroomCard({
 
 // ─── Static SEO content — visible to crawlers, subtle for users ──────────────
 function SEOContent() {
+  const { locale } = useI18n();
+  const tr = (en: string, hi: string) => locale === 'hi-IN' ? hi : en;
   return (
     <section aria-label="About BharatAI" className="w-full max-w-4xl mx-auto px-4 pb-16 mt-4">
       {/* Features */}
       <div className="mb-12">
         <h2 className="text-xl font-bold text-center mb-2 text-foreground/80">
-          What BharatAI Offers
+          {tr("What BharatAI Offers","BharatAI की विशेषताएँ")}
         </h2>
         <p className="text-center text-sm text-muted-foreground/70 mb-8">
-          An interactive AI classroom — built for CBSE, JEE, NEET &amp; UPSC
+          {tr("An interactive AI classroom — built for CBSE, JEE, NEET & UPSC","CBSE, JEE, NEET और UPSC के लिए इंटरैक्टिव AI कक्षा")}
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             {
               emoji: '🎓',
-              title: 'Multi-Agent AI Classroom',
-              desc: 'A full class with AI Teacher, AI Assistant, and student agents who discuss, debate and explain — not just one bot answering questions.',
+              title: tr("Multi-Agent AI Classroom","मल्टी-एजेंट AI कक्षा"),
+              desc: tr("A full class with AI Teacher, AI Assistant, and student agents who discuss, debate and explain — not just one bot answering questions.","AI शिक्षक, सहायक और छात्र एजेंट मिलकर चर्चा करते हैं, प्रश्न पूछते हैं और विषय समझाते हैं।"),
             },
             {
               emoji: '📄',
-              title: 'PDF to Lesson in Seconds',
-              desc: 'Upload your NCERT chapter, notes or any PDF and get an interactive lesson with slides, quiz and whiteboard instantly.',
+              title: tr("PDF to Lesson in Seconds","PDF से इंटरैक्टिव पाठ"),
+              desc: tr("Upload your NCERT chapter, notes or any PDF and get an interactive lesson with slides, quiz and whiteboard instantly.","NCERT अध्याय, नोट्स या PDF अपलोड करें और स्लाइड, प्रश्नोत्तरी तथा व्हाइटबोर्ड सहित पाठ तैयार करें।"),
             },
             {
               emoji: '🇮🇳',
-              title: '13 Indian languages + English',
-              desc: 'Choose a course language from 13 Indian languages or English. Output quality depends on your AI model.',
+              title: tr("13 Indian languages + English","13 भारतीय भाषाएँ और अंग्रेज़ी"),
+              desc: tr("Choose a course language from 13 Indian languages or English. Output quality depends on your AI model.","पाठ के लिए 13 भारतीय भाषाओं या अंग्रेज़ी में से चुनें। परिणाम की गुणवत्ता चयनित AI मॉडल पर निर्भर करती है।"),
             },
             {
               emoji: '📝',
-              title: 'Auto-Generated Quizzes',
-              desc: 'Every lesson includes MCQs, short answers and AI-graded quizzes to test understanding — like a real exam practice.',
+              title: tr("Auto-Generated Quizzes","स्वचालित प्रश्नोत्तरी"),
+              desc: tr("Every lesson includes MCQs, short answers and AI-graded quizzes to test understanding — like a real exam practice.","बहुविकल्पीय और लघु उत्तरीय प्रश्नों के माध्यम से अपनी समझ जाँचें। AI मूल्यांकन भी उपलब्ध है।"),
             },
             {
               emoji: '🖊️',
-              title: 'Interactive Whiteboard',
-              desc: 'AI teacher draws diagrams, writes formulas and explains concepts on a live whiteboard — just like a real class.',
+              title: tr("Interactive Whiteboard","इंटरैक्टिव व्हाइटबोर्ड"),
+              desc: tr("AI teacher draws diagrams, writes formulas and explains concepts on a live whiteboard — just like a real class.","AI शिक्षक व्हाइटबोर्ड पर आरेख और सूत्र बनाकर अवधारणाएँ समझाता है।"),
             },
             {
               emoji: '🔒',
-              title: 'Your API Key and Data',
-              desc: 'BharatAI runs on your own AI API key. Requests may pass through our server and your chosen AI provider.',
+              title: tr("Your API Key and Data","आपकी API कुंजी और डेटा"),
+              desc: tr("BharatAI runs on your own AI API key. Requests may pass through our server and your chosen AI provider.","BharatAI आपकी AI API कुंजी का उपयोग कर सकता है। अनुरोध हमारे सर्वर और चयनित AI प्रदाता तक जा सकते हैं।"),
             },
           ].map(({ emoji, title, desc }) => (
             <div
@@ -1228,15 +1232,15 @@ function SEOContent() {
 
       {/* Use cases */}
       <div className="mb-12 rounded-xl border border-border/40 bg-muted/20 p-6">
-        <h2 className="text-lg font-bold mb-4 text-foreground/80">Who BharatAI Is Designed For</h2>
+        <h2 className="text-lg font-bold mb-4 text-foreground/80">{tr("Who BharatAI Is Designed For","BharatAI किसके लिए है?")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
-            { label: 'Class 10–12 CBSE Students', detail: 'Learn Science, Maths, Social Science with AI explanations and auto-generated notes.' },
-            { label: 'JEE Aspirants', detail: 'Master Physics, Chemistry and Maths concepts with whiteboard diagrams and formula walkthroughs.' },
-            { label: 'NEET Aspirants', detail: 'Study Biology and Chemistry with detailed AI explanations and practice quizzes.' },
-            { label: 'UPSC Aspirants', detail: 'Cover History, Polity, Geography and Current Affairs with structured AI-generated lessons.' },
-            { label: 'College Students', detail: 'Understand complex university topics by uploading lecture notes or textbook PDFs.' },
-            { label: 'Curious Learners', detail: 'Learn anything — from Quantum Physics to Indian Classical Music — in minutes.' },
+            { label: tr("Class 10–12 CBSE Students","CBSE कक्षा 10–12 के विद्यार्थी"), detail: tr("Learn Science, Maths, Social Science with AI explanations and auto-generated notes.","AI की व्याख्याओं और नोट्स से विज्ञान, गणित तथा सामाजिक विज्ञान पढ़ें।") },
+            { label: tr("JEE Aspirants","JEE अभ्यर्थी"), detail: tr("Master Physics, Chemistry and Maths concepts with whiteboard diagrams and formula walkthroughs.","व्हाइटबोर्ड के आरेख और सूत्रों से भौतिकी, रसायन विज्ञान और गणित समझें।") },
+            { label: tr("NEET Aspirants","NEET अभ्यर्थी"), detail: tr("Study Biology and Chemistry with detailed AI explanations and practice quizzes.","विस्तृत व्याख्याओं और अभ्यास प्रश्नों से जीव विज्ञान एवं रसायन विज्ञान पढ़ें।") },
+            { label: tr("UPSC Aspirants","UPSC अभ्यर्थी"), detail: tr("Cover History, Polity, Geography and Current Affairs with structured AI-generated lessons.","संरचित पाठों के साथ इतिहास, राजव्यवस्था, भूगोल और समसामयिक विषय पढ़ें।") },
+            { label: tr("College Students","महाविद्यालय के विद्यार्थी"), detail: tr("Understand complex university topics by uploading lecture notes or textbook PDFs.","व्याख्यान नोट्स और पाठ्यपुस्तक PDF से जटिल विषय समझें।") },
+            { label: tr("Curious Learners","जिज्ञासु शिक्षार्थी"), detail: tr("Learn anything — from Quantum Physics to Indian Classical Music — in minutes.","क्वांटम भौतिकी से भारतीय शास्त्रीय संगीत तक नए विषय सीखें।") },
           ].map(({ label, detail }) => (
             <div key={label} className="flex gap-3 items-start">
               <span className="mt-0.5 text-primary text-sm">✓</span>
@@ -1251,32 +1255,29 @@ function SEOContent() {
 {/* How it works */}
 <div className="mb-12">
   <h2 className="text-xl font-bold text-foreground/80 mb-3">
-    How BharatAI Turns Topics Into Lessons
+    {tr("How BharatAI Turns Topics Into Lessons","BharatAI विषयों को पाठों में कैसे बदलता है")}
   </h2>
 
   <p className="text-sm text-muted-foreground/70 leading-relaxed mb-6">
-    Start with a question, syllabus topic, chapter name or PDF. BharatAI
-    organizes the material into a structured classroom experience designed
-    to help students understand ideas, practise recall and revise important
-    concepts.
+    {tr("Start with a question, syllabus topic, chapter name or PDF. BharatAI organizes the material into a structured classroom experience designed to help students understand ideas, practise recall and revise important concepts.","प्रश्न, पाठ्यक्रम, अध्याय या PDF से शुरू करें। BharatAI सामग्री को संरचित कक्षा में बदलता है ताकि विद्यार्थी अवधारणाएँ समझें, याद करने का अभ्यास करें और पुनरावृत्ति कर सकें।")}
   </p>
 
   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
     {[
       {
-        title: '1. Describe What You Want to Learn',
+        title: tr("1. Describe What You Want to Learn","1. बताएं कि आप क्या सीखना चाहते हैं"),
         description:
-          'Enter a focused request such as Newton laws for Class 11, organic chemistry reaction mechanisms, Indian polity for UPSC or a summary of an NCERT chapter. You can also upload study material to guide the lesson.',
+          tr("Enter a focused request such as Newton laws for Class 11, organic chemistry reaction mechanisms, Indian polity for UPSC or a summary of an NCERT chapter. You can also upload study material to guide the lesson.","कक्षा 11 के न्यूटन के नियम, कार्बनिक रसायन की अभिक्रियाएँ, UPSC की भारतीय राजव्यवस्था या NCERT अध्याय जैसे किसी विषय को लिखें। अध्ययन सामग्री भी अपलोड कर सकते हैं।"),
       },
       {
-        title: '2. Generate a Structured AI Classroom',
+        title: tr("2. Generate a Structured AI Classroom","2. संरचित AI कक्षा तैयार करें"),
         description:
-          'BharatAI converts the request into connected explanations, presentation slides, classroom discussions, diagrams, whiteboard activities and quizzes. Each part supports the same learning objective, helping students move from an introduction to practical understanding.',
+          tr("BharatAI converts the request into connected explanations, presentation slides, classroom discussions, diagrams, whiteboard activities and quizzes. Each part supports the same learning objective, helping students move from an introduction to practical understanding.","BharatAI आपके अनुरोध से व्याख्याएँ, स्लाइड, चर्चा, आरेख, व्हाइटबोर्ड गतिविधियाँ और प्रश्नोत्तरी तैयार करता है। ये सभी विषय की व्यावहारिक समझ बढ़ाने में मदद करते हैं।"),
       },
       {
-        title: '3. Learn, Practise and Revise',
+        title: tr("3. Learn, Practise and Revise","3. सीखें, अभ्यास करें और दोहराएँ"),
         description:
-          'Follow the AI teacher, answer questions and use quizzes to identify gaps. Students can revisit generated classrooms whenever they need revision, making BharatAI useful for daily study, homework support and exam preparation.',
+          tr("Follow the AI teacher, answer questions and use quizzes to identify gaps. Students can revisit generated classrooms whenever they need revision, making BharatAI useful for daily study, homework support and exam preparation.","AI शिक्षक की व्याख्या सुनें, प्रश्नों के उत्तर दें और अपनी कमज़ोरियाँ पहचानें। पुनरावृत्ति, गृहकार्य और परीक्षा की तैयारी के लिए पुरानी कक्षाएँ फिर खोल सकते हैं।"),
       },
     ].map(({ title, description }) => (
       <article
@@ -1297,77 +1298,64 @@ function SEOContent() {
 {/* Subjects */}
 <div className="mb-12 rounded-xl border border-border/40 bg-muted/20 p-6">
   <h2 className="text-lg font-bold text-foreground/80 mb-3">
-    Subjects and Exams You Can Study
+    {tr("Subjects and Exams You Can Study","विषय और परीक्षाएँ")}
   </h2>
 
   <p className="text-sm text-muted-foreground/70 leading-relaxed">
-    Create lessons for school Science, Mathematics, Social Science, English
-    and Computer Science, or explore college and professional topics.
-    Competitive-exam learners can build focused classrooms for JEE Physics,
-    Chemistry and Mathematics, NEET Biology, and UPSC History, Geography,
-    Economy, Environment and Indian Polity.
+    {tr("Create lessons for school Science, Mathematics, Social Science, English and Computer Science, or explore college and professional topics. Competitive-exam learners can build focused classrooms for JEE Physics, Chemistry and Mathematics, NEET Biology, and UPSC History, Geography, Economy, Environment and Indian Polity.","स्कूल के विज्ञान, गणित, सामाजिक विज्ञान, अंग्रेज़ी और कंप्यूटर विज्ञान के पाठ बनाएँ या उच्च शिक्षा के विषय पढ़ें। JEE के लिए भौतिकी, रसायन और गणित; NEET के लिए जीव विज्ञान; तथा UPSC के लिए इतिहास, भूगोल, अर्थव्यवस्था, पर्यावरण और राजव्यवस्था पढ़ें।")}
   </p>
 </div>
 
 {/* Active learning */}
 <div className="mb-12">
   <h2 className="text-lg font-bold text-foreground/80 mb-3">
-    Designed for Active Learning
+    {tr("Designed for Active Learning","सक्रिय अध्ययन के लिए बनाया गया")}
   </h2>
 
   <div className="space-y-3 text-sm text-muted-foreground/70 leading-relaxed">
     <p>
-      BharatAI is designed to make students participate instead of passively
-      reading long answers. Explanations are divided into manageable sections
-      and reinforced through questions, examples and visual teaching. Indian language
-      options help learners study in the language they understand
-      best, while PDF-based generation keeps lessons connected to their own
-      books and notes.
+      {tr("BharatAI is designed to make students participate instead of passively reading long answers. Explanations are divided into manageable sections and reinforced through questions, examples and visual teaching. Indian language options help learners study in the language they understand best, while PDF-based generation keeps lessons connected to their own books and notes.","BharatAI विद्यार्थियों को केवल लंबे उत्तर पढ़ने के बजाय सक्रिय भागीदारी के लिए प्रेरित करता है। छोटे खंडों, प्रश्नों, उदाहरणों और दृश्य शिक्षण से अवधारणाएँ स्पष्ट होती हैं। भारतीय भाषाओं में पढ़ने और अपनी PDF से पाठ बनाने की सुविधा मिलती है।")}
     </p>
 
     <p>
-      Unlike a standard chatbot response, a generated classroom combines
-      several learning formats in one place. This gives learners multiple ways
-      to approach difficult concepts and makes the material easier to review
-      before tests. Teachers and parents can also use the generated structure
-      to support guided study sessions.
+      {tr("Unlike a standard chatbot response, a generated classroom combines several learning formats in one place. This gives learners multiple ways to approach difficult concepts and makes the material easier to review before tests. Teachers and parents can also use the generated structure to support guided study sessions.","सामान्य चैटबॉट से अलग, यह कक्षा कई अध्ययन प्रारूप एक जगह लाती है। इससे कठिन अवधारणाओं को अलग-अलग तरीकों से समझना और परीक्षा से पहले दोहराना आसान होता है। शिक्षक और अभिभावक भी निर्देशित अध्ययन में इसका उपयोग कर सकते हैं।")}
     </p>
   </div>
 </div>
       {/* FAQ */}
       <div className="mb-8">
         <h2 className="text-lg font-bold mb-6 text-foreground/80">
-          Frequently Asked Questions
+          {tr("Frequently Asked Questions","अक्सर पूछे जाने वाले प्रश्न")}
         </h2>
         <div className="flex flex-col gap-4">
           {[
             {
-              q: 'What is BharatAI?',
-              a: "BharatAI is India-focused multi-agent AI classroom. Type any topic or upload a PDF and instantly get a full interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in your selected language.",
+              q: tr("What is BharatAI?","BharatAI क्या है?"),
+              a: tr("BharatAI is India-focused multi-agent AI classroom. Type any topic or upload a PDF and instantly get a full interactive lesson with an AI teacher, quizzes, whiteboard and classroom discussion — in your selected language.","BharatAI भारतीय विद्यार्थियों के लिए मल्टी-एजेंट AI कक्षा है। विषय लिखें या PDF अपलोड करें और अपनी चुनी हुई भाषा में पाठ, प्रश्नोत्तरी, व्हाइटबोर्ड तथा चर्चा प्राप्त करें।"),
             },
             {
-              q: 'Is BharatAI free?',
-              a: 'BharatAI is free to use. You need to bring your own AI API key (OpenAI, Gemini, Claude, DeepSeek, Groq and more are all supported). There are no subscription fees.',
+              q: tr("Is BharatAI free?","क्या BharatAI मुफ़्त है?"),
+              a: tr("BharatAI is free to use. You need to bring your own AI API key (OpenAI, Gemini, Claude, DeepSeek, Groq and more are all supported). There are no subscription fees.","सार्वजनिक पाठ मुफ़्त हैं। व्यक्तिगत कक्षा बनाने के लिए AI प्रदाता की API कुंजी आवश्यक हो सकती है। प्रदाता का शुल्क और उपयोग सीमा लागू हो सकती है।"),
             },
             {
-              q: 'Can BharatAI help with JEE, NEET and UPSC preparation?',
-              a: 'Yes. BharatAI is purpose-built for Indian competitive exam preparation. Generate lessons on any Physics, Chemistry, Biology, Mathematics, History, Polity or Geography topic. The AI quizzes are modelled after exam patterns.',
+              q: tr("Can BharatAI help with JEE, NEET and UPSC preparation?","क्या BharatAI JEE, NEET और UPSC की तैयारी में मदद करता है?"),
+              a: tr("Yes. BharatAI is purpose-built for Indian competitive exam preparation. Generate lessons on any Physics, Chemistry, Biology, Mathematics, History, Polity or Geography topic. The AI quizzes are modelled after exam patterns.","हाँ। भौतिकी, रसायन विज्ञान, जीव विज्ञान, गणित, इतिहास, राजव्यवस्था और भूगोल के पाठ तैयार करें। अभ्यास के लिए आधिकारिक पाठ्यक्रम और पुराने प्रश्नपत्रों से भी मिलान करें।"),
             },
             {
-              q: 'Which languages can I learn in?',
-              a: 'Choose Hindi, Bengali, Telugu, Marathi, Tamil, Urdu, Gujarati, Kannada, Odia, Malayalam, Punjabi, Assamese, Maithili or English for classroom generation. Interface translations are being expanded; voice support varies by provider.',
+              q: tr("Which languages can I learn in?","मैं किन भाषाओं में सीख सकता हूँ?"),
+              a: tr("Choose Hindi, Bengali, Telugu, Marathi, Tamil, Urdu, Gujarati, Kannada, Odia, Malayalam, Punjabi, Assamese, Maithili or English for classroom generation. Interface translations are being expanded; voice support varies by provider.","कक्षा के लिए हिन्दी, बंगाली, तेलुगु, मराठी, तमिल, उर्दू, गुजराती, कन्नड़, ओड़िया, मलयालम, पंजाबी, असमिया, मैथिली या अंग्रेज़ी चुनें। इंटरफ़ेस अनुवाद का विस्तार जारी है; आवाज़ की उपलब्धता प्रदाता पर निर्भर है।"),
             },
             {
-              q: 'Can I upload an NCERT PDF and get a lesson?',
-              a: 'Yes. Upload any PDF — NCERT textbook, reference notes, previous year papers — and BharatAI will extract the content and generate a complete AI classroom from it in seconds.',
+              q: tr("Can I upload an NCERT PDF and get a lesson?","क्या NCERT PDF से पाठ बना सकता हूँ?"),
+              a: tr("Yes. Upload any PDF — NCERT textbook, reference notes, previous year papers — and BharatAI will extract the content and generate a complete AI classroom from it in seconds.","हाँ। अनुमति प्राप्त NCERT पुस्तक, नोट्स या पुराने प्रश्नपत्र की PDF अपलोड करें। BharatAI उससे पाठ तैयार करने का प्रयास करेगा। परिणाम मूल सामग्री से जाँचें।"),
             },
             {
-              q: 'Which AI models work with BharatAI?',
-              a: 'BharatAI supports OpenAI (GPT-4o, GPT-4o mini), Google Gemini (2.0 Flash, 1.5 Pro), Anthropic Claude (3.5 Sonnet), DeepSeek, Qwen, Groq (Llama 3), Kimi, GLM, MiniMax, SiliconFlow and any OpenAI-compatible provider.',
+              q: tr("Which AI models work with BharatAI?","BharatAI के साथ कौन से AI मॉडल काम करते हैं?"),
+              a: tr("BharatAI supports OpenAI (GPT-4o, GPT-4o mini), Google Gemini (2.0 Flash, 1.5 Pro), Anthropic Claude (3.5 Sonnet), DeepSeek, Qwen, Groq (Llama 3), Kimi, GLM, MiniMax, SiliconFlow and any OpenAI-compatible provider.","OpenAI, Google Gemini, Anthropic Claude, DeepSeek, Qwen, Groq, Kimi, GLM, MiniMax, SiliconFlow और OpenAI-संगत प्रदाता समर्थित हैं। उपलब्ध मॉडल सेटिंग्स में देखें।"),
             },
             {
-              q: 'Is my data private?',
-              a: 'BharatAI stores classroom data locally for browser-based sessions and uses server endpoints and external AI providers for processing. See our privacy policy before uploading sensitive material.',
+              q: tr("Is my data private?","क्या मेरा डेटा निजी है?"),
+              a: tr("BharatAI stores classroom data locally for browser-based sessions and uses server endpoints and external AI providers for processing. See our privacy policy before uploading sensitive material.","ब्राउज़र आधारित कक्षाओं का डेटा स्थानीय रूप से रखा जाता है। प्रसंस्करण के लिए सर्वर और बाहरी AI प्रदाता उपयोग हो सकते हैं। संवेदनशील सामग्री अपलोड करने से पहले गोपनीयता नीति पढ़ें।"),
             },
           ].map(({ q, a }) => (
             <div
@@ -1386,7 +1374,7 @@ function SEOContent() {
 <footer className="mt-16 border-t border-border/40 pt-8 pb-6">
   <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
     <p className="text-muted-foreground/60">
-      BharatAI — Bharat Ka Apna AI Classroom 🇮🇳
+      {tr("BharatAI — Bharat Ka Apna AI Classroom 🇮🇳","BharatAI — भारत की अपनी AI कक्षा 🇮🇳")}
     </p>
     <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
       <Link href="/learn" className="text-primary underline"><SiteText k="learn"/></Link>
@@ -1399,7 +1387,7 @@ function SEOContent() {
     </nav>
   </div>
   <p className="text-center text-xs text-muted-foreground/40 mt-4">
-    Made with ❤️ for Indian students · CBSE · JEE · NEET · UPSC
+    {tr("Made with ❤️ for Indian students · CBSE · JEE · NEET · UPSC","भारतीय विद्यार्थियों के लिए ❤️ · CBSE · JEE · NEET · UPSC")}
   </p>
 </footer>
     </section>
@@ -1409,7 +1397,6 @@ function SEOContent() {
 export default function Page() {
   return (
     <>
-      <div className="mx-auto max-w-5xl px-4 py-3 text-sm"><Link href="/learn" className="text-primary underline"><SiteText k="learn"/></Link> · <Link href="/guides" className="text-primary underline"><SiteText k="guides"/></Link></div>
       <HomePage />
       <SEOContent />
     </>
