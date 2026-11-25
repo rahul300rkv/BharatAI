@@ -135,6 +135,7 @@ function GenerationPreviewContent() {
     const controller = new AbortController();
     abortControllerRef.current = controller;
     const signal = controller.signal;
+    const generationStartedAt = performance.now();
 
     // Use a local mutable copy so we can update it after PDF parsing
     let currentSession = session;
@@ -732,6 +733,7 @@ function GenerationPreviewContent() {
 
       sessionStorage.removeItem('generationSession');
       await store.saveToStorage();
+      log.info(`[Generation] Classroom ready in ${Math.round(performance.now()-generationStartedAt)}ms`);
       router.push(`/classroom/${stage.id}`);
     } catch (err) {
       // AbortError is expected when navigating away — don't show as error

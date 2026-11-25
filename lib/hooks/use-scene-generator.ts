@@ -317,10 +317,13 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
           .map((a) => a.text);
       }
 
-      // Serial generation loop — two-step per outline
+      // Pipeline one next-scene content request alongside current actions.
+      // Actions remain ordered to preserve previous-speech continuity.
+      let prefetched: {id:string; promise:Promise<SceneContentResult>} | undefined;
+      const loadContent = (outline:SceneOutline) => fetchSceneContent({outline,allOutlines:outlines,stageId:stage.id,pdfImages:params.pdfImages,imageMapping:params.imageMapping,stageInfo:params.stageInfo,agents:params.agents},signal).catch((e:unknown):SceneContentResult=>({success:false,error:e instanceof Error?e.message:'Content request failed'}));
       try {
         let pausedByFailureOrAbort = false;
-        for (const outline of pending) {
+        for (const [index, outline] of pending.entries()) {
           if (abortRef.current || store.getState().generationEpoch !== startEpoch) {
             store.getState().setGenerationStatus('paused');
             pausedByFailureOrAbort = true;
@@ -331,18 +334,8 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
 
           // Step 1: Generate content
           options.onPhaseChange?.('content', outline);
-          const contentResult = await fetchSceneContent(
-            {
-              outline,
-              allOutlines: outlines,
-              stageId: stage.id,
-              pdfImages: params.pdfImages,
-              imageMapping: params.imageMapping,
-              stageInfo: params.stageInfo,
-              agents: params.agents,
-            },
-            signal,
-          );
+          const contentResult = await (prefetched?.id===outline.id ? prefetched.promise : loadContent(outline));
+          prefetched = undefined;
 
           if (!contentResult.success || !contentResult.content) {
             if (abortRef.current || store.getState().generationEpoch !== startEpoch) {
@@ -364,6 +357,8 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
 
           // Step 2: Generate actions + assemble scene
           options.onPhaseChange?.('actions', outline);
+          const nextOutline = pending[index+1];
+          if(nextOutline && !signal.aborted) prefetched={id:nextOutline.id,promise:loadContent(nextOutline)};
           const actionsResult = await fetchSceneActions(
             {
               outline: contentResult.effectiveOutline || outline,
@@ -411,6 +406,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
           }
         }
 
+        if (pausedByFailureOrAbort && prefetched) fetchAbortRef.current?.abort();
         if (!abortRef.current && !pausedByFailureOrAbort) {
           store.getState().setGenerationStatus('completed');
           store.getState().setGeneratingOutlines([]);
@@ -425,6 +421,7 @@ export function useSceneGenerator(options: UseSceneGeneratorOptions = {}) {
           throw err;
         }
       } finally {
+        if (prefetched) fetchAbortRef.current?.abort();
         generatingRef.current = false;
         fetchAbortRef.current = null;
       }

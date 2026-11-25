@@ -21,7 +21,7 @@ export function buildCourseContext(ctx?: SceneGenerationContext): string {
   // Position information
   lines.push('');
   lines.push(
-    'IMPORTANT: All pages belong to the SAME class session. Do NOT greet again after the first page. When referencing content from earlier pages, say "we just covered" or "as mentioned on page N" — NEVER say "last class" or "previous session" because there is no previous session.',
+    'One continuous class: greet only on page 1. Refer to earlier pages as “we just covered” or by page number, never as a previous class.',
   );
   lines.push('');
   if (ctx.pageIndex === 1) {
@@ -68,7 +68,7 @@ export function formatTeacherPersonaForPrompt(agents?: AgentInfo[]): string {
   const teacher = agents.find((a) => a.role === 'teacher');
   if (!teacher?.persona) return '';
 
-  return `Teacher Persona:\nName: ${teacher.name}\n${teacher.persona}\n\nAdapt the content style and tone to match this teacher's personality. IMPORTANT: The teacher's name and identity must NOT appear on the slides — no "Teacher ${teacher.name}'s tips", no "Teacher's message", etc. Slides should read as neutral, professional visual aids.`;
+  return `Teacher Persona:\nName: ${teacher.name}\n${teacher.persona}\n\nMatch the teaching tone, but keep slides neutral and omit the teacher's identity.`;
 }
 
 /**

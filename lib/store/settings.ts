@@ -547,7 +547,7 @@ export const useSettingsStore = create<SettingsState>()(
         ttsModel: migratedData?.ttsModel || 'openai-tts',
         selectedAgentIds: migratedData?.selectedAgentIds || ['default-1', 'default-2', 'default-3'],
         maxTurns: migratedData?.maxTurns?.toString() || '10',
-        agentMode: 'auto' as const,
+        agentMode: 'preset' as const,
         autoAgentCount: 3,
 
         // Playback controls
