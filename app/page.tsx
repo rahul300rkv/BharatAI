@@ -620,7 +620,7 @@ useEffect(() => {
         <div className="mt-4 w-full rounded-xl border border-primary/20 bg-background p-4 text-center space-y-2">
           <p className="text-sm font-semibold">{locale==='hi-IN'?'बिना खाते या API कुंजी के सीखें':'Learn without an account or API key'}</p>
           <Link href="/demo" className="inline-flex rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">{locale==='hi-IN'?'मुफ़्त नमूना कक्षाएँ खोलें':'Explore free interactive classrooms'}</Link>
-          <p className="text-xs text-muted-foreground">{locale==='hi-IN'?'व्यक्तिगत AI कक्षा के लिए ही अपनी API कुंजी जोड़ें।':'Only custom AI generation needs your own provider key.'}</p>
+          <Link href="/labs" className="inline-flex ml-2 rounded-lg border border-primary px-4 py-3 text-sm font-semibold text-primary">{locale==='hi-IN'?'आभासी प्रयोगशाला':'Try virtual labs'}</Link><p className="text-xs text-muted-foreground">{locale==='hi-IN'?'व्यक्तिगत AI कक्षा के लिए ही अपनी API कुंजी जोड़ें।':'Only custom AI generation needs your own provider key.'}</p>
         </div>
       {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
       {!currentModelId && (
@@ -1381,7 +1381,7 @@ function SEOContent() {
     <p className="text-muted-foreground/60">
       {tr("BharatAI — Bharat Ka Apna AI Classroom 🇮🇳","BharatAI — भारत की अपनी AI कक्षा 🇮🇳")}
     </p>
-    <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"><Link href="/demo" className="text-muted-foreground hover:text-foreground transition-colors">{tr("Demo classrooms","नमूना कक्षाएँ")}</Link>
+    <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"><Link href="/labs" className="text-muted-foreground hover:text-foreground transition-colors">{tr("Virtual labs","आभासी प्रयोगशाला")}</Link><Link href="/demo" className="text-muted-foreground hover:text-foreground transition-colors">{tr("Demo classrooms","नमूना कक्षाएँ")}</Link>
       <Link href="/learn" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="learn"/></Link>
       <Link href="/guides" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="guides"/></Link>
       <Link href="/editorial-policy" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="editorial"/></Link>
