@@ -20,7 +20,7 @@ import {
   storeImages,
 } from '@/lib/utils/image-storage';
 import { getCurrentModelConfig } from '@/lib/utils/model-config';
-import { db } from '@/lib/utils/database';
+import { prepareSceneSpeech } from '@/lib/hooks/use-scene-generator';
 import { MAX_PDF_CONTENT_CHARS, MAX_VISION_IMAGES } from '@/lib/constants/generation';
 import { nanoid } from 'nanoid';
 import type { Stage } from '@/lib/types/stage';
@@ -61,7 +61,6 @@ function GenerationPreviewContent() {
       priority: number;
     }>
   >([]);
-  const agentRevealResolveRef = useRef<(() => void) | null>(null);
 
   // Compute active steps based on session state
   const activeSteps = getActiveSteps(session);
@@ -136,6 +135,7 @@ function GenerationPreviewContent() {
     const controller = new AbortController();
     abortControllerRef.current = controller;
     const signal = controller.signal;
+    const generationStartedAt = performance.now();
 
     // Use a local mutable copy so we can update it after PDF parsing
     let currentSession = session;
@@ -465,12 +465,10 @@ function GenerationPreviewContent() {
           settings.setSelectedAgentIds(savedIds);
           stage.agentIds = savedIds;
 
-          // Show card-reveal modal, continue generation once all cards are revealed
+          // Reveal agent cards without blocking outline generation.
           setGeneratedAgents(agentData.agents);
           setShowAgentReveal(true);
-          await new Promise<void>((resolve) => {
-            agentRevealResolveRef.current = resolve;
-          });
+
 
           agents = savedIds
             .map((id) => useAgentRegistry.getState().getAgent(id))
@@ -617,8 +615,7 @@ function GenerationPreviewContent() {
           /* ignore */
         }
 
-        // Brief pause to let user see the final outline state
-        await new Promise((resolve) => setTimeout(resolve, 800));
+
       }
 
       // Move to scene generation step
@@ -709,61 +706,12 @@ function GenerationPreviewContent() {
         throw new Error(data.error || t('generation.sceneGenerateFailed'));
       }
 
-      // Generate TTS for first scene (part of actions step — blocking)
+      // Prepare speech IDs and split long text before persisting. Audio is warmed
+      // by the classroom hook after navigation; playback can use local speech meanwhile.
       if (settings.ttsEnabled && settings.ttsProviderId !== 'browser-native-tts') {
-        const ttsProviderConfig = settings.ttsProvidersConfig?.[settings.ttsProviderId];
-        const speechActions = (data.scene.actions || []).filter(
-          (a: { type: string; text?: string }) => a.type === 'speech' && a.text,
-        );
-
-        let ttsFailCount = 0;
-        for (const action of speechActions) {
-          const audioId = `tts_${action.id}`;
-          action.audioId = audioId;
-          try {
-            const resp = await fetch('/api/generate/tts', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                text: action.text,
-                audioId,
-                ttsProviderId: settings.ttsProviderId,
-                ttsVoice: settings.ttsVoice,
-                ttsSpeed: settings.ttsSpeed,
-                ttsApiKey: ttsProviderConfig?.apiKey || undefined,
-                ttsBaseUrl: ttsProviderConfig?.baseUrl || undefined,
-              }),
-              signal,
-            });
-            if (!resp.ok) {
-              ttsFailCount++;
-              continue;
-            }
-            const ttsData = await resp.json();
-            if (!ttsData.success) {
-              ttsFailCount++;
-              continue;
-            }
-            const binary = atob(ttsData.base64);
-            const bytes = new Uint8Array(binary.length);
-            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-            const blob = new Blob([bytes], { type: `audio/${ttsData.format}` });
-            await db.audioFiles.put({
-              id: audioId,
-              blob,
-              format: ttsData.format,
-              createdAt: Date.now(),
-            });
-          } catch (err) {
-            log.warn(`[TTS] Failed for ${audioId}:`, err);
-            ttsFailCount++;
-          }
-        }
-
-        if (ttsFailCount > 0 && speechActions.length > 0) {
-          throw new Error(t('generation.speechFailed'));
-        }
+        prepareSceneSpeech(data.scene, settings.ttsProviderId);
       }
+      if (signal.aborted) return;
 
       // Add scene to store and navigate
       store.addScene(data.scene);
@@ -785,6 +733,7 @@ function GenerationPreviewContent() {
 
       sessionStorage.removeItem('generationSession');
       await store.saveToStorage();
+      log.info(`[Generation] Classroom ready in ${Math.round(performance.now()-generationStartedAt)}ms`);
       router.push(`/classroom/${stage.id}`);
     } catch (err) {
       // AbortError is expected when navigating away — don't show as error
@@ -1068,10 +1017,7 @@ function GenerationPreviewContent() {
         agents={generatedAgents}
         open={showAgentReveal}
         onClose={() => setShowAgentReveal(false)}
-        onAllRevealed={() => {
-          agentRevealResolveRef.current?.();
-          agentRevealResolveRef.current = null;
-        }}
+        onAllRevealed={() => setShowAgentReveal(false)}
       />
     </div>
   );

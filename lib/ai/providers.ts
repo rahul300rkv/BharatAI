@@ -1112,7 +1112,12 @@ export interface ModelWithInfo {
 function getCompatThinkingBodyParams(
   providerId: ProviderId,
   config: ThinkingConfig,
+  modelId?: string,
 ): Record<string, unknown> | undefined {
+  // Only inject NVIDIA's documented toggle for the matching Nemotron family.
+  if (providerId === 'nvidia' && modelId?.startsWith('nvidia/nemotron-3.5-lightning-') && config.enabled !== undefined) {
+    return {chat_template_kwargs:{enable_thinking:config.enabled}};
+  }
   if (config.enabled === false) {
     switch (providerId) {
       // Kimi / DeepSeek / GLM use { thinking: { type: "disabled" } }
@@ -1223,7 +1228,7 @@ export function getModel(config: ModelConfig): ModelWithInfo {
             | undefined;
           const thinking = thinkingCtx?.getStore?.() as ThinkingConfig | undefined;
           if (thinking && init?.body && typeof init.body === 'string') {
-            const extra = getCompatThinkingBodyParams(providerId, thinking);
+            const extra = getCompatThinkingBodyParams(providerId, thinking, config.modelId);
             if (extra) {
               try {
                 const body = JSON.parse(init.body);

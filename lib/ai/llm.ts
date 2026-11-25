@@ -272,6 +272,22 @@ export interface LLMRetryOptions {
   validate?: (text: string) => boolean;
 }
 
+// Conservative budgets for small structured tasks; leave slides, interactive
+// HTML, quizzes and full course outlines at their existing model limits.
+export function generationBudget(source: string, existing?: number): number | undefined {
+  const cap = source === 'agent-profiles' ? 4096 : source === 'scene-actions' ? 8192 : undefined;
+  return cap === undefined ? existing : Math.min(existing ?? cap, cap);
+}
+
+function tuneGeneration<T extends GenerateTextParams | StreamTextParams>(params:T, source:string):T {
+  const cap = generationBudget(source, params.maxOutputTokens);
+  return cap === undefined ? params : {...params,maxOutputTokens:cap};
+}
+
+function generationThinking(source:string):ThinkingConfig|undefined {
+  return ['agent-profiles','scene-actions','scene-outlines-stream'].includes(source) ? {enabled:false} : undefined;
+}
+
 const DEFAULT_VALIDATE = (text: string) => text.trim().length > 0;
 
 /**
@@ -299,16 +315,18 @@ export async function callLLM<T extends GenerateTextParams>(
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       // Resolve effective thinking config: per-call > global env > undefined
-      const effectiveThinking = thinking ?? getGlobalThinkingConfig();
-      const injectedParams = injectProviderOptions(params, effectiveThinking);
+      const effectiveThinking = thinking ?? getGlobalThinkingConfig() ?? generationThinking(source);
+      const injectedParams = injectProviderOptions(tuneGeneration(params, source), effectiveThinking);
 
       // Wrap in thinkingContext so the custom fetch wrapper in providers.ts
       // can read the config and inject vendor-specific body params for
       // OpenAI-compatible providers.
+      const startedAt = Date.now();
       const result = await thinkingContext.run(effectiveThinking, () =>
         generateText(injectedParams),
       );
 
+      log.info(`[${source}] LLM completed in ${Date.now() - startedAt}ms (attempt ${attempt}/${maxAttempts})`);
       // Validate result (only when retries are configured)
       if (validate && !validate(result.text)) {
         log.warn(
@@ -350,8 +368,8 @@ export function streamLLM<T extends StreamTextParams>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): StreamTextResult<any, any> {
   // Resolve effective thinking config and wrap in thinkingContext
-  const effectiveThinking = thinking ?? getGlobalThinkingConfig();
-  const injectedParams = injectProviderOptions(params, effectiveThinking);
+  const effectiveThinking = thinking ?? getGlobalThinkingConfig() ?? generationThinking(source);
+  const injectedParams = injectProviderOptions(tuneGeneration(params, source), effectiveThinking);
   const result = thinkingContext.run(effectiveThinking, () => streamText(injectedParams));
 
   return result;

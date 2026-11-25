@@ -490,11 +490,10 @@ export class PlaybackEngine {
           .play(speechAction.audioId || '', speechAction.audioUrl)
           .then((audioStarted) => {
             if (!audioStarted) {
-              // No pre-generated audio — try browser-native TTS if selected
+              // Missing cloud audio: use the browser voice if available.
               const settings = useSettingsStore.getState();
               if (
                 settings.ttsEnabled &&
-                (settings.ttsProviderId === 'browser-native-tts' || useStageStore.getState().stage?.id.startsWith('demo-v1-')) &&
                 typeof window !== 'undefined' &&
                 window.speechSynthesis
               ) {
