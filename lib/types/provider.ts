@@ -18,7 +18,8 @@ export type BuiltInProviderId =
   | 'doubao'
   | 'grok'
   | 'groq'
-  | 'openrouter';
+  | 'openrouter'
+  | 'nvidia';
 
 /**
  * Provider ID (built-in or custom)

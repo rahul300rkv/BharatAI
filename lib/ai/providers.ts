@@ -698,7 +698,7 @@ export const PROVIDERS: Record<ProviderId, ProviderConfig> = {
 
   siliconflow: {
     id: 'siliconflow',
-    name: '硅基流动',
+    name: 'SiliconFlow',
     type: 'openai',
     defaultBaseUrl: 'https://api.siliconflow.cn/v1',
     requiresApiKey: true,
@@ -793,7 +793,7 @@ export const PROVIDERS: Record<ProviderId, ProviderConfig> = {
 
   doubao: {
     id: 'doubao',
-    name: '豆包',
+    name: 'Doubao',
     type: 'openai',
     defaultBaseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
     requiresApiKey: true,
@@ -978,20 +978,6 @@ export const PROVIDERS: Record<ProviderId, ProviderConfig> = {
         capabilities: { streaming: true, tools: true, vision: false },
       },
       // ── Llama 3 ──────────────────────────────────────────────────────
-      {
-        id: 'llama3-70b-8192',
-        name: 'Llama 3 70B',
-        contextWindow: 8192,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
-      {
-        id: 'llama3-8b-8192',
-        name: 'Llama 3 8B',
-        contextWindow: 8192,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: false, vision: false },
-      },
       // ── DeepSeek R1 on Groq (thinking model) ─────────────────────────
       {
         id: 'deepseek-r1-distill-llama-70b',
@@ -1057,175 +1043,21 @@ export const PROVIDERS: Record<ProviderId, ProviderConfig> = {
         capabilities: { streaming: true, tools: true, vision: false },
       },
       // ── Mixtral ───────────────────────────────────────────────────────
-      {
-        id: 'mixtral-8x7b-32768',
-        name: 'Mixtral 8x7B',
-        contextWindow: 32768,
-        outputWindow: 32768,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
       // ── Gemma ─────────────────────────────────────────────────────────
-      {
-        id: 'gemma2-9b-it',
-        name: 'Gemma 2 9B',
-        contextWindow: 8192,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
     ],
   },
 
   // ── OpenRouter ────────────────────────────────────────────────────────────
-  openrouter: {
-    id: 'openrouter',
-    name: 'OpenRouter',
-    type: 'openai',
-    defaultBaseUrl: 'https://openrouter.ai/api/v1',
+  nvidia: {
+    id: 'nvidia', name: 'NVIDIA NIM', type: 'openai',
+    defaultBaseUrl: 'https://integrate.api.nvidia.com/v1',
     requiresApiKey: true,
-    icon: '/logos/openrouter.svg',
-    models: [
-      // ── Free models (no credits needed) ──────────────────────────────
-      {
-        id: 'openrouter/free',
-        name: 'Auto (Best Free)',
-        contextWindow: 200000,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: true },
-      },
-      {
-        id: 'meta-llama/llama-3.3-70b-instruct:free',
-        name: 'Llama 3.3 70B (free)',
-        contextWindow: 131072,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
-      {
-        id: 'google/gemini-2.0-flash-exp:free',
-        name: 'Gemini 2.0 Flash (free)',
-        contextWindow: 1000000,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: true },
-      },
-      {
-        id: 'deepseek/deepseek-chat-v3-0324:free',
-        name: 'DeepSeek V3 (free)',
-        contextWindow: 163840,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
-      {
-        id: 'deepseek/deepseek-r1:free',
-        name: 'DeepSeek R1 (free)',
-        contextWindow: 163840,
-        outputWindow: 32768,
-        capabilities: {
-          streaming: true,
-          tools: false,
-          vision: false,
-          thinking: { toggleable: false, budgetAdjustable: false, defaultEnabled: true },
-        },
-      },
-      {
-        id: 'qwen/qwen3.6-plus:free',
-        name: 'Qwen3.6 Plus (free)',
-        contextWindow: 131072,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
-      {
-        id: 'qwen/qwen3-8b:free',
-        name: 'Qwen3 8B (free)',
-        contextWindow: 131072,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
-      {
-        id: 'microsoft/phi-4-reasoning-plus:free',
-        name: 'Phi-4 Reasoning Plus (free)',
-        contextWindow: 32768,
-        outputWindow: 8192,
-        capabilities: {
-          streaming: true,
-          tools: false,
-          vision: false,
-          thinking: { toggleable: false, budgetAdjustable: false, defaultEnabled: true },
-        },
-      },
-      // ── Paid models ───────────────────────────────────────────────────
-      {
-        id: 'openai/gpt-4o',
-        name: 'GPT-4o',
-        contextWindow: 128000,
-        outputWindow: 16384,
-        capabilities: { streaming: true, tools: true, vision: true },
-      },
-      {
-        id: 'openai/gpt-4o-mini',
-        name: 'GPT-4o Mini',
-        contextWindow: 128000,
-        outputWindow: 16384,
-        capabilities: { streaming: true, tools: true, vision: true },
-      },
-      {
-        id: 'anthropic/claude-sonnet-4-20250514',
-        name: 'Claude Sonnet 4',
-        contextWindow: 200000,
-        outputWindow: 16000,
-        capabilities: { streaming: true, tools: true, vision: true },
-      },
-      {
-        id: 'anthropic/claude-3.5-haiku',
-        name: 'Claude 3.5 Haiku',
-        contextWindow: 200000,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: true },
-      },
-      {
-        id: 'google/gemini-2.5-pro-preview',
-        name: 'Gemini 2.5 Pro',
-        contextWindow: 1000000,
-        outputWindow: 65536,
-        capabilities: {
-          streaming: true,
-          tools: true,
-          vision: true,
-          thinking: { toggleable: true, budgetAdjustable: true, defaultEnabled: false },
-        },
-      },
-      {
-        id: 'meta-llama/llama-4-maverick',
-        name: 'Llama 4 Maverick',
-        contextWindow: 1000000,
-        outputWindow: 16384,
-        capabilities: { streaming: true, tools: true, vision: true },
-      },
-      {
-        id: 'deepseek/deepseek-chat-v3-0324',
-        name: 'DeepSeek V3',
-        contextWindow: 163840,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
-      {
-        id: 'deepseek/deepseek-r1',
-        name: 'DeepSeek R1',
-        contextWindow: 163840,
-        outputWindow: 32768,
-        capabilities: {
-          streaming: true,
-          tools: false,
-          vision: false,
-          thinking: { toggleable: false, budgetAdjustable: false, defaultEnabled: true },
-        },
-      },
-      {
-        id: 'qwen/qwen3-235b-a22b',
-        name: 'Qwen3 235B',
-        contextWindow: 131072,
-        outputWindow: 8192,
-        capabilities: { streaming: true, tools: true, vision: false },
-      },
-    ],
+    models: [{id:'qwen/qwen3-next-80b-a3b-instruct',name:'Qwen3 Next 80B Instruct (check availability)',capabilities:{streaming:true,tools:true,vision:false}}],
+  },
+  openrouter: {
+    id:'openrouter',name:'OpenRouter',type:'openai',
+    defaultBaseUrl:'https://openrouter.ai/api/v1',requiresApiKey:true,icon:'/logos/openrouter.svg',
+    models:[{id:'openrouter/free',name:'Free router (availability varies)',capabilities:{streaming:true,tools:true,vision:false}}],
   },
 };
 

@@ -31,6 +31,7 @@ import {
   FileText,
   Send,
 } from 'lucide-react';
+import { useSettingsStore } from '@/lib/store/settings';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import type { ProviderConfig } from '@/lib/ai/providers';
 import type { ProvidersConfig } from '@/lib/types/settings';
@@ -66,7 +67,23 @@ export function ProviderConfigPanel({
   onResetToDefault,
   isBuiltIn,
 }: ProviderConfigPanelProps) {
-  const { t } = useI18n();
+  const { t,locale } = useI18n();
+  const [catalogBusy,setCatalogBusy]=useState(false);
+  const [catalogMessage,setCatalogMessage]=useState('');
+  const setProviderConfig=useSettingsStore(s=>s.setProviderConfig);
+  const refreshCatalog=async()=>{
+    setCatalogBusy(true);setCatalogMessage('');
+    try{
+      const r=await fetch('/api/model-catalog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({provider:provider.id,apiKey:provider.id==='nvidia'?apiKey:undefined,freeOnly:true})});
+      const result=await r.json();
+      if(!r.ok||!Array.isArray(result.models)||!result.models.length)throw Error(result.error||'No compatible models found');
+      const merged=new Map(provider.models.map(m=>[m.id,m]));
+      for(const m of result.models)merged.set(m.id,m);
+      setProviderConfig(provider.id,{models:Array.from(merged.values())});
+      setCatalogMessage(locale==='hi-IN'?'मॉडल सूची अपडेट हुई': 'Live models added; test the selected model before use.');
+    }catch(e){setCatalogMessage(e instanceof Error?e.message:'Catalogue unavailable');}
+    finally{setCatalogBusy(false);}
+  };
 
   // Local state for this provider
   const [apiKey, setApiKey] = useState(initialApiKey);
@@ -153,7 +170,7 @@ export function ProviderConfigPanel({
   const isServerConfigured = providersConfig[provider.id]?.isServerConfigured;
 
   return (
-    <div className="space-y-6 max-w-3xl min-w-0">
+    <div className="space-y-6 max-w-3xl min-w-0">{(provider.id==='nvidia'||provider.id==='openrouter')&&<div className="rounded-lg border p-3 space-y-2"><p className="text-sm">{locale==='hi-IN'?'उपलब्ध मॉडल सीधे प्रदाता से प्राप्त करें।':'Discover available models directly from the provider. Free or trial quotas may vary.'}</p><Button variant="outline" size="sm" disabled={catalogBusy} onClick={refreshCatalog}>{catalogBusy?t('common.loading'):(locale==='hi-IN'?'मॉडल सूची अपडेट करें':'Refresh live models')}</Button>{catalogMessage&&<p role="status" className="text-xs break-words">{catalogMessage}</p>}</div>}
       {/* Server-configured notice */}
       {isServerConfigured && (
         <div className="rounded-lg border border-primary/20 bg-primary/6 dark:border-primary/25 dark:bg-primary/950/30 p-3 text-sm text-primary700 dark:text-primary300">

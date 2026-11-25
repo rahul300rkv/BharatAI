@@ -97,14 +97,14 @@ function OnboardingBanner({ onSetupClick }: { onSetupClick: () => void }) {
           {hi ? 'कक्षा बनाने के लिए AI API कुंजी सेट करें' : 'Set up an AI API key to generate a classroom'}
         </p>
         <p className="text-xs text-orange-700/80 dark:text-orange-300/70 mt-0.5 leading-relaxed">
-          {hi ? 'Groq की API कुंजी यहाँ प्राप्त करें: ' : 'Get a Groq API key at ' }
+          {hi ? 'NVIDIA की API कुंजी यहाँ प्राप्त करें: ' : 'Get an NVIDIA API key at ' }
           <a
-            href="https://console.groq.com"
+            href="https://build.nvidia.com/models"
             target="_blank"
             rel="noopener noreferrer"
             className="underline font-medium hover:text-orange-900 dark:hover:text-orange-100 transition-colors"
           >
-            console.groq.com
+            build.nvidia.com
           </a>
           {hi ? '। फिर सेटिंग्स में LLM अनुभाग खोलकर API कुंजी जोड़ें। OpenAI, Gemini, Claude और अन्य प्रदाता भी समर्थित हैं। प्रदाता की शुल्क व उपयोग सीमाएँ लागू हो सकती हैं।' : '. Then open Settings → LLM and add your API key. Other providers are supported. Provider charges and limits may apply.'}
         </p>
@@ -617,6 +617,11 @@ useEffect(() => {
           </div>
         </motion.div>
 
+        <div className="mt-4 w-full rounded-xl border border-primary/20 bg-background p-4 text-center space-y-2">
+          <p className="text-sm font-semibold">{locale==='hi-IN'?'बिना खाते या API कुंजी के सीखें':'Learn without an account or API key'}</p>
+          <Link href="/demo" className="inline-flex rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">{locale==='hi-IN'?'मुफ़्त नमूना कक्षाएँ खोलें':'Explore free interactive classrooms'}</Link>
+          <p className="text-xs text-muted-foreground">{locale==='hi-IN'?'व्यक्तिगत AI कक्षा के लिए ही अपनी API कुंजी जोड़ें।':'Only custom AI generation needs your own provider key.'}</p>
+        </div>
       {/* ═══ Onboarding banner — shown until dismissed or model configured ═══ */}
       {!currentModelId && (
         <div className="relative z-20 w-full max-w-[800px] mt-4">
@@ -1376,10 +1381,10 @@ function SEOContent() {
     <p className="text-muted-foreground/60">
       {tr("BharatAI — Bharat Ka Apna AI Classroom 🇮🇳","BharatAI — भारत की अपनी AI कक्षा 🇮🇳")}
     </p>
-    <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-      <Link href="/learn" className="text-primary underline"><SiteText k="learn"/></Link>
-      <Link href="/guides" className="text-primary underline"><SiteText k="guides"/></Link>
-      <Link href="/editorial-policy" className="text-muted-foreground hover:text-foreground"><SiteText k="editorial"/></Link>
+    <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2"><Link href="/demo" className="text-muted-foreground hover:text-foreground transition-colors">{tr("Demo classrooms","नमूना कक्षाएँ")}</Link>
+      <Link href="/learn" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="learn"/></Link>
+      <Link href="/guides" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="guides"/></Link>
+      <Link href="/editorial-policy" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="editorial"/></Link>
       <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="about"/></Link>
       <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="privacy"/></Link>
       <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors"><SiteText k="terms"/></Link>

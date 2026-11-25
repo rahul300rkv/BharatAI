@@ -494,7 +494,7 @@ export class PlaybackEngine {
               const settings = useSettingsStore.getState();
               if (
                 settings.ttsEnabled &&
-                settings.ttsProviderId === 'browser-native-tts' &&
+                (settings.ttsProviderId === 'browser-native-tts' || useStageStore.getState().stage?.id.startsWith('demo-v1-')) &&
                 typeof window !== 'undefined' &&
                 window.speechSynthesis
               ) {

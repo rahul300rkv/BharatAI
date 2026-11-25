@@ -1,5 +1,6 @@
 'use client';
 
+import { getDemoClassroom } from '@/lib/demo-classrooms';
 import { SiteText } from '@/components/site-language';
 import { Stage } from '@/components/stage';
 import { ThemeProvider } from '@/lib/hooks/use-theme';
@@ -35,6 +36,12 @@ export default function ClassroomDetailPage() {
 
   const loadClassroom = useCallback(async () => {
     try {
+      const demo=getDemoClassroom(classroomId);
+      if(demo){
+        useStageStore.getState().clearStore();
+        useStageStore.setState({stage:demo.stage,scenes:demo.scenes,currentSceneId:demo.scenes[0]?.id??null,mode:'playback'});
+        return;
+      }
       await loadFromStorage(classroomId);
 
       // If IndexedDB had no data, try server-side storage (API-generated classrooms)

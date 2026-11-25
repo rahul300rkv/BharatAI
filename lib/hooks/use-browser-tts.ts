@@ -77,12 +77,13 @@ export function useBrowserTTS(options: UseBrowserTTSOptions = {}) {
 
       // Set voice if specified
       if (voiceURI) {
-        const voice = availableVoices.find((v) => v.voiceURI === voiceURI);
+        const voice = availableVoices.find((v) => v.voiceURI === voiceURI && v.lang.split('-')[0]===lang.split('-')[0]);
         if (voice) {
           utterance.voice = voice;
         }
       }
 
+      if (!utterance.voice) utterance.voice=availableVoices.find(v=>v.lang===lang) ?? availableVoices.find(v=>v.lang.split('-')[0]===lang.split('-')[0]) ?? null;
       utterance.onstart = () => {
         setIsSpeaking(true);
         setIsPaused(false);
