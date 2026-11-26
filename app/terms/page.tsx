@@ -9,9 +9,8 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-        <PublicLanguageNav/><h1 className="text-3xl font-bold mb-2"><SiteText k="terms"/></h1><EnglishContent>
+    <main className="site-page site-reading">
+        <h1 className="site-title"><SiteText k="terms"/></h1><EnglishContent>
         <p className="text-sm text-muted-foreground mb-8">Last updated: November 16, 2026</p>
 
         <div className="space-y-6 text-sm leading-relaxed">
@@ -32,6 +31,6 @@ export default function TermsPage() {
             Contact: <a href="mailto:rahul.verma300@rediffmail.com" className="text-primary underline">rahul.verma300@rediffmail.com</a>
           </p>
         </div>
-      </EnglishContent></div></main>
+      </EnglishContent></main>
   );
 }

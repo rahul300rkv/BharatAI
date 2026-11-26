@@ -76,10 +76,11 @@ const initialFormState: FormState = {
 };
 
 function HomePage() {
-  const { t, locale, setLocale } = useI18n();
-  const { theme, setTheme } = useTheme();
+  const { t, locale } = useI18n();
   const router = useRouter();
   const [form, setForm] = useState<FormState>(initialFormState);
+  const previousLocale=useRef(locale);
+  useEffect(()=>{if(previousLocale.current!==locale){previousLocale.current=locale;setForm(p=>({...p,language:locale}));try{localStorage.setItem(LANGUAGE_STORAGE_KEY,locale)}catch{}}},[locale]);
   const [settingsOpen, setSettingsOpen] = useState(false);
   useEffect(()=>{if(new URLSearchParams(window.location.search).get('settings')==='1'){setSettingsOpen(true);const url=new URL(window.location.href);url.searchParams.delete('settings');window.history.replaceState(window.history.state,'',url.pathname+url.search+url.hash)}},[]);
   const [settingsSection, setSettingsSection] = useState<
@@ -146,27 +147,11 @@ useEffect(() => {
     }
   }
 
-  const [languageOpen, setLanguageOpen] = useState(false);
-  const [themeOpen, setThemeOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [classrooms, setClassrooms] = useState<StageListItem[]>([]);
   const [thumbnails, setThumbnails] = useState<Record<string, Slide>>({});
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
-  const toolbarRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    if (!languageOpen && !themeOpen) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (toolbarRef.current && !toolbarRef.current.contains(e.target as Node)) {
-        setLanguageOpen(false);
-        setThemeOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [languageOpen, themeOpen]);
 
   const loadClassrooms = async () => {
     try {
@@ -345,96 +330,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="learning-hero relative w-full flex flex-col items-center px-4 pt-4 sm:px-8 overflow-x-clip min-h-[min(76dvh,720px)]">
-      <header className="w-full max-w-6xl flex items-center justify-between gap-2"><Link href="/" aria-label="BharatAI"><img src="/logo-horizontal.svg" alt="BharatAI" className="h-9 sm:h-11 w-auto"/></Link><nav className="hidden sm:flex flex-wrap gap-4 text-sm ms-auto me-3"><Link href="/demo"><LabText text="Classrooms"/></Link><Link href="/labs"><LabText text="Labs"/></Link><Link href="/learn"><SiteText k="learn"/></Link></nav>
-      <div
-        ref={toolbarRef}
-        className="relative z-50 flex items-center gap-1"
-      >
-        {/* Language Selector */}
-          <div className="relative" >
-            <select aria-label={t('settings.language')} value={locale} onChange={e=>{const value=e.target.value;if(isLocale(value)){setLocale(value);updateForm('language',value);}setLanguageOpen(false);setThemeOpen(false);}} className="max-w-[110px] rounded-full bg-background text-foreground px-2 py-1 text-xs border">
-            {languages.map(l=><option key={l.code} value={l.code} lang={l.code}>{l.native}</option>)}
-            </select>
-          </div>
-
-
-        <div className="w-[1px] h-4 bg-border" />
-
-        {/* Theme Selector */}
-        <div className="relative">
-          <button
-            onClick={() => {
-              setThemeOpen(!themeOpen);
-              setLanguageOpen(false);
-            }}
-            className="p-2 rounded-full text-muted-foreground hover:bg-primary/8 hover:text-primary hover:shadow-sm transition-all"
-          >
-            {theme === 'light' && <Sun className="w-4 h-4" />}
-            {theme === 'dark' && <Moon className="w-4 h-4" />}
-            {theme === 'system' && <Monitor className="w-4 h-4" />}
-          </button>
-          {themeOpen && (
-            <div className="absolute top-full mt-2 right-0 bg-popover border border-primary/15 rounded-xl shadow-lg overflow-hidden z-50 min-w-[140px]">
-              <button
-                onClick={() => {
-                  setTheme('light');
-                  setThemeOpen(false);
-                }}
-                className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary transition-colors flex items-center gap-2',
-                  theme === 'light' &&
-                    'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
-                )}
-              >
-                <Sun className="w-4 h-4" />
-                {t('settings.themeOptions.light')}
-              </button>
-              <button
-                onClick={() => {
-                  setTheme('dark');
-                  setThemeOpen(false);
-                }}
-                className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary transition-colors flex items-center gap-2',
-                  theme === 'dark' &&
-                    'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
-                )}
-              >
-                <Moon className="w-4 h-4" />
-                {t('settings.themeOptions.dark')}
-              </button>
-              <button
-                onClick={() => {
-                  setTheme('system');
-                  setThemeOpen(false);
-                }}
-                className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-primary/8 hover:text-primary transition-colors flex items-center gap-2',
-                  theme === 'system' &&
-                    'bg-primary/8 dark:bg-primary/15 text-primary dark:text-primary',
-                )}
-              >
-                <Monitor className="w-4 h-4" />
-                {t('settings.themeOptions.system')}
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="w-[1px] h-4 bg-border" />
-
-        {/* Settings Button */}
-        <div className="relative">
-          <button
-            onClick={() => setSettingsOpen(true)}
-            className="p-2 rounded-full text-muted-foreground hover:bg-primary/8 hover:text-primary hover:shadow-sm transition-all group"
-          >
-            <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
-          </button>
-        </div>
-      </div>
-      </header>
+    <div className="learning-hero site-container relative flex flex-col items-center min-h-[min(70dvh,660px)]">
       <SettingsDialog
         open={settingsOpen}
         onOpenChange={(open) => {
@@ -1072,13 +968,10 @@ function ClassroomCard({
   );
 }
 
-// ─── Static SEO content — visible to crawlers, subtle for users ──────────────
-function SEOContent(){const {locale}=useI18n();return <footer className="mx-auto max-w-4xl px-4 pt-8 pb-6 text-center space-y-3 border-t"><p className="text-sm text-muted-foreground">{designText(locale,'intro')}</p><p className="text-sm text-muted-foreground">14 · {engagementText(locale,'languages')} · 20 <LabText text="Labs"/></p><nav className="flex flex-wrap gap-x-4 gap-y-2 justify-center text-xs">{(['about','guides','editorial','privacy','terms','contact'] as const).map(k=><Link key={k} href={k==='editorial'?'/editorial-policy':'/'+k} className="hover:underline"><SiteText k={k}/></Link>)}<Link href="/history" className="hover:underline">{engagementText(locale,'history')}</Link></nav></footer>}
-
 export default function Page() {
   return (
     <>
-      <MotionConfig reducedMotion="user"><main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section><SEOContent /></main></MotionConfig>
+      <MotionConfig reducedMotion="user"><main><section id="personalised-classroom" className="scroll-mt-6"><HomePage /></section></main></MotionConfig>
     </>
   );
 }

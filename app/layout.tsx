@@ -1,4 +1,4 @@
-import { MobileLearningNav } from '@/components/mobile-learning-nav';
+import { PublicShell } from '@/components/public-shell';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { GeistMono } from 'geist/font/mono';
@@ -134,8 +134,7 @@ export default function RootLayout({
         <ThemeProvider>
           <I18nProvider>
             <ServerProvidersInit />
-            {children}
-            <MobileLearningNav/>
+            <PublicShell>{children}</PublicShell>
             <Toaster position="top-center" />
           </I18nProvider>
         </ThemeProvider>
